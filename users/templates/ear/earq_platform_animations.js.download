@@ -1,0 +1,5065 @@
+var googleAPIKey = '';
+var googleAPILoaded = false;
+var googleAPIStarted = false;
+var maxmindLoaded = false;
+var maxmindStarted = false;
+var infoWindow = null;
+
+var SESS_LATITUDE = '';
+var SESS_LONGITUDE = '';
+var SESS_CITY = '';
+var SESS_DATE = '';
+var SESS_ZIP = '';
+var SESS_TIME = '';
+var SESS_ACCOUNT_NUM = '';
+var SESS_LOCATION_ID = '';
+var SESS_ARTICLEFILTER = '';
+var SESS_SPLASHCLOSED = '';
+var SESS_LOCATIONSPAGEVISITED = '';
+
+var googleCheck = false;
+var geolocation = false;
+var myPinSize = "large";
+
+var someoneElse = false;
+var currentWearer = false;
+var primaryContact = false;
+var accompanyPatient = false;
+var requireTransportation = false;
+var isMinor = false;
+var thisArticleFilter = '';
+
+var changedMonthID = '';
+
+$(function() { 
+
+	// first check if "slug" appears in the URL
+	var firstURL = $(location).attr('href');
+	if (firstURL.indexOf('slug') >= 1) {
+		//console.log("parse slug references and go to new URL")
+		if (firstURL.indexOf('slug2') >= 1) {
+			// console.log("2 slugs to parse");
+			var urlSplits = firstURL.split("?slug1=");
+			var urlSplits2 = urlSplits[1].split("&slug2=");
+			window.location.assign("https://www.earq.com/"+urlSplits2[0]+"/"+urlSplits2[1]);
+		}
+		if (firstURL.indexOf('slug2') == -1) {
+			// console.log("only 1 slug to parse");
+			var urlSplits = firstURL.split("?slug1=");
+			window.location.assign("https://www.earq.com/"+urlSplits[1]);
+		}
+	}
+
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-10332626-2', 'auto');
+  ga('require', 'displayfeatures');
+  ga('send', 'pageview');
+	
+	if (landingSlug1 == "home" || landingPage == true) { homePageScript(); }
+	if (landingSlug1 == "locations" && landingSlug2 == "") { 
+		
+		setSessionData('SESS_LOCATIONSPAGEVISITED', 'true');
+	
+		$('#locations_search_date').datepicker({ 
+
+			//minDate: 1, maxDate: 45, beforeShowDay: $.datepicker.noWeekends, monthNamesShort: $.datepicker._defaults.monthNames,
+			minDate: 1, maxDate: 45, beforeShowDay: noWeekendsOrHolidays, monthNamesShort: $.datepicker._defaults.monthNames,
+			dateFormat: "MM dd, yy"
+
+		});
+	
+	}
+	if ((landingSlug1 == "providers" || landingSlug1 == "locations") && landingSlug2 != "") { 
+	
+		setSessionData('SESS_LOCATIONSPAGEVISITED', 'true');
+	
+		providersPageScript(); 
+
+		$('#provider_search_date').datepicker({ 
+			
+			minDate: booking_days_out, maxDate: (booking_days_out+40), stepMonths: 1, beforeShowDay: noWeekendsOrOffDays, monthNamesShort: $.datepicker._defaults.monthNames,
+			dateFormat: "MM dd, yy"
+
+		});
+	
+	}
+	
+	if (landingSlug1 != "providers" && landingSlug1 != "home" && landingSlug1 != "" && landingSlug1 != "locations") {
+		
+		$('#footer_search_date').datepicker({ 
+		
+			//minDate: 1, maxDate: 45, beforeShowDay: $.datepicker.noWeekends, monthNamesShort: $.datepicker._defaults.monthNames,
+			minDate: 1, maxDate: 45, beforeShowDay: noWeekendsOrHolidays, monthNamesShort: $.datepicker._defaults.monthNames,
+			dateFormat: "MM dd, yy"
+
+		});
+		
+	}
+	
+	if (landingSlug1 == "search" && document.getElementById("numOfResultsNews") !== null) {
+		
+		/*if ($('#numOfResultsPages').html() == '0 results') {
+			
+			if ($('#numOfResultsArticles').html() != '0 results') {
+				slideTo('numOfResultsArticles');
+			}
+			if ($('#numOfResultsArticles').html() == '0 results') {
+				
+				if ($('#numOfResultsNews').html() != '0 results') {
+					slideTo('numOfResultsNews');
+				}
+				if ($('#numOfResultsNews').html() == '0 results') {
+					
+					if ($('#numOfResultsProviders').html() != '0 results') {
+						slideTo('numOfResultsProviders');
+					}
+					
+				}
+				
+			}
+			
+		}*/
+		
+		if ($('#numOfResultsArticles').html() == '0 results') {
+			$('#sr_articles').hide();
+		}
+		if ($('#numOfResultsNews').html() == '0 results') {
+			$('#sr_news').hide();
+		}
+		if ($('#numOfResultsProviders').html() == '0 results') {
+			$('#sr_providers').hide();
+		}
+		
+	}
+	
+	getSessionData();
+	handleScroll();
+	getGoogleAPIKey();
+	
+	if (landingSlug1 == "search" ) {
+	
+		$('.location_block').each(function (index, value) {
+		
+			var ac1 = $(this).attr("id");
+			var ac2 = ac1.substr(ac1.length - 5);
+
+			if ($(this).data("reviews-slug") != '' || $(this).data("reviews-pid") != '') {
+				getLocalProviderReviewsData(ac2, $(this).data("reviews-slug"), $(this).data("nick"), $(this).data("reviews-pid"));
+			}
+
+		});
+	
+	}
+	
+	if ((landingSlug1 == "hearing-health" && landingSlug2 == "articles" && landingSlug3 != "") || (landingSlug1 == "our-story" && landingSlug2 == "news" && landingSlug3 != "")) {
+		if ($('window').width() <= 1159) {
+			$('#wrapper').after($('#share_buttons'));
+		}
+	}
+	if ((landingSlug1 == "hearing-health" && landingSlug2 == "articles" && landingSlug3 == "") || (landingSlug1 == "our-story" && landingSlug2 == "news" && landingSlug3 == "")) {
+		if ($('window').width() <= 619) {
+			showMobileSearchForm();
+		}
+	}
+	if (landingSlug1 == "our-story" && landingSlug2 == "news") {
+		removeArticleFilters();
+	}
+	
+	if ($(window).width() <= 769) { //  && landingPage == false
+		$('.footerRight').html('<a href="'+baseURL+'/contact">Contact</a><a href="'+baseURL+'/newsletter">Subscribe</a><a href="'+baseURL+'/careers">Careers</a><a href="'+baseURL+'/privacy-policy">Privacy Policy</a><a href="'+baseURL+'/hearing-health/frequently-asked-questions">FAQ</a><a href="'+baseURL+'/hearing-health/articles" onclick="articlesAutoFilter(\'\');">Articles</a><a class="forProfessionalsButton" href="https://www.cq-partners.com/" target="_blank">Become a CQ Member</a>');
+		$('.forProfessionalsButton').after($('#footerCopyright'));
+	}
+	if ($(window).width() <= 689) {
+		$('#cc_footer_uber').after($('#cc_footer_uberHolder .question'));
+	}
+	
+	if ($(window).width() <= 929) {
+	if ((landingSlug1 == "hearing-health" && (landingSlug2 == "hearing-loss-in-children" || landingSlug2 == "tips-for-family")) || landingSlug1 == 'secure-warranty') {
+		
+		var contentToMove = $('.tooTall').html();
+		$('.cont').prepend('<p class="intro" style="margin-bottom: 40px;">'+contentToMove+'</p>');
+		$('.tooTall').html('');
+		
+	}
+	}
+	if ((landingSlug1 == "contact" || landingSlug1 == "search" || landingSlug1 == "cq-partners" || landingSlug1 == "2022-coop-program") && $(window).width() <= 499) {
+		$('#contact_firstName').after($('#cfl_lastname'));
+		$('#contact_phone').after($('#cfl_email'));
+		
+		$('#contact_firstName2').after($('#cfl_lastname2'));
+		$('#contact_phone2').after($('#cfl_email2'));
+		$('#cfl_attendees').after($('#contact_attendees'));
+	}
+	if (landingSlug1 == "careers" && $(window).width() <= 1259) {
+		$('.careerQuoteHolder').before($('.dbZagRight'));
+	}
+	
+	// load mobile jQuery for swiping
+	if ($(window).width() <= 1024 || matchMedia('(pointer:coarse)').matches) { // also limit by URL?
+	
+		if ((landingSlug1 == "hearing-aids" && landingSlug2 == '') || (landingSlug1 == "hearing-health" && landingSlug2 == '') || (landingSlug1 == "hearing-health" && landingSlug2 == 'associated-conditions') || (landingSlug1 == "locations" && landingSlug2 != '') || landingSlug1 == "careers" || (landingSlug1 == "locations" && landingSlug2 == '' && locationsPageVer == 2)) {
+	
+			var importedScript2 = document.createElement('script');
+			importedScript2.src = baseURL+'/jquery.mobile-1.5.0-alpha.1.edited2.js';
+			document.head.appendChild(importedScript2);
+		
+		}
+		
+	}
+	if (landingSlug1 == "hearing-aids" && landingSlug2 == '') { $(window).resize(function(){    handleResizeHA();    }); }
+	
+	if (landingSlug1 == 'hearing-health' || landingSlug1 == 'hearing-aids' || landingSlug1 == 'efhp') {
+		if (SESS_LATITUDE == '' || SESS_LONGITUDE == '') {
+	
+			setTimeout("getMaxmind();", 1000);
+
+		}
+	}
+	
+	if (navigator.userAgent.indexOf('Mac OS X') != -1) {
+	  $("#phone").addClass("mac");
+	} else {
+	  $("#phone").addClass("pc");
+	}
+	
+	if (landingSlug1 == "reconnect22") {
+		
+		console.log("triggering style loop");
+		$('.redBox').addClass('blue');
+		setTimeout("setInterval(\"$('.redBox').removeClass('blue');\", 6000);", 3000);
+		setInterval("$('.redBox').addClass('blue');", 6000);
+		
+	}
+	
+});
+
+function checkHolidays(date) {
+
+	var validDay = true;
+	var day = date.getDay();
+	var isHoliday = false;
+	var dateString = date.toString();
+	if (dateString.indexOf('Wed Nov 27 2019') >= 0 || dateString.indexOf('Thu Nov 28 2019') >= 0 || dateString.indexOf('Tue Dec 24 2019') >= 0 || dateString.indexOf('Wed Dec 25 2019') >= 0 || dateString.indexOf('Wed Jan 01 2020') >= 0) {
+		
+		isHoliday = true;
+		return false;
+		
+	}
+	if (validDay == true && isHoliday == false) {
+	
+		return [true, ''];
+		
+	}
+	
+}
+
+function offDays(date) {
+
+	var validDay = true;
+	var day = date.getDay();
+	var isHoliday = false;
+	var dateString = date.toString();
+	
+	//console.log("date is "+date+", dateString is "+dateString);
+	//console.log("indexOf found, "+dateString+": "+dateString.indexOf('Wed Nov 27 2019'));
+	
+	if (dateString.indexOf('Wed Nov 27 2019') >= 0 || dateString.indexOf('Thu Nov 28 2019') >= 0 || dateString.indexOf('Tue Dec 24 2019') >= 0 || dateString.indexOf('Wed Dec 25 2019') >= 0 || dateString.indexOf('Wed Jan 01 2020') >= 0) {
+		
+		isHoliday = true;
+		return false;
+		
+	}
+	
+	if ((landingSlug1 == "providers" || landingSlug1 == "locations") && landingSlug2 != "") { 
+	
+		if (hours_Monday == "Closed" && day == 1) {
+			validDay = false;
+			return false;
+		}
+		if (hours_Tuesday == "Closed" && day == 2) {
+			validDay = false;
+			return false;
+		}
+		if (hours_Wednesday == "Closed" && day == 3) {
+			validDay = false;
+			return false;
+		}
+		if (hours_Thursday == "Closed" && day == 4) {
+			validDay = false;
+			return false;
+		}
+		if (hours_Friday == "Closed" && day == 5) {
+			validDay = false;
+			return false;
+		}
+		
+	}
+	if (landingSlug1 == "locations" && landingSlug2 == "") { 
+	
+		var $focused = $(':focus');
+		
+		if (changedMonthID == '') {
+
+			var focusedPieces = $focused.attr("id").split("_date");
+			var focusedID = focusedPieces[1];
+
+		}
+		if (changedMonthID != '') {
+
+			var focusedPieces = changedMonthID.split("_date");
+			var focusedID = focusedPieces[1];
+
+		}
+
+		if (eval('hours_Monday'+focusedID.replace('-', 'DASH')) == "Closed" && day == 1) {
+			validDay = false;
+			return false;
+		}
+		if (eval('hours_Tuesday'+focusedID.replace('-', 'DASH')) == "Closed" && day == 2) {
+			validDay = false;
+			return false;
+		}
+		if (eval('hours_Wednesday'+focusedID.replace('-', 'DASH')) == "Closed" && day == 3) {
+			validDay = false;
+			return false;
+		}
+		if (eval('hours_Thursday'+focusedID.replace('-', 'DASH')) == "Closed" && day == 4) {
+			validDay = false;
+			return false;
+		}
+		if (eval('hours_Friday'+focusedID.replace('-', 'DASH')) == "Closed" && day == 5) {
+			validDay = false;
+			return false;
+		}
+	
+	}
+	if (validDay == true && isHoliday == false) {
+	
+		return [true, ''];
+		
+	}
+
+}
+function noWeekendsOrHolidays(date) {
+
+    var noWeekend = $.datepicker.noWeekends(date);
+    
+    if (noWeekend[0]) {
+    
+    	   return checkHolidays(date);
+	   
+    } else {
+    
+        return noWeekend;
+	   
+    }
+    
+}
+function noWeekendsOrOffDays(date) {
+
+    var noWeekend = $.datepicker.noWeekends(date);
+    
+    if (noWeekend[0]) {
+    
+    	   return offDays(date);
+	   
+    } else {
+    
+        return noWeekend;
+	   
+    }
+    
+}
+function locationsPageScript() {
+
+	if (SESS_LATITUDE != '' && SESS_LONGITUDE != '') {
+	
+		lookUpLocalProviders();		
+		
+	}
+	if (SESS_LATITUDE == '' || SESS_LONGITUDE == '') {
+	
+		getMaxmind();
+	
+	}
+	
+	$(window).resize(function(){    handleResizeLocations();    });
+	
+	if (locationsPageVer == 2 && $(window).width() <= 1249) {
+		//$('#mobileFiltersButtonHolder').after($('#left_placeholder'));
+		//$('#left_placeholder').after($('#mobileFiltersButtonHolder'));
+		$('#locations_fields').after($('#mobileFiltersButtonHolder'));
+	}
+	
+}
+function handleResizeLocations() {
+	
+	if (locationsPageVer == 2) {
+		if ($('#left_map').length >= 1 && $(window).width() >= 1250) {
+			$('#left_map').css({ height: $(window).height()+'px' });
+		}
+	}
+	
+}
+function homePageScript() {
+	$("#hero").addClass("fadedIn");
+	$('#hero_search_date').datepicker({ 
+		
+	//minDate: 1, maxDate: 45, beforeShowDay: $.datepicker.noWeekends, monthNamesShort: $.datepicker._defaults.monthNames,
+	minDate: 1, maxDate: 45, beforeShowDay: noWeekendsOrHolidays, monthNamesShort: $.datepicker._defaults.monthNames,
+	
+	dateFormat: "MM dd, yy"
+
+	});
+	if (landingSlug1 == '' || landingSlug1 == "home") {
+		setTimeout("homeTyping()", 7000);
+	}
+	setTimeout("$('#uber_icon').addClass('fadedIn')", 1500);
+	setTimeout("$('#uber_health_blurb').addClass('fadedIn')", 3000);
+	setTimeout("$('#uber_car .fine').addClass('fadedIn')", 4500);
+	
+	if (SESS_LATITUDE == '' || SESS_LONGITUDE == '') {
+	
+		setTimeout("getMaxmind();", 1000);
+	
+	}
+}
+function homeTyping() {
+	var typed = new Typed('#heroH1', {
+	  strings: ["See Available Times and Providers", "Schedule Your Hearing Appointment", "See Available Times and Providers", "Schedule Your Hearing Appointment"],
+	  typeSpeed: 75,
+	  backSpeed: 40,
+	  backDelay: 3000,
+	  loop: true
+	});
+}
+function getSessionData() {
+	var fd = new FormData();
+	fd.append("action", 'GETSESSIONDATA');
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function(){
+	
+		if (xhr.readyState == 4 && xhr.status == 200){
+		
+			var sessPieces = xhr.responseText.split('|||');
+			SESS_LATITUDE = sessPieces[1];
+			SESS_LONGITUDE = sessPieces[2];
+			if (SESS_LATITUDE != '') {
+				geolocation = true;
+			}
+			if (landingSlug1 == "locations" && landingSlug2 == "") { 
+			
+			    setTimeout("locationsPageScript();", 50);
+		    
+			    if (locationsPageVer == 2) {
+			    	     //console.log("creating locations page map, 75");
+					setTimeout("createLocationsPageMap();", 75);
+			    } 
+			
+			}
+			SESS_CITY = sessPieces[3];
+			if (SESS_CITY != '') {
+				$('#nearestCityName').html(SESS_CITY);
+			}
+			SESS_ZIP = sessPieces[4];
+			if (SESS_ZIP != '') {
+				$('#locations_search_zip, #hero_search_zip, #footer_search_zip').val(SESS_ZIP);
+			}
+			SESS_DATE = sessPieces[5];
+			if (SESS_DATE != '') {
+				$('#locations_search_date, #hero_search_date, #provider_search_date, #footer_search_date').val(SESS_DATE);
+				if ((landingSlug1 == "providers" || landingSlug1 == "locations") && landingSlug2 != "" && booking_vendor != '') { 
+					getLocalProviderTimes(provider_account, $('#provider_search_date').val(), booking_days_out);					
+				}
+			}
+			
+			SESS_TIME = sessPieces[7];
+			SESS_ACCOUNT_NUM = sessPieces[8];
+			SESS_LOCATION_ID = sessPieces[9];
+			SESS_PROVIDER_ID = sessPieces[10];
+			SESS_ARTICLEFILTER = sessPieces[11];
+			SESS_SPLASHCLOSED = sessPieces[12];
+			SESS_LOCATIONSPAGEVISITED = sessPieces[13];
+			
+			if (geolocation == true && SESS_SPLASHCLOSED != 'true' && SESS_LOCATIONSPAGEVISITED != 'true' && (landingSlug1 == 'hearing-health' || landingSlug1 == 'hearing-aids' || landingSlug1 == 'efhp')) {
+			
+				setTimeout("populateSplashScreenProvider();", 2000);
+				
+			}
+			
+			if (SESS_ARTICLEFILTER != '') {
+				thisArticleFilter = SESS_ARTICLEFILTER;
+				setArticleFilter(thisArticleFilter);
+			}
+			
+			setTimeout("checkLandingHash();", 50);
+		
+		}
+		
+	}
+	xhr.open("POST", baseURL+"/process.php");
+	xhr.send(fd);
+}
+function providerDateUpdated() {
+	getLocalProviderTimes(provider_account, $('#provider_search_date').val(), booking_days_out);
+	setSessionData('SESS_DATE', $('#provider_search_date').val());
+	
+	setTimeout("$('#cantfind').css({ display: 'block' }).animate({ opacity: 1 });", 500);
+	setTimeout("$('#cantFindIcon').addClass('active');", 750);
+	
+}
+function setSessionData(myVar, myValue) {
+	var fd = new FormData();
+	fd.append("action", 'SETSESSIONDATA');
+	fd.append("var", myVar);
+	fd.append("value", myValue);
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function(){
+	
+		if (xhr.readyState == 4 && xhr.status == 200){
+		
+			
+		
+		}
+		
+	}
+	xhr.open("POST", baseURL+"/process.php");
+	xhr.send(fd);
+}
+function getGoogleAPIKey() {
+
+	googleAPIStarted = true;
+	
+	var fd = new FormData();
+	fd.append("action", 'GETGOOGLEAPIKEY');
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function(){
+		if (xhr.readyState == 4 && xhr.status == 200){
+
+			if (xhr.responseText != '') {
+			
+				googleAPIKey = xhr.responseText;
+				setSessionData('googleAPIKey', googleAPIKey);
+				googleAPILoaded = true;
+				var googleScript = document.createElement('script');
+				googleScript.src = '//maps.googleapis.com/maps/api/js?key='+googleAPIKey+'&callback=googleCheckComplete';
+				document.head.appendChild(googleScript);
+
+			}
+
+		}
+	}
+	xhr.open("POST", baseURL+"/process.php");
+	xhr.send(fd);
+	
+}
+function googleCheckComplete() {
+	googleCheck = true;
+}
+function checkMapVariables() {
+	
+	if (googleCheck == false) { 
+	
+		setTimeout("checkMapVariables()", 500);
+	
+	}
+	
+	if (googleCheck == true) { 
+	
+		if (SESS_LATITUDE == '') {
+		
+		    if ("geolocation" in navigator) {
+
+			  navigator.geolocation.getCurrentPosition(
+
+			  function success(position) {
+			  
+			  	geolocation = true;
+				ga('send', 'event', 'geolocationApproval', 'click', 'allowed');
+
+				SESS_LATITUDE = position.coords.latitude;
+				SESS_LONGITUDE = position.coords.longitude;
+				setSessionData('SESS_LATITUDE', position.coords.latitude);
+				setSessionData('SESS_LONGITUDE', position.coords.longitude);
+				
+				var myJSON = "//maps.googleapis.com/maps/api/geocode/json?latlng=" + SESS_LATITUDE + "," + SESS_LONGITUDE + "&sensor=false&key="+googleAPIKey;
+				$.getJSON(myJSON, function(data) { 
+
+					var jsonText = JSON.stringify(data);
+
+					var splits = jsonText.split('["country","political"]},{"long_name":"');
+					var split2 = splits[1].split('"');
+					
+					SESS_ZIP = split2[0];
+					setSessionData('SESS_ZIP', split2[0]);
+					
+					var split3 = jsonText.split('","types":["locality","political"');
+					var split3b = split3[0].split('"');
+					SESS_CITY = split3b[split3b.length-1];
+					setSessionData('SESS_CITY', SESS_CITY);
+					
+					$('#hero_search_zip, #locations_search_zip, #footer_search_zip').val(SESS_ZIP);
+		    			$('#nearestCityName').html(SESS_CITY);
+					
+					if (landingSlug1 == "home" || landingPage == true) { populateThreeFeaturedProviders(); createMap(); };
+					if (landingSlug1 == "locations" && landingSlug2 == "") {
+		    
+				     locationsPageScript();
+
+					    if (locationsPageVer == 2) {
+							//console.log("creating locations page map 100");
+							setTimeout("createLocationsPageMap();", 100);
+					    } 
+
+				     }
+
+				});
+				
+				if (geolocation == true && SESS_SPLASHCLOSED != 'true' && SESS_LOCATIONSPAGEVISITED != 'true' && (landingSlug1 == 'hearing-health' || landingSlug1 == 'hearing-aids' || landingSlug1 == 'efhp')) {
+			
+					setTimeout("populateSplashScreenProvider();", 2500);
+
+			     }
+
+			  },
+			  function error(error_message) {
+
+			    homeSelectDifferentLocation();
+			    $('.homeProviderName').html('(waiting for zip code)');
+			    geolocation = false;
+			    $('#local_providers').html('<p class="exclam">Please enter a valid zip code or city, state combination above to find your local hearing healthcare professionals.</p>');
+			    $('#weCanHelp').hide();
+			    createMap();
+			    ga('send', 'event', 'geolocationApproval', 'click', 'blocked');
+
+			  });
+
+		} else {
+		  
+		  homeSelectDifferentLocation();
+		  $('.homeProviderName').html('(waiting for zip code)');
+		  geolocation = false;
+		  $('#local_providers').html('<p class="exclam">Please enter a valid zip code or city, state combination above to find your local hearing healthcare professionals.</p>');
+		  $('#weCanHelp').hide();
+		  createMap();
+		  ga('send', 'event', 'geolocationApproval', 'click', 'blocked');
+
+		}
+		    
+		}
+		if (SESS_LATITUDE != '') {
+		
+		    $('#hero_search_zip, #locations_search_zip, #footer_search_zip').val(SESS_ZIP);
+		    $('#nearestCityName').html(SESS_CITY);
+		
+		    if (landingSlug1 == "home" || landingPage == true) { populateThreeFeaturedProviders(); createMap(); };
+		    
+		    if (landingSlug1 == "locations" && landingSlug2 == "") {
+		    
+			    locationsPageScript();
+		    
+			    if (locationsPageVer == 2) {
+			    	     //console.log("creating locations page map 50");
+					setTimeout("createLocationsPageMap();", 50);
+			    } 
+			
+		    }
+		    if ((landingSlug1 == "providers" || landingSlug1 == "locations") && landingSlug2 != "") { createProviderPageMap(); }
+		    
+		    if (geolocation == true && SESS_SPLASHCLOSED != 'true' && SESS_LOCATIONSPAGEVISITED != 'true' && (landingSlug1 == 'hearing-health' || landingSlug1 == 'hearing-aids' || landingSlug1 == 'efhp')) {
+			
+				setTimeout("populateSplashScreenProvider();", 2500);
+				
+		    }
+		    
+		}
+	    
+	}
+	
+}
+function createMap() {
+
+	$('#mapHolder_home').show();
+
+	if (geolocation == true) {
+
+		var current_location = new google.maps.LatLng(SESS_LATITUDE, SESS_LONGITUDE);
+		var myZoom = 9;
+		myPinSize = "large";
+	
+	}
+	if (geolocation == false) {
+	
+		var current_location = new google.maps.LatLng(40.607024, -98.386695);
+		var myZoom = 5;
+		myPinSize = "small";
+	
+	}
+	
+	var myGestureHandling = 'greedy';
+	if ($(window).width() <= 959) {
+		myGestureHandling = 'auto';
+	}
+	
+     var geoContent = new Array();
+     var mapOptions = {
+         center: current_location,
+         zoom: myZoom,
+	    gestureHandling: myGestureHandling,
+         mapTypeId: google.maps.MapTypeId.ROADMAP
+     };
+     googlemap = new google.maps.Map(document.getElementById("mapHolder_home"), mapOptions);
+	
+	var fd = new FormData();
+	fd.append("action", 'PUTPINSONMAP');
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function(){
+		if (xhr.readyState == 4 && xhr.status == 200){
+
+			if (xhr.responseText != '') {
+			
+				
+				
+				var responseLines = xhr.responseText.split("***NEWLINE***");
+				for (var i=0;i<responseLines.length-1;i++) {
+					
+					var rlPieces = responseLines[i].split('|||');
+					var rAccount = rlPieces[0];
+					var rPractice = rlPieces[1];
+					
+					var rAddress = rlPieces[3];
+					var rCity = rlPieces[4];
+					var rState = rlPieces[5];
+					var rZip = rlPieces[6];
+					
+					var rLatitude = rlPieces[7];
+					var rLongitude = rlPieces[8];
+					
+					var rNick = rlPieces[9];
+					
+					var rBooking = rlPieces[14];
+					
+					placeMarker(rPractice, rLatitude, rLongitude, rAddress, rCity, rState, rZip, rBooking, rNick, rAccount, myPinSize);
+					
+				}
+				
+			}
+
+		}
+	}
+	xhr.open("POST", baseURL+"/process.php");
+	xhr.send(fd);
+	
+	if ($(window).width() >= 1060) {
+	
+		$('#mapHolder_home').click(function () {
+
+		    $('#mapHolder_home .gm-style').css("pointer-events", "auto");
+
+		});
+
+		$("#mapHolder_home" ).mouseleave(function() {
+
+		    $('#mapHolder_home .gm-style').css("pointer-events", "none"); 
+
+		});
+	
+	}
+	
+}
+
+function placeMarker(myPractice, myLatitude, myLongitude, myAddress, myCity, myState, myZip, myBooking, myNick, myAccount, myPinSize) {
+
+	var geoContent = '<div class="accentTopLeft"></div><div class="accentTopRight"></div><p>'+myPractice + '<br>'+myAddress+'<br>'+myCity+', '+myState+' '+myZip+'</p>'; // Exclusive EarQ Provider<br>
+	
+	var myNickExtra = '';
+	if (myAccount.indexOf('-') >= 1) {
+		myNickExtra = '/'+myCity.replace(/ /g,"-").toLowerCase();
+	}
+	
+	if (myBooking == 'SCHEDULERYES') {
+		if (landingSlug1 != 'locations') {
+			geoContent += '<a class="tinyCalendar" href="locations/'+myNick+myNickExtra+'">Online Booking Available</a>';
+		}
+		if (landingSlug1 == 'locations') {
+			geoContent += '<a class="tinyCalendar" href="locations/'+myNick+myNickExtra+'">Online Scheduling</a>';
+		}
+	}
+	if (myBooking != 'SCHEDULERYES') {
+		if (landingSlug1 != 'locations') {
+			geoContent += '<a class="tinyEnvelope" href="locations/'+myNick+myNickExtra+'">Request an Appointment</a>';
+		}
+		if (landingSlug1 == 'locations') {
+			geoContent += '<a class="tinyEnvelope" href="locations/'+myNick+myNickExtra+'">Request Appt.</a>';
+		}
+	}
+	
+	if (landingSlug1 != 'locations') {
+		geoContent += '<a class="tinyProfile" href="locations/'+myNick+myNickExtra+'">Learn More about this Provider</a>';
+	}
+	if (landingSlug1 == 'locations') {
+		geoContent += '<a class="tinyProfile" href="locations/'+myNick+myNickExtra+'">Learn More</a>';
+		myPinSize = "small";
+	}
+	
+	var myIconPNG = 'icon-location3.png';
+	if (myPinSize == "small") {
+		myIconPNG = 'icon-location3-small.png';
+	}
+			
+	var mark = new google.maps.Marker({
+		 position: new google.maps.LatLng(myLatitude, myLongitude),
+		 map: googlemap,
+		 icon: 'https://cdn.earq.com/platform_images/'+myIconPNG
+	});
+	google.maps.event.addListener(mark, 'click', (function(mark, key) {
+		 return function() {
+		 
+		 	closeAllInfoWindows();
+			
+			var infoWindow = new google.maps.InfoWindow({
+			    content: geoContent
+			});
+			
+			moveToLocation(myLatitude, myLongitude);
+		 
+			infoWindow.setContent(geoContent);
+			infoWindow.open(googlemap, mark);
+			infoWindow.setOptions({ disableAutoPan : true });
+
+			infoWindow.addListener('closeclick',function(){
+
+			});
+
+		 }
+	})(mark));
+
+}
+
+function closeAllInfoWindows() {
+	
+	$('.gm-style-iw, .gm-style-iw-c, .gm-style-iw-a, .gm-style-iw-t, .gm-style-iw-d').remove();
+	if (infoWindow) {
+         infoWindow.close();
+     }
+	
+}
+
+function moveToLocation(lat, lng){
+    diff = -0.055;
+    lat2 = lat-diff;
+    var center = new google.maps.LatLng(lat2, lng);
+    googlemap.panTo(center);
+    
+    if (landingSlug1 == "locations" && landingSlug2 == "" && locationsPageVer == 2 && $(window).width() >= 1250) {
+    	   
+	   $('.location_block').each(function (index, value) {
+	   	   if ($(this).attr("data-latitude") == lat && $(this).attr("data-longitude") == lng) {
+		   	  slideTo($(this).attr("id"), 250);
+		   }
+	   });
+	   
+    }
+    
+}
+
+function getMaxmind() {
+	
+	checkMapVariables();
+
+}
+function goMaxmind() {
+
+}
+function populateThreeFeaturedProviders() {
+
+	$('#threeFeaturedHolder').show();
+	
+	var fd = new FormData();
+	fd.append("action", 'THREEFEATUREDPROVIDERS');
+	fd.append("SESS_LATITUDE", SESS_LATITUDE);
+	fd.append("SESS_LONGITUDE", SESS_LONGITUDE);
+	
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function(){
+	
+		if (xhr.readyState == 4 && xhr.status == 200){
+		
+			if (xhr.responseText == '***NEWLINE***') {
+				$('.homeProviderName').html('<span class="loading"></span>');
+				setTimeout("populateThreeFeaturedProviders();", 1000);
+			}
+
+			if (xhr.responseText != '' && xhr.responseText != '***NEWLINE***') {
+			
+				$('#city_search_error_message').html('').hide();
+				
+			
+				var fpLines = xhr.responseText.split('***NEWLINE***');
+				for (i=1;i<=3;i++) {
+					
+					var fpPieces = fpLines[i].split('|||');
+					
+					var providerURLExtra = '';
+					if (fpPieces[0].indexOf('-') >= 1) {
+						if (fpPieces[10] == '') {
+							providerURLExtra = '/'+fpPieces[3].replace(/ /g,"-").toLowerCase();
+						}
+						if (fpPieces[10] != '') {
+							providerURLExtra = '/'+fpPieces[10];
+						}
+					}
+					
+					$('#featuredProvider'+i+' .homeProviderName').html(fpPieces[1]);
+					$('#featuredProvider'+i+' .homePreviewAddress').html(fpPieces[2]+'<br>'+fpPieces[3]+', '+fpPieces[4]+' '+fpPieces[5]);
+					$('#featuredProvider'+i+' .learnMoreButton').show().attr("href", "locations/"+fpPieces[6]+providerURLExtra);
+					
+					if (fpPieces[7] != '' && fpPieces[7] != 0 && fpPieces[7] != '0') {
+					
+						$('#featuredProvider'+i+' .reviewStarsHolderOuter').show();
+						$('#featuredProvider'+i+' .readReviewsButton').show().attr("href", "locations/"+fpPieces[6]+providerURLExtra+"#reviews").html('Read '+fpPieces[7]+' Reviews');
+						var agg = fpPieces[8];
+						var aggWidth = fpPieces[8]/5;
+						var starsWidth = 144*aggWidth;
+						$('#featuredProvider'+i+' .reviewStarsHolder').animate({ width: starsWidth+'px' });
+						
+						if ($('#featuredProvider'+i+' .homeProviderName').height() <= 50) {
+							
+						}
+					
+					}
+					if (fpPieces[7] == '' || fpPieces[7] == 0 || fpPieces[7] == '0') {
+						$('#featuredProvider'+i+' .reviewStarsHolderOuter').hide();
+						$('#featuredProvider'+i+' .readReviewsButton').hide();
+					}
+					
+				}
+				
+			}
+
+		}
+		
+	}
+	xhr.open("POST", baseURL+"/process.php");
+	xhr.send(fd);
+	
+}
+
+function handleScroll() {
+
+	if (landingSlug1 == "home") { 
+	
+		if ($(window).scrollTop() >= 500) {
+
+		}
+	
+	}
+	if (landingSlug1 == "blog" || landingSlug1 == "news" || landingSlug1 == "press" || (landingSlug1 == "hearing-health" && landingSlug2 == "articles" && landingSlug3 != '') || (landingSlug1 == "our-story" && landingSlug2 == "press" && landingSlug3 != '')) { 
+		
+		if ($(window).width() >= 1160) {
+		
+			var scrollness = $(document).scrollTop();
+			var heightness = $('#article').height();
+			if (scrollness >= (heightness-240)) {
+				$('#share_buttons').css({ position: 'absolute', top: 140+$('#article').height()-250+'px' });
+			}
+			if (scrollness < (heightness-240)) {
+				$('#share_buttons').css({ position: 'fixed', top: '140px' });
+			}
+
+		}
+	
+	}
+	
+	if (landingSlug1 == "locations" && landingSlug2 == "" && $('#left_map').length >= 1 && $(document).scrollTop() >= 1) {
+	
+		if ($(window).width() >= 1250) { // make the map hug the left
+	
+			var scrollness = $(document).scrollTop();
+			if (scrollness >= 199) {
+				$('#left_map').addClass('hug');
+			}
+			if (scrollness <= 198) {
+				$('#left_map').removeClass('hug');
+			}
+
+			var copyOffset = $('.locationsPageCopy').offset().top-$('.locationsPageCopy').height();
+			if (scrollness >= copyOffset) {
+				$('#left_map').addClass('past').css({ 'margin-top': scrollness-(scrollness-copyOffset)+'px' });
+			}
+			if (scrollness < copyOffset) {
+				$('#left_map').removeClass('past').css({ 'margin-top': '0px' });
+			}
+		
+		}
+		
+	}
+	
+}
+$(window).bind( 'hashchange', function( event ) {
+	handleHash();
+});	
+$(window).scroll(function(){
+	handleScroll();		
+});
+function handleHash() {
+
+	var hash = window.location.hash.substring(1);
+	if (hash.split("#") != '') {
+		myHash = hash.split("#");
+	}
+	if (myHash != "") {
+		var scrollTop = $(window).scrollTop();
+		slideTo(myHash);
+	}
+
+}
+function slideTo(mySection, mySpeed) {
+
+	var scrollTop = $(window).scrollTop();
+	var target = "#"+mySection;
+	$target = $(target);
+	var targo = $target.offset().top-30;
+	
+	var slideSpeed = 1000;
+	if (mySpeed !== undefined) {
+		slideSpeed = mySpeed;
+	}
+
+	$('html, body').stop().animate({ 'scrollTop': targo }, slideSpeed);	
+	
+}
+function homeSelectDifferentLocation() {
+	$('.cityCenterH2, #nearestCityName, .cityCenterChangeButton').hide();
+	$('#city_search_zip, #city_search_zip_button').show();
+}
+$("#city_search_zip").keyup(function (e) {
+	if (e.keyCode == 13) {   citySearchByZip();   }
+});
+function citySearchByZip() {
+
+	var validForm = true;
+	
+	if ($('#city_search_zip').val() == '') {
+		validForm = false;
+		$('#city_search_error_message').css({ display: 'block', opacity: 0 }).html('PLEASE ENTER VALID CITY AND STATE OR ZIP').animate({ opacity: 1 });
+	}
+
+	if (validForm == true && $('#city_search_zip').val() != '' && ($.isNumeric($('#city_search_zip').val()) || $('#city_search_zip').val().indexOf(',') >= 1 || $('#city_search_zip').val().indexOf(' ') >= 1 || $('#city_search_zip').val().indexOf('-') >= 1)) {
+	
+		$('#city_search_error_message').html('').hide();
+		
+		var valToSearch = $('#city_search_zip').val();
+		if ($('#city_search_zip').val() == '85248') {
+			valToSearch = 'Sun Lakes, AZ';
+		}
+
+		var myJSON = "//maps.googleapis.com/maps/api/geocode/json?key="+googleAPIKey+"&address=" + valToSearch;
+		$.getJSON(myJSON, function(data) {
+
+			var jsonText = JSON.stringify(data);
+
+			if (jsonText == '{"results":[],"status":"ZERO_RESULTS"}') {
+				$('#city_search_error_message').show().html('PLEASE ENTER VALID CITY AND STATE OR ZIP').animate({ opacity: 1 });
+				ga('send', 'event', { eventCategory: 'search', eventAction: 'homePageCitySearch', eventLabel: $('#city_search_zip').val() });
+			}
+
+			if (jsonText != '{"results":[],"status":"ZERO_RESULTS"}') {
+			
+				SESS_ZIP = $('#city_search_zip').val();
+				setSessionData('SESS_ZIP', $('#city_search_zip').val());
+				$('#hero_search_zip').val($('#city_search_zip').val());
+
+				$('.homeProviderName, .homePreviewAddress, .readReviewsButton').html('');
+				$('.homeProviderName').html('<span class="loading"></span>');
+				$('.reviewStarsHolder').css({ width: '1px' });
+				$('.featuredProvider .learnMoreButton').attr("href", '#');
+
+				var split1 = jsonText.split('lat":');
+				var split1b = split1[1].split(',');
+				var split2 = split1[1].split(',"lng":');
+				var split2b = split2[1].split(',');
+				var split2c = split2b[0].split('}');
+
+				var split3 = jsonText.split('","types":["locality","political"');
+				var split3b = split3[0].split('"');
+
+				geolocation = true;
+
+				if (myPinSize == "large") {
+					moveToLocation(split1b[0], split2c[0]);
+				}
+				SESS_LATITUDE = split1b[0];
+				SESS_LONGITUDE = split2c[0];
+				
+				SESS_CITY = split3b[split3b.length-1];
+				setSessionData('SESS_LATITUDE', split1b[0]);
+				setSessionData('SESS_LONGITUDE', split2c[0]);
+				setSessionData('SESS_CITY', SESS_CITY);
+				$('#nearestCityName').html(SESS_CITY);
+
+				setTimeout("populateThreeFeaturedProviders();", 250);
+				
+				//ga('send', 'event', { eventCategory: 'search', eventAction: 'homePageCitySearch', eventLabel: $('#city_search_zip').val() });
+				ga('send', 'event', 'search', 'homePageCitySearch', $('#city_search_zip').val());
+
+				$('.cityCenterH2, #nearestCityName, .cityCenterChangeButton').show();
+				$('#city_search_zip, #city_search_zip_button').hide();
+
+				if (myPinSize == "small") {
+					myPinSize = "large";
+					createMap();
+				}
+
+			}
+
+		});
+	
+	}
+	
+}
+function homeDateUpdated() {
+	$('#hero_search_zip').focus();
+	setSessionData('SESS_DATE', $('#hero_search_date').val());
+}
+function homeZipUpdated() {
+	$('.hero_search_submit').focus();
+	if ($.isNumeric($('#hero_search_zip').val())) {
+		setSessionData('SESS_ZIP', $('#hero_search_zip').val());
+	}
+}
+$("#hero_search_zip").keyup(function (e) {
+	if ($.isNumeric($('#hero_search_zip').val())) {
+		setSessionData('SESS_ZIP', $('#hero_search_zip').val());
+	}
+	if (e.keyCode == 13) {   heroSearchFindAppointments();   }
+});
+function heroSearchFindAppointments() {
+	var validForm = true;
+	if ($('#hero_search_zip').val() == '') { //  || $('#hero_search_date').val() == ''
+		validForm = false;
+		$('#hero_error_message').css({ display: 'block', opacity: 0 }).html('PLEASE ENTER VALID CITY AND STATE OR ZIP').animate({ opacity: 1 });
+		ga('send', 'event', { eventCategory: 'search', eventAction: 'emptyHomePageSearch', eventLabel: $('#hero_search_zip').val() });
+	}
+	if (validForm == true && (!$.isNumeric($('#hero_search_zip').val()) || $('#hero_search_zip').val().indexOf(',') == -1 || $('#hero_search_zip').val().indexOf(' ') == -1 || $('#hero_search_zip').val().indexOf('-') == -1)) {
+		validForm = false;
+		$('#hero_error_message').css({ display: 'block', opacity: 0 }).html('PLEASE ENTER VALID CITY AND STATE OR ZIP').animate({ opacity: 1 });
+		//ga('send', 'event', { eventCategory: 'search', eventAction: 'invalidHomePageSearch', eventLabel: $('#hero_search_zip').val() });
+	}
+	if ($('#hero_search_zip').val() != '' && ($.isNumeric($('#hero_search_zip').val()) || $('#hero_search_zip').val().indexOf(',') >= 1 || $('#hero_search_zip').val().indexOf(' ') >= 1 || $('#hero_search_zip').val().indexOf('-') >= 1)) { //  && $('#hero_search_date').val() != ''
+	
+		$('#hero_error_message').html('&nbsp;');
+		
+		var valToSearch = $('#hero_search_zip').val();
+		if ($('#hero_search_zip').val() == '85248') {
+			valToSearch = 'Sun Lakes, AZ';
+		}
+		if ($('#hero_search_zip').val() == '12203') {
+			valToSearch = '10 McKown Rd, 1 Pinnacle Pl, Albany, NY 12203';
+		}
+		
+		var myJSON = "//maps.googleapis.com/maps/api/geocode/json?key="+googleAPIKey+"&address=" + valToSearch;
+		$.getJSON(myJSON, function(data) {
+
+			var jsonText = JSON.stringify(data);
+
+			if (jsonText == '{"results":[],"status":"ZERO_RESULTS"}') {
+				$('#hero_error_message').show().html('PLEASE ENTER VALID CITY AND STATE OR ZIP').animate({ opacity: 1 });
+				ga('send', 'event', { eventCategory: 'search', eventAction: 'zeroResultsHomePageSearch', eventLabel: $('#hero_search_zip').val() });
+			}
+			if (jsonText != '{"results":[],"status":"ZERO_RESULTS"}') {
+				
+				setSessionData('SESS_ZIP', $('#hero_search_zip').val());
+				SESS_ZIP = $('#hero_search_zip').val();
+				
+				SESS_DATE = $('#hero_search_date').val();
+				setSessionData('SESS_DATE', SESS_DATE);
+				
+				var split1 = jsonText.split('lat":');
+				var split1b = split1[1].split(',');
+				var split2 = split1[1].split(',"lng":');
+				var split2b = split2[1].split(',');
+				var split2c = split2b[0].split('}');
+
+				var split3 = jsonText.split('","types":["locality","political"');
+				var split3b = split3[0].split('"');
+				
+				SESS_LATITUDE = split1b[0];
+				SESS_LONGITUDE = split2c[0];
+				
+				SESS_CITY = split3b[split3b.length-1];
+				setSessionData('SESS_LATITUDE', split1b[0]);
+				setSessionData('SESS_LONGITUDE', split2c[0]);
+				setSessionData('SESS_CITY', SESS_CITY);
+				$('#nearestCityName').html(SESS_CITY);
+				setTimeout('window.location = baseURL+"/locations";', 1500);
+				
+				$('.hero_search_submit').css({ color: 'rgba(255, 255, 255, 1)', 'pointer-events': 'none' }).html('SEARCHING').animate({ color: '#ffffff' });
+				setTimeout("$('.hero_search_submit').html('SEARCHING.');", 500);
+				setTimeout("$('.hero_search_submit').html('SEARCHING..');", 900);
+				setTimeout("$('.hero_search_submit').html('SEARCHING...');", 1300);
+				
+				ga('send', 'event', { eventCategory: 'search', eventAction: 'homePageSearch', eventLabel: $('#hero_search_zip').val() });
+				
+			}
+			
+		});
+
+	}
+}
+function locationsDateUpdated() {
+	if ($('#locations_search_zip').val() == '') {
+		$('#locations_search_zip').focus();
+	}
+	setSessionData('SESS_DATE', $('#locations_search_date').val());
+	if ($('#locations_search_zip').val() != '' && $('#locations_search_zip').val() != '' && ($.isNumeric($('#locations_search_zip').val()) || $('#locations_search_zip').val().indexOf(',') >= 1 || $('#locations_search_zip').val().indexOf(' ') >= 1 || $('#locations_search_zip').val().indexOf('-') >= 1) && SESS_ZIP != '') {
+		locationsSearchFindAppointments();
+	}
+}
+function locationsZipUpdated() {
+	$('.locations_search_submit').focus();
+	if ($.isNumeric($('#locations_search_zip').val())) {
+		setSessionData('SESS_ZIP', $('#locations_search_zip').val());
+	}
+	if ($(window).width() <= 949 && locationsPageVer == 2) {
+		$('.locations_search_submit').click();
+	}
+}
+$("#locations_search_zip").keyup(function (e) {
+	if (e.keyCode == 13) {   locationsSearchFindAppointments();   }
+});
+function locationsSearchFindAppointments() {
+	
+	var validForm = true;
+	if ($('#locations_search_zip').val() == '' || $('#locations_search_date').val() == '') {
+		validForm = false;
+		$('#locations_error_message').css({ display: 'block', opacity: 0 }).html('PLEASE ENTER VALID CITY AND STATE OR ZIP').animate({ opacity: 1 });
+		ga('send', 'event', { eventCategory: 'search', eventAction: 'emptyLocationsPageSearch', eventLabel: $('#locations_search_zip').val() });
+		
+	}
+	if (validForm == true && (!$.isNumeric($('#locations_search_zip').val()) || $('#locations_search_zip').val().indexOf(',') == -1 || $('#locations_search_zip').val().indexOf(' ') == -1 || $('#locations_search_zip').val().indexOf('-') == -1)) {
+		validForm = false;
+		$('#locations_error_message').css({ display: 'block', opacity: 0 }).html('PLEASE ENTER VALID CITY AND STATE OR ZIP').animate({ opacity: 1 });
+		//ga('send', 'event', { eventCategory: 'search', eventAction: 'invalidLocationsPageSearch', eventLabel: $('#locations_search_zip').val() });
+	}
+	if ($('#locations_search_zip').val() != '' && ($.isNumeric($('#locations_search_zip').val()) || $('#locations_search_zip').val().indexOf(',') >= 1 || $('#locations_search_zip').val().indexOf(' ') >= 1 || $('#locations_search_zip').val().indexOf('-') >= 1) && $('#locations_search_date').val() != '') {
+	
+		$('#locations_error_message').html('').hide();
+		
+		var valToSearch = $('#locations_search_zip').val();
+		if ($('#locations_search_zip').val() == '85248') {
+			valToSearch = 'Sun Lakes, AZ';
+		}
+		if ($('#locations_search_zip').val() == '12203') {
+			valToSearch = '10 McKown Rd, 1 Pinnacle Pl., Albany, NY 12203';
+		}
+		
+		var myJSON = "//maps.googleapis.com/maps/api/geocode/json?key="+googleAPIKey+"&address=" + valToSearch;
+		$.getJSON(myJSON, function(data) {
+
+			var jsonText = JSON.stringify(data);
+
+			if (jsonText == '{"results":[],"status":"ZERO_RESULTS"}') {
+				$('#locations_error_message').show().html('PLEASE ENTER VALID CITY AND STATE OR ZIP').animate({ opacity: 1 });
+				$('#local_providers').html('<p class="exclam">Please enter a valid zip code or city, state combination above to find your local hearing healthcare professionals.</p>');
+				$('#weCanHelp').hide();
+				ga('send', 'event', { eventCategory: 'search', eventAction: 'zeroResultsLocationsPageSearch', eventLabel: $('#locations_search_zip').val() });
+			}
+			if (jsonText != '{"results":[],"status":"ZERO_RESULTS"}') {
+			
+				$('#weCanHelp').hide();
+
+				SESS_ZIP = $('#locations_search_zip').val();
+				SESS_DATE = $('#locations_search_date').val();
+				
+				setSessionData('SESS_ZIP', SESS_ZIP);
+				setSessionData('SESS_DATE', SESS_DATE);
+				
+				$('#local_providers').html('');
+				$('#local_providers').html('<div class="loading"></div><p><br>(Looking up local providers, please stand by.)</p>');
+				
+				var split1 = jsonText.split('lat":');
+				var split1b = split1[1].split(',');
+				var split2 = split1[1].split(',"lng":');
+				var split2b = split2[1].split(',');
+				var split2c = split2b[0].split('}');
+
+				var split3 = jsonText.split('","types":["locality","political"');
+				var split3b = split3[0].split('"');
+				
+				SESS_LATITUDE = split1b[0];
+				SESS_LONGITUDE = split2c[0];
+				
+				SESS_CITY = split3b[split3b.length-1];
+				setSessionData('SESS_LATITUDE', split1b[0]);
+				setSessionData('SESS_LONGITUDE', split2c[0]);
+				setSessionData('SESS_CITY', SESS_CITY);
+				
+				lookUpLocalProvidersACTIVE = false;
+				setTimeout('lookUpLocalProviders();', 50);
+				if (locationsPageVer == 2) {
+				
+					$('#left_map').html('');
+					setTimeout('createLocationsPageMap();', 50);
+					
+				}
+				
+				ga('send', 'event', { eventCategory: 'search', eventAction: 'locationsPageSearch', eventLabel: $('#locations_search_zip').val() });
+				
+			}
+			
+		});
+
+	}
+	
+	if ($(window).width() <= 1249) {
+		hideLocationsMobileFilters();
+	}
+	
+}
+
+var attributeFilters = ['tinnitus', 'pediatric', 'balance', 'repair', 'cochlear', 'wax', 'ent'];
+var att_tinnitus = false;
+var att_pediatric = false;
+var att_balance = false;
+var att_repair = false;
+var att_cochlear = false;
+var att_wax = false;
+var att_ent = false;
+
+function filterSpecialty(mySpecialty) {
+
+	var someBoxChecked = false;
+
+	for (var i=0;i<attributeFilters.length;i++) {
+		
+		if ($('#lc_'+attributeFilters[i]).prop('checked')) {
+			ga('send', 'event', { eventCategory: 'filter', eventAction: 'filterClickOn', eventLabel: attributeFilters[i] });
+			window['att_'+attributeFilters[i]] = true;
+			$('#bubble_'+attributeFilters[i]+', #filteringResultsBy, #filteringResultsByClear').css({ display: 'block' });
+			someBoxChecked = true;
+		}
+		if (!$('#lc_'+attributeFilters[i]).prop('checked')) {
+			window['att_'+attributeFilters[i]] = false;
+			$('#bubble_'+attributeFilters[i]).css({ display: 'none' });
+		}
+		
+	}
+	
+	if (someBoxChecked == false) {
+	
+		$('.location_block').show();
+		$('#filteringResultsBy, #filteringResultsByClear').css({ display: 'none' });
+		$('#right_results .bubble').css({ display: 'none' });
+		
+	}
+	if (someBoxChecked == true) {
+	
+		$('.location_block').show();
+		
+		for (var i=0;i<attributeFilters.length;i++) {
+	
+			$('.location_block').each(function (index, value) {
+
+				if (window['att_'+attributeFilters[i]] == true && $(this).hasClass('att_'+attributeFilters[i])) {
+					//$(this).show();
+				}
+				if (window['att_'+attributeFilters[i]] == true && !$(this).hasClass('att_'+attributeFilters[i])) {
+					$(this).hide();
+				}
+
+			});
+		
+		}
+		
+	}
+	
+	if ($('#lc_uber').prop('checked')) {
+		filterFeeRides();
+	}
+	if ($('#lc_online').prop('checked')) {
+		filterOnlineBooking();
+	}
+	
+}
+function removeFilter(myFilter) {
+
+	$('#lc_'+myFilter).prop('checked', false); 
+	$('#bubble_'+myFilter).css({ display: 'none' });
+	filterSpecialty();
+	
+	if (myFilter == 'online') {
+		filterOnlineBooking();
+	}
+	if (myFilter == 'uber') {
+		filterFreeRides();
+	}
+	
+}
+function filterOnlineBooking() {
+
+	if ($('#lc_online').prop('checked')) {
+	
+		ga('send', 'event', { eventCategory: 'filter', eventAction: 'filterClickOn', eventLabel: 'onlineScheduling' });
+		
+		$('.location_block').each(function (index, value) {
+
+			if (!$(this).hasClass('att_online')) {
+				$(this).hide();
+			}
+			
+		});
+		
+	}
+	if (!$('#lc_online').prop('checked')) {
+		
+		$('.location_block').show();
+		filterSpecialty();
+		
+	}
+	
+}
+
+function filterTimeOfDay(myTime) {
+
+	$('.tod_am, .tod_pm').show();
+	
+	if (myTime == "morning" && $('#lc_morning').prop('checked')) {
+		ga('send', 'event', { eventCategory: 'filter', eventAction: 'filterClickOn', eventLabel: "morning" });
+		$("#lc_afternoon" ).prop("checked", false);
+		$('.tod_pm').hide();
+	}
+	if (myTime == "afternoon" && $('#lc_afternoon').prop('checked')) {
+		ga('send', 'event', { eventCategory: 'filter', eventAction: 'filterClickOn', eventLabel: "afternoon" });
+		$("#lc_morning" ).prop("checked", false);
+		$('.tod_am').hide();
+	}
+	
+}
+function filterFreeRides() {
+
+	if ($('#lc_uber').prop('checked')) {
+	
+		ga('send', 'event', { eventCategory: 'filter', eventAction: 'filterClickOn', eventLabel: 'uber' });
+		
+		$('.location_block').each(function (index, value) {
+
+			if (!$(this).hasClass('att_uber')) {
+				$(this).hide();
+			}
+			
+		});
+		
+	}
+	if (!$('#lc_uber').prop('checked')) {
+		
+		$('.location_block').show();
+		filterSpecialty();
+		
+	}
+
+}
+
+var lookUpLocalProvidersACTIVE = false;
+
+function lookUpLocalProviders() {
+
+	if (lookUpLocalProvidersACTIVE == false) {
+	
+		lookUpLocalProvidersACTIVE = true;
+	
+		var fd = new FormData();
+		fd.append("action", 'LOOKUPLOCALPROVIDERS');
+		fd.append("SESS_LATITUDE", SESS_LATITUDE);
+		fd.append("SESS_LONGITUDE", SESS_LONGITUDE);
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function(){
+			if (xhr.readyState == 4 && xhr.status == 200){
+
+				if (xhr.responseText != '' && xhr.responseText != 'NO PROVIDERS') {
+
+					var responseLines = xhr.responseText.split("***NEWLINE***");
+					for (var i=0;i<responseLines.length-1;i++) {
+
+						var lpPieces = responseLines[i].split('|||');
+						var lpAccount = lpPieces[0];
+						var lpPractice = lpPieces[1];
+
+						var lpAddress = lpPieces[3];
+						var lpCity = lpPieces[4]; // this was here already
+						var lpState = lpPieces[5];
+						var lpZip = lpPieces[6];
+
+						var lpAddressCityStateZip = lpAddress+', '+lpCity+', '+lpState+' '+lpZip;
+						var lpCityStateZip = lpCity+', '+lpState+' '+lpZip;
+
+						var lpLatitude = lpPieces[7];
+						var lpLongitude = lpPieces[8];
+
+						var lpNick = lpPieces[9];
+						var lpLogo = lpPieces[11];
+						var lpHeadshot = lpPieces[12];
+
+						var lpBooking = lpPieces[14];
+
+						var lpReviewsStatus = lpPieces[15];
+						var lpReviewsSlug = lpPieces[16];
+
+						var lpAtt_tinnitus = lpPieces[17];
+						var lpAtt_pediatric = lpPieces[18];
+						var lpAtt_balance = lpPieces[19];
+						var lpAtt_repair = lpPieces[20];
+						var lpAtt_cochlear = lpPieces[21];
+						var lpAtt_wax = lpPieces[22];
+						var lpAtt_ent = lpPieces[23];
+						var lpAtt_uber = lpPieces[24];
+
+						var lpManufacturer = lpPieces[25];
+						var lpDistance = lpPieces[26];
+						var lpHours = lpPieces[27];
+						var lpDaysOut = lpPieces[33];
+
+						var lpReviewsGooglePID = lpPieces[34];
+						var lpPlatformCityDisplay = lpPieces[35];
+						var lpPlatformCityNick = lpPieces[36];
+
+						var lpFree = lpPieces[37];
+						var lpTrialDays = lpPieces[38];
+
+						generateLocalProviderResult(lpAccount, lpPractice, lpCity, lpBooking, lpReviewsStatus, lpNick, lpLogo, lpHeadshot, lpReviewsSlug, lpAtt_tinnitus, lpAtt_pediatric, lpAtt_balance, lpAtt_repair, lpAtt_cochlear, lpAtt_wax, lpAtt_ent, lpAtt_uber, lpManufacturer, lpDistance, lpHours, lpDaysOut, lpReviewsGooglePID, lpPlatformCityDisplay, lpPlatformCityNick, lpAddressCityStateZip, lpLatitude, lpLongitude, lpAddress, lpState, lpZip, lpFree, lpTrialDays);
+
+						var lpMonday = lpPieces[28];
+						var lpTuesday = lpPieces[29];
+						var lpWednesday = lpPieces[30];
+						var lpThursday = lpPieces[31];
+						var lpFriday = lpPieces[32];
+
+						eval('hours_Monday'+lpAccount.replace("-", "DASH")+' = "'+lpMonday+'"');
+						eval('hours_Tuesday'+lpAccount.replace("-", "DASH")+' = "'+lpTuesday+'"');
+						eval('hours_Wednesday'+lpAccount.replace("-", "DASH")+' = "'+lpWednesday+'"');
+						eval('hours_Thursday'+lpAccount.replace("-", "DASH")+' = "'+lpThursday+'"');
+						eval('hours_Friday'+lpAccount.replace("-", "DASH")+' = "'+lpFriday+'"');
+
+					}
+
+					var divList = $(".location_block");
+					divList.sort(function(a, b){
+					    return $(a).data("data-sort")-$(b).data("data-sort")
+					});
+					$("#local_providers").html(divList);
+
+					$('#weCanHelp').show();
+
+				}
+
+				if (xhr.responseText == '' || xhr.responseText == 'NO PROVIDERS') {
+
+					$('#local_providers').html('<p style="font-size: 1.4em;"><strong>We\'re sorry, but we were unable to find any local providers within 50 minutes of the search area requested.<br><br>Please try another city, state or zip entry.</strong></p>')
+
+				}
+
+			}
+
+		}
+		xhr.open("POST", baseURL+"/process.php");
+		xhr.send(fd);
+	
+	}
+	
+}
+function generateLocalProviderResult(myAccount, myPractice, myCity, myBooking, myReviewsStatus, myNick, myLogo, myHeadshot, myReviewsSlug, myTinnitus, myPediatric, myBalance, myRepair, myCochlear, myWax, myEnt, myUber, myManufacturer, myDistance, myHours, myDaysOut, myReviewsGooglePID, myPlatformCityDisplay, myPlatformCityNick, myAddressCityStateZip, myLatitude, myLongitude, myAddress, myState, myZip, myFree, myTrialDays) {
+
+	if (myAccount == 'PA051-01') {
+		myBooking = 'SCHEDULERNO';
+	}
+	
+	var myNickExtra = '';
+	if (myAccount.indexOf('-') >= 1) {
+		if (myPlatformCityNick == '') {
+			myNickExtra = '/'+myCity.replace(/ /g,"-");
+		}
+		if (myPlatformCityNick != '') {
+			myNickExtra = '/'+myPlatformCityNick;
+		}
+	}
+	
+	var htmlToAppend = '<div data-sort="'+myDistance+'" data-latitude="'+myLatitude+'" data-longitude="'+myLongitude+'" data-practice="'+myPractice+'" data-account="'+myAccount+'" data-nick="'+myNick+myNickExtra.toLowerCase()+'" data-address="'+myAddress+'" data-city="'+myCity+'" data-state="'+myState+'" data-zip="'+myZip+'" data-scheduler="'+myBooking+'" class="location_block'; // att_repair att_wax att_tinnitus
+	
+	if (myTinnitus == 'Yes') { htmlToAppend += ' att_tinnitus'; }
+	if (myPediatric == 'Yes') { htmlToAppend += ' att_pediatric'; }
+	if (myBalance == 'Yes') { htmlToAppend += ' att_balance'; }
+	if (myRepair == 'Yes') { htmlToAppend += ' att_repair'; }
+	if (myCochlear == 'Yes') { htmlToAppend += ' att_cochlear'; }
+	if (myWax == 'Yes') { htmlToAppend += ' att_wax'; }
+	if (myEnt == 'Yes') { htmlToAppend += ' att_ent'; }
+	if (myUber == 'Yes') { htmlToAppend += ' att_uber'; }
+	if (myBooking == 'SCHEDULERYES') { htmlToAppend += ' att_online'; }
+	
+	
+	
+	htmlToAppend += '" id="lb_'+myAccount+'">';
+	if (myHeadshot != 'HEADSHOTNO') {
+		htmlToAppend += '<a class="lb_image headshot" href="locations/'+myNick+myNickExtra.toLowerCase()+'"><img src="'+myHeadshot+'"/></a>';
+	}
+	if (myHeadshot == 'HEADSHOTNO' && myLogo != 'LOGONO') {
+		htmlToAppend += '<a class="lb_image justLogo" href="locations/'+myNick+myNickExtra.toLowerCase()+'"><span class="helper"></span><img src="'+myLogo+'"/></a>';
+	}
+	if (myHeadshot == 'HEADSHOTNO' && myLogo == 'LOGONO') {
+		// go generic
+		if (myManufacturer == '') {
+			htmlToAppend += '<a class="lb_image" href="locations/'+myNick+myNickExtra.toLowerCase()+'"><span class="helper"></span><img src="https://cdn.earq.com/platform_images/generic-ear-icon.png"/></a>';
+		}
+		if (myManufacturer == 'Oticon') {
+			htmlToAppend += '<a class="lb_image" href="locations/'+myNick+myNickExtra.toLowerCase()+'"><span class="helper"></span><img src="https://cdn.earq.com/platform_images/generic_oticon.png"/></a>';
+		}
+		if (myManufacturer == 'Signia') {
+			htmlToAppend += '<a class="lb_image" href="locations/'+myNick+myNickExtra.toLowerCase()+'"><span class="helper"></span><img src="https://cdn.earq.com/platform_images/generic_styletto.png"/></a>';
+		}
+		if (myManufacturer == 'ReSound') {
+			htmlToAppend += '<a class="lb_image" href="locations/'+myNick+myNickExtra.toLowerCase()+'"><span class="helper"></span><img src="https://cdn.earq.com/platform_images/generic_resound.png"/></a>';
+		}
+		if (myManufacturer == 'Starkey') {
+			htmlToAppend += '<a class="lb_image" href="locations/'+myNick+myNickExtra.toLowerCase()+'"><span class="helper"></span><img src="https://cdn.earq.com/platform_images/generic_starkey.png"/></a>';
+		}
+		if (myManufacturer == 'Widex') {
+			htmlToAppend += '<a class="lb_image" href="locations/'+myNick+myNickExtra.toLowerCase()+'"><span class="helper"></span><img src="https://cdn.earq.com/platform_images/generic_widex.png"/></a>';
+		}
+		
+	}
+	
+	
+	
+	// add featured provider blue thing
+	if (myBooking == 'SCHEDULERYES') {
+		htmlToAppend += '<a class="lb_featuredBlock" href="locations/'+myNick+myNickExtra.toLowerCase()+'"><span class="spacer"></span><span class="blueBar">ONLINE SCHEDULING</span></a>'; // <span class="thumbsUp"></span>
+	}
+	
+	if (locationsPageVer == 1) {
+	
+		myDistanceDisplay = Math.round( myDistance * 10 ) / 10;
+		if (myPlatformCityDisplay == '') {
+			htmlToAppend += '<div class="lb_city">'+myCity+'<span class="lb_miles">'+myDistanceDisplay+' mi</span></div>';
+		}
+		if (myPlatformCityDisplay != '') {
+			htmlToAppend += '<div class="lb_city">'+myPlatformCityDisplay+'<span class="lb_miles">'+myDistanceDisplay+' mi</span></div>';
+		}
+	
+	}
+	
+	
+	
+	htmlToAppend += '<div class="lb_nameDate">';
+	
+	if (locationsPageVer == 2 && (myFree == 'Yes' || parseInt(myTrialDays) != 0)) { 
+		htmlToAppend += '<div class="freeStuff';
+		
+		if (myFree == 'Yes' && parseInt(myTrialDays) != 0) { 
+			htmlToAppend += ' tall';
+		}
+		
+		htmlToAppend += '">';
+	}
+	if (locationsPageVer == 2 && myFree == 'Yes') {
+		htmlToAppend += '<a class="free" href="locations/'+myNick+myNickExtra.toLowerCase()+'">Free Consultation</a>';
+	}
+	if (locationsPageVer == 2 && myTrialDays != '0' && myTrialDays != 0) {
+		htmlToAppend += '<a class="trialDays" href="locations/'+myNick+myNickExtra.toLowerCase()+'">'+myTrialDays+'-day Trial</a>';
+	}
+	if (locationsPageVer == 2 && (myFree == 'Yes' || parseInt(myTrialDays) != 0)) { 
+		htmlToAppend += '<div class="clear"></div></div>';
+	}
+	
+	// '<!--<div class="exclusiveProviderStamp"></div>-->
+	
+	htmlToAppend += '<p class="lbProviderName"><a href="locations/'+myNick+myNickExtra.toLowerCase()+'" onclick="stopLookUp();">'+myPractice+'</a></p>';
+	
+	if (locationsPageVer == 2) {
+		htmlToAppend += '<p class="addressCityStateZip">'+myAddressCityStateZip+'</p>';
+	}
+	
+	if (myReviewsStatus == 'REVIEWSYES') {
+		
+		htmlToAppend += '<div class="reviewStarsHolderOuter"></div><div class="noReviewsAvailable">(Looking Up Reviews)</div>';
+		
+	}
+	if (myReviewsStatus == 'REVIEWSNO') {
+	
+		//htmlToAppend += '<div class="reviewStarsHolderOuter"></div><div class="noReviewsAvailable">(No Reviews Available)</div>'; // <div class="clear"></div>
+	
+	}
+	if (myBooking == 'SCHEDULERYES' && locationsPageVer == 1) {
+		
+		//htmlToAppend += '<div class="lb_hours">'+myHours+'</div>';
+		var newHours = myHours.replace('Open ', 'Online Scheduling Available: ');
+		htmlToAppend += '<div class="lb_hours">'+newHours+'</div>';
+		
+		htmlToAppend += '<form enctype="multipart/form-data" method="post" id="lb_form'+myAccount+'" action="javascript:searchNewDateLB(\''+myAccount+'\', '+myDaysOut+');"><input readonly="readonly" class="lb_search_date" name="lb_search_date" type="text" id="lb_search_date'+myAccount+'" placeholder="DATE" onfocus="this.placeholder = \'\'" onblur="this.placeholder = \'DATE\'" onchange="searchNewDateLB(\''+myAccount+'\', '+myDaysOut+');" value="'+SESS_DATE+'"/></form>';
+		
+		htmlToAppend += '<div class="timeBoxes"><div class="loading"></div></div>';
+			
+		htmlToAppend += '<p class="timeConfirm"></p>';
+		htmlToAppend += '<a class="timeConfirmButton" onclick="tcWaitNote(\''+myAccount+'\');">Confirm & Continue</a>';
+		htmlToAppend += '<a class="timeUndo" onclick="timeConfirmUndo(\''+myAccount+'\');">&larr; Go back</a>';
+	
+	}
+	if (myBooking == 'SCHEDULERNO') {
+	
+		//htmlToAppend += '<div class="clear"></div><div class="lb_form"><p>Online scheduling is currently unavailable with this provider. Click below&mdash;or call <strong><a href="tel:+18003380705">800-338-0705</a></strong>&mdash;to request an appointment.</p><a class="requestApptBox" onclick="locationsRequestAppt(\''+myAccount+'\');"><div class="requestApptBoxInner">Request an Appointment</div></a></div>';
+		
+		htmlToAppend += '<div class="clear"></div><div class="lb_form"><p>Click below to request an appointment, or call us at <a href="tel:+18003380705">800-338-0705</a>.</p><a class="requestApptBox" onclick="locationsRequestAppt(\''+myAccount+'\');"><div class="requestApptBoxInner">Request an Appointment</div></a></div>';
+	
+	}
+	
+	if (myBooking == 'SCHEDULERYES' && locationsPageVer == 2) {
+	
+		// <div class="clear"></div>
+		
+		if ($(window).width() >= 500) {
+	
+			htmlToAppend += '<p class="firstAvailNote2">(Finding times for you, please stand by...)</p><a class="columnZag columnZagLeft disabled" onclick="timeColumnsShift(\'back\', \''+myAccount+'\');"></a><div id="columnsHolderOuter'+myAccount+'" class="columnsHolderOuter"><div id="columnsHolder'+myAccount+'" class="columnsHolder"></div></div><a class="columnZag columnZagRight disabled" onclick="timeColumnsShift(\'more\', \''+myAccount+'\');"></a>'; // (columns go here)
+		
+		}
+		if ($(window).width() <= 499) { // diff. location for columnZagRight
+	
+			htmlToAppend += '<p class="firstAvailNote2">(Finding times for you, please stand by...)</p><a class="columnZag columnZagLeft disabled" onclick="timeColumnsShift(\'back\', \''+myAccount+'\');"></a><a class="columnZag columnZagRight disabled" onclick="timeColumnsShift(\'more\', \''+myAccount+'\');"></a><div id="columnsHolderOuter'+myAccount+'" class="columnsHolderOuter"><div id="columnsHolder'+myAccount+'" class="columnsHolder"></div></div>'; // (columns go here)
+		
+		}
+	
+	}
+	
+	htmlToAppend += '<div class="clear"></div>';
+
+	htmlToAppend += '</div><div class="clear"></div><div class="divider"></div></div> <!--end of location box-->';
+	
+	$('#local_providers').append(htmlToAppend);
+	if (myReviewsStatus == 'REVIEWSYES') {
+		getLocalProviderReviewsData(myAccount, myReviewsSlug, myNick, myReviewsGooglePID);
+	}
+	if (myBooking == 'SCHEDULERYES' && locationsPageVer == 1) {
+		getLocalProviderTimes(myAccount, '', myDaysOut);
+	}
+	if (myBooking == 'SCHEDULERYES' && locationsPageVer == 2) {
+		setTimeout("$('#lb_"+myAccount+" .firstAvailNote2').addClass('active');", 2000);
+		getColumnDates(myAccount, 'locations');
+	}
+	filterFreeRides();
+	filterSpecialty();
+	
+	if (locationsPageVer == 2 && $(window).width() <= 959) {
+		// swipe script, "each" function
+		//console.log("applying swipe features");
+		//$('.location_block').each(function(i, obj) {
+		//	$(this).find(".columnsHolderOuter").addClass("check").on("swipe", locationsPageSwipeHandlerLeft);
+		//	$(this).find(".columnsHolderOuter").addClass("check2").on("swipe", locationsPageSwipeHandlerRight);
+		//});
+	}
+	
+}
+function locationsPageSwipeHandlerLeft(event) {
+	$( event.target ).addClass( "swipe" );
+	var locationsTargetDiv = $(event.target).parent().attr("data-account");
+	console.log("left - locationsTargetDiv is "+locationsTargetDiv);
+}
+function locationsPageSwipeHandlerRight(event) {
+	$( event.target ).addClass( "swipe2" );
+	var locationsTargetDiv = $(event.target).parent().attr("data-account");
+	console.log("right - locationsTargetDiv is "+locationsTargetDiv);
+}
+function getLocalProviderReviewsData(myAccount, myReviewsSlug, myNick, myReviewsGooglePID) {
+	
+	var fd = new FormData();
+	fd.append("action", 'GETLOCALPROVIDERREVIEWSDATA');
+	fd.append("account", myAccount);
+	fd.append("slug", myReviewsSlug);
+	fd.append("PID", myReviewsGooglePID);
+	var xhr = new XMLHttpRequest();
+	window['reviews'+myAccount.replace("-", "")] = xhr;
+	xhr.onreadystatechange = function(){
+		if (xhr.readyState == 4 && xhr.status == 200){
+
+			if (xhr.responseText != '') {
+			
+				var responseData = xhr.responseText.split("|||");
+				var numOfReviews = responseData[0];
+				var starRating = responseData[1];
+				
+				if (numOfReviews != '' && numOfReviews != 0 && numOfReviews != '0') {
+				
+					$('#lb_'+myAccount+' .noReviewsAvailable').remove();
+					$('#lb_'+myAccount+' .reviewStarsHolderOuter').html('<div class="reviewStarsHolder"><div class="reviewStarsFive"></div></div>');
+
+					var aggWidth = starRating/5;
+					var starsWidth = 144*aggWidth;
+					$('#lb_'+myAccount+' .reviewStarsHolderOuter .reviewStarsHolder').animate({ width: starsWidth+'px' });
+					
+					if ($('#lb_'+myAccount+' .readReviewsButton').length === 0) {
+						$('#lb_'+myAccount+' .reviewStarsHolderOuter').after('<a class="readReviewsButton" href="locations/'+myNick+'#reviews">Read '+numOfReviews+' Reviews</a>');
+					}
+				
+				}
+				if (numOfReviews == '' || numOfReviews == 0 || numOfReviews == '0') {
+				
+					$('#lb_'+myAccount+' .noReviewsAvailable').html('(No Reviews Available)');
+					$('#lb_'+myAccount+' .reviewStarsHolderOuter, #lb_'+myAccount+' .noReviewsAvailable').hide();
+				
+				}
+			
+			}
+			
+		}
+		
+	}
+	xhr.open("POST", baseURL+"/process.php");
+	xhr.send(fd);
+	
+}
+function searchNewDateLB(myAccount, myDaysOut) {
+	var uniqueDate = $('#lb_search_date'+myAccount).val();
+	getLocalProviderTimes(myAccount, uniqueDate, myDaysOut);
+}
+function stopLookUp() {
+	
+}
+
+function getLocalProviderTimes(myAccount, myUniqueDate, myDaysOut) {
+
+	$('#lb_'+myAccount+' .timeBoxes').html('<div class="loading"></div>');
+	
+	$('body').on('focus',"#lb_form"+myAccount+" #lb_search_date"+myAccount, function(){
+	
+		if ($(window).width() <= 600) {
+			//alert("triggering datepicker");
+			//console.log("triggering datepicker");
+		}
+	
+	    changedMonthID = '';
+	    $(this).datepicker({ 
+		
+		minDate: myDaysOut, maxDate: (myDaysOut+40), beforeShowDay: noWeekendsOrOffDays, monthNamesShort: $.datepicker._defaults.monthNames, // OrOffDays
+		dateFormat: "MM dd, yy",
+	     onChangeMonthYear:function(year, month, instance){
+
+		   changedMonthID = instance.id;
+
+	     }
+
+		});
+	});
+	
+	var fd = new FormData();
+	fd.append("action", 'RETURNSLOTS');
+	if (myUniqueDate != '' && myUniqueDate !== undefined) {
+		fd.append("unique_date", myUniqueDate);
+	}
+	fd.append("account", myAccount);
+	fd.append("SESS_DATE", SESS_DATE);
+
+	var xhr = new XMLHttpRequest();
+	
+	window['times'+myAccount.replace("-", "")] = xhr;
+	
+	xhr.onreadystatechange = function(){
+		if (xhr.readyState == 4 && xhr.status == 200){
+		
+			//if (provider_account == 'NE009') {
+			//	console.log('slots: '+xhr.responseText);
+			//}
+
+			if (xhr.responseText != '') {
+			
+				if (xhr.responseText != 'NO TIMES AVAILABLE' && xhr.responseText.substr(0,8) != 'TOO SOON' && xhr.responseText.substr(0,8) != 'Too soon') {
+			
+					var slots = JSON.parse(xhr.responseText);
+					var htmlToInsert = '';
+					for (var i=0;i<slots.length;i++) {
+
+						var timeDisplay = slots_getAMPM(slots[i]["time"]);
+						var suffix = slots_getSuffix(slots[i]["time"]);
+
+						htmlToInsert += '<a class="timeBox tod_'+suffix+'" onclick="selectTimeSlot(\''+myAccount+'\', \''+slots[i]["time"]+'\', \''+slots[i]["provider_id"]+'\')">'+timeDisplay+suffix+'</a>';
+
+					}
+					$('#lb_'+myAccount+' .timeBoxes').html(htmlToInsert);
+					if (landingSlug2 == '') {
+						$('#lb_'+myAccount+' .timeBoxes').prepend('<p style="font-size: 1.1em; margin-bottom: 16px;">Select appointment time:</p>');
+					}
+				
+				}
+				if (xhr.responseText == 'NO TIMES AVAILABLE') {
+					if ($(window).width() >= 580) {
+						$('#lb_'+myAccount+' .timeBoxes').html('<p>No availability. Please try another date.</p>');
+					}
+					if ($(window).width() <= 579) {
+						
+						if (landingSlug2 == '') {
+						
+							$('#lb_'+myAccount+' .timeBoxes').html('<p>No availability. <a style="text-decoration: underline; color: #111;" onclick="slideTo(\'locations_search_date\');">Please try another date.</a></p>');
+							
+						}
+						if (landingSlug2 != '') {
+						
+							$('#lb_'+myAccount+' .timeBoxes').html('<p>No availability. Please try another date.</p>');
+							
+						}
+						
+					}
+				}
+				if (xhr.responseText.substr(0,8) == 'TOO SOON' || xhr.responseText.substr(0,8) == 'Too soon') {
+				
+					//$('#lb_'+myAccount+' .timeBoxes').html('<p>'+xhr.responseText+'</p>');
+					
+					//var lbDisplayDate = formatDisplayDate(xhr.responseText.split(" ").pop());
+					//if (lbDisplayDate == 'December 25') {
+					//	lbDisplayDate = 'December 26';
+					//}
+					
+					var polishedTooSoonText = "First available date is "+formatDisplayDate(xhr.responseText.split(" ").pop());
+					//var polishedTooSoonText = "First available date is "+lbDisplayDate;
+					//if (SESS_ZIP == '13204') {
+					//	console.log("polished response: "+polishedTooSoonText);
+					//}
+					$('#lb_'+myAccount+' .timeBoxes').html('<p>'+polishedTooSoonText+'</p>');
+					
+				}
+			
+			}
+			
+		}
+		
+	}
+	xhr.open("POST", baseURL+"/process.php");
+	xhr.send(fd);
+	
+}
+function n(n){
+    return n > 9 ? "" + n: "0" + n;
+}
+function slots_getAMPM(myTime) {
+	if (myTime.substr(0,2) <= 12) {
+		return parseFloat(myTime.substr(0,2))+":"+myTime.substr(3,2);
+	}
+	if (myTime.substr(0,2) >= 13) {
+		var newNum = myTime.substr(0,2)-12;
+		return newNum+":"+myTime.substr(3,2);
+	}
+}
+function slots_getSuffix(myTime) {
+	if (myTime.substr(0,2) <= 11) {
+		return 'am';
+	}
+	if (myTime.substr(0,2) >= 12) {
+		return 'pm';
+	}
+}
+
+function locationsRequestAppt(myAccount) {
+	
+	$('#lb_'+myAccount+' .lb_form').html('');
+
+	$('#lb_'+myAccount+' .lb_form').html('<form enctype="multipart/form-data" method="post" id="contact_form'+myAccount+'" action="javascript:submitLocationBoxContactForm(\''+myAccount+'\');"><label for="contact_firstname">First Name</label><label for="contact_lastname">Last Name</label><input name="contact_firstname" required type="text" id="contact_firstName" autocomplete/><input name="contact_lastname" required type="text" id="contact_lastName" autocomplete/><label for="contact_phone">Phone Number:</label><label for="contact_email">E-mail Address:</label><input name="contact_phone" required type="tel" id="contact_phone" autocomplete/><input name="contact_email" required pattern="^\S+@\S+\.\S+$" type="email" id="contact_email" autocomplete/><div class="clear"></div><label for="contact_comments" style="width: 80%;">Comments (optional):</label><div class="clear"></div><textarea name="contact_comments" cols="46" rows="2" id="contact_comments" style="font-family: freight-sans-pro, sans-serif;"></textarea><input name="source" type="hidden" id="source" value="locationsPage"/><input name="provider_accountnum" type="hidden" id="provider_accountnum" value="'+myAccount+'"/><p id="errorMessage'+myAccount+'" style="display: none;"></p><a class="requestApptBox" onclick="submitLocationBoxContactForm(\''+myAccount+'\');">Submit Request</a></form>');
+	
+}
+
+function submitLocationBoxContactForm(myAccount) {
+	
+	var validForm = true;
+	var contact_firstname = $('#contact_form'+myAccount+' #contact_firstName').val();
+	var contact_lastname = $('#contact_form'+myAccount+' #contact_lastName').val();
+	var contact_phone = $('#contact_form'+myAccount+' #contact_phone').val();
+	var contact_email = $('#contact_form'+myAccount+' #contact_email').val();
+	var contact_comments = $('#contact_form'+myAccount+' #contact_comments').val();
+	
+	if (contact_firstname == '' || contact_lastname == '' || contact_phone == '' || contact_email == '') {
+		
+		$('#errorMessage'+myAccount).html('Please fill out all of the required fields.').css({ display: 'block', opacity: 0, 'font-weight': 700 }).animate({ opacity: 1 });
+		validForm = false;
+		
+	}
+	if (validForm == true) {
+		
+		$('#contact_form'+myAccount+' .requestApptBox').html('Submitting...').css({ 'pointer-events': 'none' });
+		$('#contact_form'+myAccount).attr("action", baseURL+"/thank-you");
+		$('#contact_form'+myAccount).submit();
+		
+	}
+	
+}
+
+function createProviderPageMap() {
+	
+	var myLatLng = { lat: provider_latitude, lng: (provider_longitude) };
+	var myLatLngCenterAdjust = { lat: (provider_latitude+.0015), lng: provider_longitude };
+	
+	var map = new google.maps.Map(document.getElementById('providerMap'), {
+
+		center: myLatLngCenterAdjust,
+		//zoom: 10
+		zoom: 14
+
+	});
+
+	var geocoder = new google.maps.Geocoder;
+	var infowindow = new google.maps.InfoWindow;
+
+	var marker = new google.maps.Marker({
+	
+		map: map,
+		position: myLatLng,
+		//label: "<?php echo $found_practiceName; ?>",
+		title: "EarQ Provider",
+		//icon: baseURL+'/platform_images/icon-location3.png'
+		icon: 'https://cdn.earq.com/platform_images/icon-location3.png'
+		
+	});
+	
+}
+var featuredReviewNode = 0;
+function providersPageScript() {
+
+	if (SESS_LATITUDE != '' && SESS_LONGITUDE != '') {
+	
+		createProviderPageMap();
+		
+	}
+	if (SESS_LATITUDE == '' || SESS_LONGITUDE == '') {
+	
+		getMaxmind();
+	
+	}
+
+	if (totalFeaturedStaff >= 2) {
+		$('.zagRightThick').show();
+		for (var i=1;i<totalFeaturedStaff;i++) {
+			$('#providerBio'+i).hide();
+		}
+	}
+	
+	if (totalColumns >= 2 && $(window).width() <= 699) { // v3 detection
+		console.log("window width is "+$(window).width());
+		$('.columnZagRight').after($('#columnsHolderOuter'));
+	}
+	
+	if (getStarsDataProviderPage == true) {
+		
+		var fd = new FormData();
+		fd.append("action", 'GETLOCALPROVIDERREVIEWSDATA');
+		fd.append("account", provider_account);
+		fd.append("slug", provider_reviews_slug);
+		fd.append("PID", provider_reviews_googlePID);
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function(){
+			if (xhr.readyState == 4 && xhr.status == 200){
+
+				if (xhr.responseText != '') {
+
+					var responseData = xhr.responseText.split("|||");
+					var numOfReviews = responseData[0];
+					var starRating = responseData[1];
+					
+					var aggWidth = starRating/5;
+					var starsWidth = 144*aggWidth;
+					$('.reviewStarsHolderOuter .reviewStarsHolder').animate({ width: starsWidth+'px' });
+					$('.readReviewsButton').removeClass('noReviewsAvailable').html('Read '+numOfReviews+' Reviews');		
+					
+					totalFeaturedReviews = responseData[3];		
+					
+					if (totalFeaturedReviews >= 2) {
+						$('.zagRightThick2').show();
+						for (var i=1;i<totalFeaturedReviews;i++) {
+							$('#providerReview'+i).hide();
+						}
+					}
+
+				}
+
+			}
+
+		}
+		xhr.open("POST", baseURL+"/process.php");
+		xhr.send(fd);
+		
+	}
+	
+	if ($('.providerBioHolder').length === 0 && $('.prv_gift').length === 0) {
+		$('#biosAndSpecials').remove();
+		$('.providerPageContent').css({ 'padding-top': '0px' });
+		$('.innerContentGray').css({ 'margin-top': '0px', 'border-top': '1px solid #ccc' });
+	}
+	if ($('window').width() <= 1009 && $('#altLocationHolder').length !== 0) {
+		$('.providerPageTopInner').addClass('moreLocations');
+		$('#providerPageAlternateLocations, #altLocationHolder').css({ display: 'block' });
+	}
+	if ($('window').width() <= 1249 && $('#biosAndSpecials .zagRightThick').length !== 0) {
+		$('#biosAndSpecials').addClass('moreBios');
+	}
+	if ($('window').width() <= 1249 && $('.zagRightThick2').length !== 0) {
+		$('#innerContentReviews').addClass('moreReviews');
+	}
+	if ($('window').width() <= 499) {
+		$('#contact_firstName').after($('#cfl_lastname'));
+		$('#contact_phone').after($('#cfl_email'));
+	}
+	setTimeout("checkProviderPageMap();", 2000);
+	
+	if (columns == true) {
+	
+		//console.log("go columns");
+		
+		getColumnDates(provider_account, 'provider');
+		
+	}
+	
+}
+function getColumnDates(myAccount, myPageType) {
+
+	var fd2 = new FormData();
+	fd2.append("action", 'GETCOLUMNDATES');
+	fd2.append("pageType", myPageType);
+	
+	if (landingSlug1 == 'locations' && landingSlug2 != '') {
+		fd2.append("account", provider_account);
+	}
+	if (landingSlug1 == 'locations' && landingSlug2 == '') {
+		//console.log("appending "+myAccount);
+		fd2.append("account", myAccount);
+	}
+	
+	var xhr2 = new XMLHttpRequest();
+	xhr2.onreadystatechange = function(){
+		if (xhr2.readyState == 4 && xhr2.status == 200){
+
+			if (xhr2.responseText != '') {
+
+				var columnHTML = '';
+
+				var responseData = xhr2.responseText.split("***");
+
+				for (i=0;i<responseData.length-1;i++) {
+
+					var rdPieces = responseData[i].split(" ||| ");
+
+					var cdMonth = rdPieces[2];
+					if ($(window).width() <= 1129) {
+						cdPieces = rdPieces[2].split(" ");
+						cdMonth = rdPieces[2].substr(0,3)+' '+cdPieces[1];
+					}
+
+					columnHTML += '<div class="column" id="col'+i+'" data-date="'+rdPieces[0]+'"><p class="columnDay">'+rdPieces[1]+'</p><p class="columnDate">'+cdMonth+'</p><div class="divider"></div><div class="loading"></div></div>';
+
+				}
+
+				columnHTML += '<div class="clear"></div>';
+				
+				if (landingSlug1 == 'locations' && landingSlug2 != '') {
+					$('#columnsHolder').html(columnHTML);
+					returnSlotsForColumns();
+				}
+				if (landingSlug1 == 'locations' && landingSlug2 == '') {
+					// console.log("populating columns, "+myAccount+", "+columnHTML);
+					$('#columnsHolder'+myAccount).html(columnHTML);
+					returnSlotsForColumns(myAccount);
+				}				
+
+			}
+			if (xhr2.responseText == '') {
+				$('#columnsHolder').html('<p>An error has occurred; please try again later.');
+			}
+
+		}
+
+	}
+	xhr2.open("POST", baseURL+"/process.php");
+	xhr2.send(fd2);
+}
+function returnSlotsForColumns(myAccount) {
+
+	if (landingSlug1 == 'locations' && landingSlug2 != '') {
+
+		$('#firstAvailNote2').addClass('active');
+
+		$('.column').each(function(i, obj) {
+
+			var thisDataDate = $(this).attr("data-date");
+			//console.log("id: "+$(this).attr("id")+", date is "+thisDataDate);
+
+			// fd stuff goes here; include integer for proper staggering of API calls
+
+			var fd = new FormData();
+			fd.append("action", 'RETURNSLOTSFORCOLUMNS');
+			fd.append("unique_date", thisDataDate);
+			fd.append("account", provider_account);
+			fd.append("SESS_DATE", thisDataDate);
+			fd.append("wait", $(this).attr("id").slice(3));
+			fd.append("id", $(this).attr("id"));
+
+			var xhr = new XMLHttpRequest();
+
+			xhr.onreadystatechange = function(){
+
+				if (xhr.readyState == 4 && xhr.status == 200){
+
+					// console.log('columns response: '+xhr.responseText);
+
+					if (xhr.responseText != '') {
+
+						var responseSplit = xhr.responseText.split(' *** ');
+						var responseDIVID = responseSplit[0];
+						var responseDate = responseSplit[1];
+						var htmlToAppend = '';
+
+						//totalColumns = 0;
+
+						if (responseSplit[2] != 'NO TIMES AVAILABLE' && responseSplit[2].substr(0,8) != 'TOO SOON' && responseSplit[2].substr(0,8) != 'Too soon') {
+
+							var slots = JSON.parse(responseSplit[2]);
+
+							for (var i=0;i<slots.length;i++) {
+
+								var timeDisplay = slots_getAMPM(slots[i]["time"]);
+								var suffix = slots_getSuffix(slots[i]["time"]);
+
+								htmlToAppend += '<a class="timeBox tod_'+suffix+'" onclick="selectDateAndTimeSlot(\''+provider_account+'\', \''+slots[i]["time"]+'\', \''+slots[i]["provider_id"]+'\', \''+responseDate+'\')">'+timeDisplay+suffix+'</a>';
+
+							}
+							$('#'+responseDIVID+' .loading').remove();
+							$('#'+responseDIVID).append(htmlToAppend);
+							//totalColumns++;
+							if (slots.length == 0) {
+								$('#'+responseDIVID).append('<p class="na">No<br>Times<br>Available</p>');
+							}
+
+						}
+						if (responseSplit[2] == 'NO TIMES AVAILABLE' || responseSplit[2].substr(0,8) == 'TOO SOON' || responseSplit[2].substr(0,8) == 'Too soon') {
+
+							//$('#'+responseDIVID).hide();
+							$('#'+responseDIVID+' .loading').remove();
+							$('#'+responseDIVID).append('<p class="na">No<br>Times<br>Available</p>');
+
+						}
+						if (responseDIVID == 'col10' || responseDIVID == 'col20') {
+							checkColumnHolderHeight();
+						}
+
+					}
+
+					totalColumns = 0;
+					$('.column').each(function(i, obj) {
+
+						if ($(this).is(":visible")) {
+							totalColumns++;
+						}
+
+					});
+					//console.log("totalColumns is "+totalColumns);
+					//console.log("visibleColumns is "+visibleColumns);
+
+				}
+
+			}
+
+			xhr.open("POST", baseURL+"/process.php");
+			xhr.send(fd);
+
+		});
+
+		// setTimeout("activeNextColumnsZag();", 5000);
+		
+		//setTimeout("activeNextColumnsZag('"+myAccount+"');", 2500);
+		setTimeout("activeNextColumnsZag('"+myAccount+"');", 5000);
+		//setTimeout("activeNextColumnsZag('"+myAccount+"');", 7500);
+		//setTimeout("activeNextColumnsZag('"+myAccount+"');", 10000);
+		//setTimeout("activeNextColumnsZag('"+myAccount+"');", 12500);
+		//setTimeout("activeNextColumnsZag('"+myAccount+"');", 15000);
+	
+	} // end of provider page version
+	
+	if (landingSlug1 == 'locations' && landingSlug2 == '') {
+	
+		window['timesColumnNode'+myAccount.replace('-', 'DASH')] = 0;
+
+		$('#columnsHolder'+myAccount+' .firstAvailNote2'+myAccount).addClass('active');
+
+		$('#columnsHolder'+myAccount+' .column').each(function(i, obj) {
+
+			var thisDataDate = $(this).attr("data-date");
+			//console.log("id: "+$(this).attr("id")+", date is "+thisDataDate);
+
+			// fd stuff goes here; include integer for proper staggering of API calls
+
+			var fd = new FormData();
+			fd.append("action", 'RETURNSLOTSFORCOLUMNS');
+			fd.append("unique_date", thisDataDate);
+			fd.append("account", myAccount);
+			fd.append("SESS_DATE", thisDataDate);
+			fd.append("wait", $(this).attr("id").slice(3));
+			fd.append("id", $(this).attr("id"));
+
+			var xhr = new XMLHttpRequest();
+
+			xhr.onreadystatechange = function(){
+
+				if (xhr.readyState == 4 && xhr.status == 200){
+
+					// console.log('columns response: '+xhr.responseText);
+
+					if (xhr.responseText != '') {
+
+						var responseSplit = xhr.responseText.split(' *** ');
+						var responseDIVID = responseSplit[0];
+						var responseDate = responseSplit[1];
+						var htmlToAppend = '';
+
+						//totalColumns = 0;
+
+						if (responseSplit[2] != 'NO TIMES AVAILABLE' && responseSplit[2].substr(0,8) != 'TOO SOON' && responseSplit[2].substr(0,8) != 'Too soon') {
+
+							var slots = JSON.parse(responseSplit[2]);
+
+							for (var i=0;i<slots.length;i++) {
+
+								var timeDisplay = slots_getAMPM(slots[i]["time"]);
+								var suffix = slots_getSuffix(slots[i]["time"]);
+
+								htmlToAppend += '<a class="timeBox tod_'+suffix+'" onclick="selectDateAndTimeSlot(\''+myAccount+'\', \''+slots[i]["time"]+'\', \''+slots[i]["provider_id"]+'\', \''+responseDate+'\')">'+timeDisplay+suffix+'</a>';
+
+							}
+							$('#columnsHolder'+myAccount+' #'+responseDIVID+' .loading').remove();
+							$('#columnsHolder'+myAccount+' #'+responseDIVID).append(htmlToAppend);
+							//totalColumns++;
+							if (slots.length == 0) {
+								$('#columnsHolder'+myAccount+' #'+responseDIVID).append('<p class="na">No<br>Times<br>Available</p>');
+							}
+
+						}
+						if (responseSplit[2] == 'NO TIMES AVAILABLE' || responseSplit[2].substr(0,8) == 'TOO SOON' || responseSplit[2].substr(0,8) == 'Too soon') {
+
+							//$('#'+responseDIVID).hide();
+							$('#columnsHolder'+myAccount+' #'+responseDIVID+' .loading').remove();
+							$('#columnsHolder'+myAccount+' #'+responseDIVID).append('<p class="na">No<br>Times<br>Available</p>');
+
+						}
+						if (responseDIVID == 'col10' || responseDIVID == 'col20') {
+							//checkColumnHolderHeight(myAccount);
+						}
+
+					}
+
+					/*totalColumns = 0;
+					$('#columnsHolder'+myAccount+' .column').each(function(i, obj) {
+
+						if ($(this).is(":visible")) {
+							totalColumns++;
+						}
+
+					});*/
+					//console.log("totalColumns is "+totalColumns);
+					//console.log("visibleColumns is "+visibleColumns);
+
+				}
+
+			}
+
+			xhr.open("POST", baseURL+"/process.php");
+			xhr.send(fd);
+
+		});
+
+		//setTimeout("activeNextColumnsZag('"+myAccount+"');", 2500);
+		setTimeout("activeNextColumnsZag('"+myAccount+"');", 5000);
+		//setTimeout("activeNextColumnsZag('"+myAccount+"');", 7500);
+		//setTimeout("activeNextColumnsZag('"+myAccount+"');", 10000);
+		// console.log("timeout set, activeNextColumnsZag for "+myAccount);
+	
+	} // end of locations page version
+	
+}
+function activeNextColumnsZag(myAccount) {
+
+	// console.log("inside function, activeNextColumnsZag: "+myAccount);
+
+	if (landingSlug1 == "locations" && landingSlug2 != '') {
+	
+		var allZeroes = true;
+		var tenLoading = false;
+	
+		// console.log("inside function, activeNextColumnsZag");
+		
+		for (i=0;i<15;i++) {
+		
+			if ($('#col'+i+' .loading').length >= 1) {
+				tenLoading = true;
+			}
+		
+		}
+		
+		if (tenLoading == false) {
+
+			for (i=0;i<15;i++) {
+
+				if ($('#col'+i+' .timeBox').length >= 1) {
+
+					allZeroes = false;
+
+					if ($('#firstAvailNote2').html() == '' || $('#firstAvailNote2').html() == '&nbsp;' || $('#firstAvailNote2').html() == '(Finding times for you, please stand by...)') {
+
+						var firstI = i;
+						var faDisplayDate = $('#col'+i+' .columnDate').html();
+						if (faDisplayDate == 'December 25') {
+							faDisplayDate = 'December 26';
+						}
+
+						$('#firstAvailNote2').html('(First available date is '+faDisplayDate+')');
+						$('.columnZagRight').removeClass('disabled');
+
+					}
+				}
+
+			}
+		
+		}
+		
+		if (allZeroes == false) {
+		
+			for (i=0;i<firstI;i++) {
+				if (i < firstI) {
+					$('#col'+i).hide();
+				}
+			}
+
+			var targoWidth = totalColumns*160;
+			if (targoWidth != 0) {
+				$('#columnsHolder').css({ width: targoWidth+'px' });
+			}
+		
+		}
+		if (allZeroes == true) {
+			setTimeout("activeNextColumnsZag('"+myAccount+"');", 1000);
+		}
+	
+	} // end of provider page version
+	
+	if (landingSlug1 == "locations" && landingSlug2 == '') {
+	
+		// console.log("activeNextColumnsZag: "+myAccount);
+		
+		var allZeroes = true;
+		var tenLoading = false;
+		
+		//window['allZeroes'+myAccount] = true;
+		//window['tenLoading'+myAccount] = false;
+		
+		for (i=0;i<15;i++) {
+		
+			if ($('#columnsHolder'+myAccount+' #col'+i+' .loading').length >= 1) {
+				tenLoading = true;
+				//window['tenLoading'+myAccount] = true;
+			}
+		
+		}
+		
+		//if (eval('tenLoading'+myAccount) == false) {
+		if (tenLoading == false) {
+		
+			for (i=0;i<15;i++) {
+
+				// console.log("checking num of timeBoxes in "+myAccount+", and it is "+$('#columnsHolder'+myAccount+' #col'+i+' .timeBox').length);
+
+				if ($('#columnsHolder'+myAccount+' #col'+i+' .timeBox').length >= 1 && $('#columnsHolder'+myAccount+' .loading').length == 0) {
+				
+					
+
+					allZeroes = false;
+					//window['allZeroes'+myAccount] = false;
+
+					if ($('#lb_'+myAccount+' .firstAvailNote2').html() == '' || $('#lb_'+myAccount+' .firstAvailNote2').html() == '&nbsp;' || $('#lb_'+myAccount+' .firstAvailNote2').html() == '(Finding times for you, please stand by...)') {
+
+						var firstI = i;
+						// console.log("populating first avail note for "+myAccount);
+
+						var lbDisplayDate = $('#lb_'+myAccount+' #col'+firstI+' .columnDate').html()
+						/*if (lbDisplayDate == 'December 25') {
+							lbDisplayDate = 'December 26';
+						}
+						if (lbDisplayDate == 'December 30' && myAccount == 'TX117') {
+							lbDisplayDate = 'December 31';
+						}*/
+
+						//$('#lb_'+myAccount+' .firstAvailNote2').html('(First available date is '+$('#col'+i+' .columnDate').html()+')');
+						$('#lb_'+myAccount+' .firstAvailNote2').html('(First available date is '+lbDisplayDate+')');
+						$('#lb_'+myAccount+' .columnZagRight').removeClass('disabled');
+
+					}
+				}
+
+			}
+		
+		}
+		//if (eval('allZeroes'+myAccount) == false) {
+		if (allZeroes == false) {
+		
+			for (i=0;i<firstI;i++) {
+				if (i < firstI) {
+					$('#columnsHolder'+myAccount+' #col'+i).hide();
+				}
+			}
+			
+		}
+		//if (eval('allZeroes'+myAccount) == true) {
+		if (allZeroes == true) {
+			//if ($('#lb_'+myAccount).length >= 1) { // make sure the div is still there
+				setTimeout("activeNextColumnsZag('"+myAccount+"');", 1000);
+				// console.log("another timeout set, activeNextColumnsZag for "+myAccount);
+			//}
+		}
+		
+		//$('#columnsHolder'+myAccount).css({ width: (totalColumns*160)+'px' });
+	
+	} // end of locations page version
+	
+}
+function checkColumnHolderHeight(myAccount) {
+
+	if (landingSlug1 == "locations" && landingSlug2 != '') { // provider page version
+
+		var ch = 120;
+
+		$('.column').each(function(i, obj) {
+
+			//thisCH = parseInt($(this).css( 'height' ).slice(0, -2));
+			thisCH = 62+($(this).find('.timeBox').length*42);
+			//console.log('thisCH is '+thisCH);
+
+			if (thisCH > ch) {
+				ch = thisCH;
+			}
+
+		});
+
+		//console.log("ch should be the highest number, "+ch);
+		if ($('window').width() >= 700) {
+			$('#columnsHolder, #columnsHolderOuter, .columnZag, .column, #providerPageView_times').css({ height: (ch+20)+'px' });
+		}
+		if ($('window').width() <= 699) {
+			$('#columnsHolder, #columnsHolderOuter').css({ height: (ch+40)+'px' });
+			$('#providerPageView_times').css({ height: (ch+100)+'px' });
+		}
+	
+	} // end of provider page version
+	
+	if (landingSlug1 == "locations" && landingSlug2 == '') { // locations page version
+	
+		var ch = 120;
+
+		$('#columnsHolder'+myAccount+' .column').each(function(i, obj) {
+
+			//thisCH = parseInt($(this).css( 'height' ).slice(0, -2));
+			thisCH = 62+($(this).find('.timeBox').length*42);
+			//console.log('thisCH is '+thisCH);
+
+			if (thisCH > ch) {
+				ch = thisCH;
+			}
+
+		});
+
+		//console.log("ch should be the highest number, "+ch);
+		if ($('window').width() >= 700) {
+			$('#columnsHolder'+myAccount+', #columnsHolderOuter'+myAccount+', #columnsHolder'+myAccount+' .columnZag, #columnsHolder'+myAccount+' .column').css({ height: (ch+20)+'px' });
+		}
+		if ($('window').width() <= 699) {
+			$('#columnsHolder'+myAccount+', #columnsHolderOuter'+myAccount+'').css({ height: (ch+40)+'px' });
+		}
+	
+	} // end of locations page version
+	
+}
+
+var timesColumnNode = 0;
+var columnShiftEnabled = true;
+
+function timeColumnsShift(myDirection, myAccount) {
+
+	if (columnShiftEnabled == true) {
+	
+		columnShiftEnabled = false;
+		var disabledTime = 750;
+		if ($(window).width() <= 1029) { disabledTime = 350; };
+		setTimeout("columnShiftEnabled = true;", disabledTime);
+	
+		if (landingSlug1 == "locations" && landingSlug2 != '') { // provider page version
+
+			var currentColumnsMarginLeft = parseInt($('#columnsHolder').css( 'margin-left' ).slice(0, -2));
+			console.log("currentColumnsMarginLeft is "+currentColumnsMarginLeft);
+
+			var sizeOfColumnHolderShift = 800;
+			// rules for other window sizes
+			if ($(window).width() <= 1129) { sizeOfColumnHolderShift=500; };
+			if ($(window).width() <= 699) { sizeOfColumnHolderShift=240; };
+
+			var maxShifts = 4; // 5 columns
+			if ($(window).width() <= 699) { maxShifts=7; };
+
+			if (myDirection == 'more') {
+				timesColumnNode += 1;
+				if (timesColumnNode == maxShifts) {
+					$('.columnZagRight').addClass('disabled');
+				}
+				$('.columnZagLeft').removeClass('disabled');
+
+				$('#columnsHolder').css({ 'margin-left': (currentColumnsMarginLeft-sizeOfColumnHolderShift)+'px' });
+
+			}
+			if (myDirection == 'back') {
+				timesColumnNode -= 1;
+				if (timesColumnNode == 0) {
+					$('.columnZagLeft').addClass('disabled');
+				}
+				$('.columnZagRight').removeClass('disabled');
+
+				$('#columnsHolder').css({ 'margin-left': (currentColumnsMarginLeft+sizeOfColumnHolderShift)+'px' });
+
+			}
+		
+		} // end of provider page version
+		
+		if (landingSlug1 == "locations" && landingSlug2 == '') { // locations page version
+		
+			columnShiftEnabled = false;
+			setTimeout("columnShiftEnabled = true;", 1100);
+
+			var currentColumnsMarginLeft = parseInt($('#columnsHolder'+myAccount).css( 'margin-left' ).slice(0, -2));
+			console.log(myAccount+": currentColumnsMarginLeft is "+currentColumnsMarginLeft);
+
+			var sizeOfColumnHolderShift = 800;
+			if ($(window).width() >= 1480 && $(window).width() <= 1829) { sizeOfColumnHolderShift=600; }; // ADAPTED FOR LOCATIONS PAGE
+			if ($(window).width() >= 1250 && $(window).width() <= 1479) { sizeOfColumnHolderShift=360; }; // ADAPTED FOR LOCATIONS PAGE
+			// rules for other window sizes
+			if ($(window).width() <= 1049) { sizeOfColumnHolderShift=360; }; // ADAPTED FOR LOCATIONS PAGE
+			if ($(window).width() <= 499) { sizeOfColumnHolderShift=300; }; // THESE WILL CHANGE
+
+			var maxShifts = 2; // 
+			//if ($(window).width() >= 1250 && $(window).width() <= 1479) { maxShifts=3; }; // ADAPTED FOR LOCATIONS PAGE
+			//if ($(window).width() <= 1049) { maxShifts=3; };
+			if ($(window).width() <= 1479) { maxShifts=3; };
+
+			if (myDirection == 'more') {
+			
+				//eval('timesColumnNode'+myAccount.replace('-', 'DASH')) += 1; myAccount.replace('-', 'DASH')
+				window['timesColumnNode'+myAccount.replace('-', 'DASH')] += 1;
+				
+				if (eval('timesColumnNode'+myAccount.replace('-', 'DASH')) == maxShifts) {
+					$('#lb_'+myAccount+' .columnZagRight').addClass('disabled');
+					console.log("adding disabled: #columnsHolder"+myAccount+" .columnZagRight");
+				}
+				$('#lb_'+myAccount+' .columnZagLeft').removeClass('disabled');
+				console.log("removing disabled: #columnsHolder"+myAccount+" .columnZagLeft");
+
+				$('#columnsHolder'+myAccount).css({ 'margin-left': (currentColumnsMarginLeft-sizeOfColumnHolderShift)+'px' });
+
+			}
+			if (myDirection == 'back') {
+				//eval('timesColumnNode'+myAccount.replace('-', 'DASH')) -= 1;
+				window['timesColumnNode'+myAccount.replace('-', 'DASH')] -= 1;
+				if (eval('timesColumnNode'+myAccount.replace('-', 'DASH')) == 0) {
+					$('#lb_'+myAccount+' .columnZagLeft').addClass('disabled');
+					console.log("adding disabled: #columnsHolder"+myAccount+" .columnZagLeft");
+				}
+				$('#lb_'+myAccount+' .columnZagRight').removeClass('disabled');
+				console.log("removing disabled: #columnsHolder"+myAccount+" .columnZagRight");
+
+				$('#columnsHolder'+myAccount).css({ 'margin-left': (currentColumnsMarginLeft+sizeOfColumnHolderShift)+'px' });
+
+			}
+		
+		} // end of locations page version
+	
+	}
+	
+}
+
+function checkProviderPageMap() {
+	if ($('#providerMap').html() == '') {
+		createProviderPageMap();
+	}
+}
+function nextProviderBio() {
+	$('.providerBioHolder').hide();
+	featuredStaffNode += 1;
+
+	if (featuredStaffNode == totalFeaturedStaff) {;
+		featuredStaffNode = 0;
+	}
+	$('#providerBio'+featuredStaffNode).css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	$('.zagLeftThick').show();
+	
+	if (featuredStaffNode == 0) {
+		$('.zagLeftThick').hide();
+	}
+	
+}
+function prevProviderBio() {
+
+	if (featuredStaffNode >= 1) {
+
+		$('.providerBioHolder').hide();
+		featuredStaffNode -= 1;
+		$('.zagRightThick').show();
+		$('#providerBio'+featuredStaffNode).css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+		
+		if (featuredStaffNode == 0) {
+			$('.zagLeftThick').hide();
+		}
+	
+	}
+}
+function nextProviderReview() {
+
+	$('.providerReviewHolder').hide();
+	featuredReviewNode += 1;
+
+	if (featuredReviewNode == totalFeaturedReviews) {
+		featuredReviewNode = 0;
+	}
+	$('#providerReview'+featuredReviewNode).css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	$('.zagLeftThick2').show();
+	
+	if (featuredReviewNode == 0) {
+		$('.zagLeftThick2').hide();
+	}
+}
+function prevProviderReview() {
+	
+	if (featuredReviewNode >= 1) {
+
+		$('.providerReviewHolder').hide();
+		featuredReviewNode -= 1;
+		$('.zagRightThick2').show();
+		$('#providerReview'+featuredReviewNode).css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+		if (featuredReviewNode == 0) {
+			$('.zagLeftThick2').hide();
+		}
+	
+	}
+}
+function providerPageChangeCity() {
+	var myCity = $('#providerPageCities').val();
+
+	var urlPieces = document.URL.split('locations/');
+	if (urlPieces[1].indexOf('/') >= 0) {
+		var urlPieces2 = urlPieces[1].split('/');
+		var myNick = urlPieces2[0];
+	}
+	if (urlPieces[1].indexOf('/') == -1) {
+		var myNick = urlPieces[1];
+	}
+	
+	if (myCity == '0') {
+		window.location = baseURL+'/locations/'+myNick;
+	}
+	if (myCity != '0') {
+		thisURL = String(window.location);
+		if (thisURL.indexOf('#') == -1) {
+			window.location = baseURL+'/locations/'+myNick+'/'+myCity;
+		}
+		if (thisURL.indexOf('#') >= 1) {
+			nickPieces = myNick.split('#');
+			window.location = baseURL+'/locations/'+nickPieces[0]+'/'+myCity;
+		}
+	}
+	
+}
+
+function formatDisplayTime(myTime) {
+
+	var clockSuffix = 'am';
+	var myClockHour = Number(myTime.substr(0,2));
+	if (myClockHour >= 12) {
+	    clockSuffix = 'pm';
+	}
+	if (myClockHour >= 13) {
+	    myClockHour = myClockHour-12;
+	}
+	var myClockMinutes = Number(myTime.substr(3,2));
+	displayClock = myClockHour+':'+n(myClockMinutes)+clockSuffix;
+	return displayClock;
+	
+}
+
+function formatDisplayDate(myDate) {
+	
+	// ex: 2019-11-27
+	var myYearNum = myDate.substr(0, 4);
+	var myMonthNum = Number(myDate.substr(5, 2));
+	//console.log('myMonthNum is '+myMonthNum);
+	var myDayNum = myDate.substr(8, 2);
+	var months = ['blank', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+	
+	return months[myMonthNum]+' '+myDayNum+', '+myYearNum;
+	
+}
+
+var accountNumToJumpTo;
+
+function selectTimeSlot(myAccountNum, myTime, myProviderID) {
+
+	$('#searchTypeButtons, #firstAvailNote2').hide();
+	
+	setSessionData('SESS_TIME', myTime);
+	setSessionData('SESS_ACCOUNT_NUM', myAccountNum);
+	setSessionData('SESS_PROVIDER_ID', myProviderID);
+	
+	SESS_TIME = myTime;
+	SESS_ACCOUNT_NUM = myAccountNum;
+	SESS_PROVIDER_ID = myProviderID;
+	
+	if ((landingSlug1 == "providers" || landingSlug1 == "locations") && landingSlug2 != "") { 
+	
+		setSessionData('SESS_DATE', $('#provider_search_date').val());
+		SESS_DATE = $('#provider_search_date').val();
+		
+		$('#schedulerbox_datetime, #optionsForOnlineSchedulingNote').hide();
+		$('#schedulerbox_patient').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+		$('.prv_calendar').html('Confirm Your Appointment for '+$('#provider_search_date').val()+' at '+formatDisplayTime(myTime));
+		//$('#back_backFromPatient').css({ width: '240px' }).html('<div class="leftZagSmall"></div>SELECT DIFFERENT DATE & TIME');
+		if ($(window).width() >= 930) {
+			$('#back_backFromPatient').css({ width: '240px' }).html('<div class="leftZagSmall"></div>SELECT DIFFERENT DATE & TIME');
+		}
+		if ($(window).width() <= 929) {
+			$('#back_backFromPatient').css({ width: '160px' }).html('<div class="leftZagSmall"></div>SELECT DIFFERENT DATE & TIME');
+		}
+		
+	}
+	if (landingSlug1 == "locations" && landingSlug2 == "") { 
+	
+		setSessionData('SESS_DATE', $('#lb_'+myAccountNum+' .lb_search_date').val());
+		SESS_DATE = $('#lb_'+myAccountNum+' .lb_search_date').val();
+		//$('#lb_'+myAccountNum+' .timeConfirm').html('Confirm Your Appointment for '+SESS_DATE+' at '+formatDisplayTime(myTime)+':').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+		targoURL = $('#lb_'+myAccountNum+' .lbProviderName a').attr("href");
+		$('#lb_'+myAccountNum+' .timeConfirmButton').attr("href", targoURL+'#schedule').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 }).html('CONFIRMING...'); // 
+		//$('#lb_'+myAccountNum+' .timeUndo').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+		$('#lb_'+myAccountNum+' .timeBoxes, #lb_'+myAccountNum+' .lb_search_date, #lb_form'+myAccountNum).hide();
+		
+		// new, November 2019:
+		
+		accountNumToJumpTo = myAccountNum;
+		setTimeout("jumpToAccountPage();", 1000);
+		
+		//setTimeout("tcWaitNote("+myAccountNum+");", 1500);
+		//setTimeout("$('#lb_'+myAccountNum+' .timeConfirm').click();", 1500);
+		
+		//tcWaitNote(myAccountNum);
+		//$('#lb_'+myAccountNum+' .timeConfirm').trigger();
+	
+	}
+	ga('send', 'event', { eventCategory: 'selectTimeSlot', eventAction: 'click', eventLabel: (myAccountNum+' @ '+myTime) });
+	
+}
+function selectDateAndTimeSlot(myAccountNum, myTime, myProviderID, myDate) {
+
+	$('#searchTypeButtons, #firstAvailNote2').hide();
+
+	setSessionData('SESS_TIME', myTime);
+	setSessionData('SESS_DATE', myDate);
+	setSessionData('SESS_ACCOUNT_NUM', myAccountNum);
+	setSessionData('SESS_PROVIDER_ID', myProviderID);
+	
+	SESS_TIME = myTime;
+	SESS_DATE = formatDisplayDate(myDate);
+	SESS_ACCOUNT_NUM = myAccountNum;
+	SESS_PROVIDER_ID = myProviderID;
+	
+	if ((landingSlug1 == "providers" || landingSlug1 == "locations") && landingSlug2 != "") { 
+		
+		$('#schedulerbox_datetime, #optionsForOnlineSchedulingNote, #searchTypeButtons').hide();
+		$('#schedulerbox_patient').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+		//$('.prv_calendar').html('Confirm Your Appointment for '+formatDisplayDate(myDate)+' at '+formatDisplayTime(myTime));
+		$('.prv_calendar').html('Confirm Your Appointment for '+SESS_DATE+' at '+formatDisplayTime(myTime));
+
+		if ($(window).width() >= 930) {
+			$('#back_backFromPatient').css({ width: '240px' }).html('<div class="leftZagSmall"></div>SELECT DIFFERENT DATE & TIME');
+		}
+		if ($(window).width() <= 929) {
+			$('#back_backFromPatient').css({ width: '160px' }).html('<div class="leftZagSmall"></div>SELECT DIFFERENT DATE & TIME');
+		}
+		
+	}
+	
+	if (landingSlug1 == "locations" && landingSlug2 == "") { // locations page
+	
+		$('#columnsHolderOuter'+myAccountNum+', #lb_'+myAccountNum+' .columnZagLeft, #lb_'+myAccountNum+' .columnZagRight').hide();
+	
+		//targoURL = $('#lb_'+myAccountNum+' .lbProviderName a').attr("href");
+		//$('#lb_'+myAccountNum+' .timeConfirmButton').attr("href", targoURL+'#schedule').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 }).html('CONFIRMING...'); // 
+		//$('#lb_'+myAccountNum+' .timeBoxes, #lb_'+myAccountNum+' .lb_search_date, #lb_form'+myAccountNum).hide();
+		
+		// new, November 2019:
+		
+		accountNumToJumpTo = myAccountNum;
+		
+		setTimeout("jumpToAccountPage();", 2500);
+		
+		$('#lb_'+myAccountNum+' .firstAvailNote2').css({ 'font-weight': 600, 'font-size': '1.8em' }).html('Confirming your appointment for '+SESS_DATE+' at '+formatDisplayTime(myTime)+', please stand by while we prepare to take you to the next step').addClass('red');
+		setTimeout("$('#lb_"+myAccountNum+" .firstAvailNote2').append('.');", 1000);
+		setTimeout("$('#lb_"+myAccountNum+" .firstAvailNote2').append('.');", 1700);
+		setTimeout("$('#lb_"+myAccountNum+" .firstAvailNote2').append('.');", 2499);
+	
+	}
+
+	ga('send', 'event', { eventCategory: 'selectDateAndTimeSlot', eventAction: 'click', eventLabel: (myAccountNum+' @ '+myDate+' '+myTime) });
+
+}
+function jumpToAccountPage() {
+	//$('#lb_'+accountNumToJumpTo+' .timeConfirmButton').trigger("href"); // click().
+	if (locationsPageVer == 1) {
+	
+		var href = $('#lb_'+accountNumToJumpTo+' .timeConfirmButton').attr('href');
+		window.location.href = href;
+	
+	}
+	if (locationsPageVer == 2) {
+	
+		var href = $('#lb_'+accountNumToJumpTo+' .lbProviderName a').attr('href');
+		window.location.href = href+'#schedule'; // ?v3=true
+	
+	}
+	
+}
+function timeConfirmUndo(myAccountNum) {
+	$('#lb_'+myAccountNum+' .timeBoxes, #lb_'+myAccountNum+' .lb_search_date').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	$('#lb_'+myAccountNum+' .timeConfirmButton, #lb_'+myAccountNum+' .timeConfirm, #lb_'+myAccountNum+' .timeUndo').hide();
+	ga('send', 'event', { eventCategory: 'timeConfirmUndo', eventAction: 'click', eventLabel: myAccountNum });
+}
+function tcWaitNote(myAccountNum) {
+	$('#lb_'+myAccountNum+' .timeConfirmButton').css({ 'pointer-events': 'none' }).html('Please Stand By...');
+	ga('send', 'event', { eventCategory: 'confirmAndContinue', eventAction: 'click', eventLabel: myAccountNum });
+}
+
+function checkLandingHash() {
+
+	thisURL = String(window.location);
+	
+	if (thisURL.indexOf('#') >= 1) {
+
+		var hash = window.location.hash.substring(1);
+
+		if (hash.split("#") != '') {
+			myHash = hash.split("#");
+		}
+
+		if (myHash != '') {
+			
+			if (landingSlug1 != "locations") {
+				slideTo(myHash);
+			}
+			
+			if ((landingSlug1 == "providers" || landingSlug1 == "locations") && landingSlug2 != "" && myHash == "schedule") {
+			
+				if (columns == false) { // v2
+					selectTimeSlot(SESS_ACCOUNT_NUM, SESS_TIME, SESS_PROVIDER_ID);
+				}
+				if (columns == true) { // v3
+					selectDateAndTimeSlot(SESS_ACCOUNT_NUM, SESS_TIME, SESS_PROVIDER_ID, SESS_DATE);
+				}
+				
+				if ($(window).width() >= 930) {
+					slideTo(myHash);
+					$('#back_backFromPatient').css({ width: '240px' }).html('<div class="leftZagSmall"></div>SELECT DIFFERENT DATE & TIME');
+				}
+				if ($(window).width() <= 929) {
+					slideTo('prv_youHaveSelected');
+					$('#back_backFromPatient').css({ width: '160px' }).html('<div class="leftZagSmall"></div>SELECT DIFFERENT DATE & TIME');
+				}
+			
+			}
+		}
+	
+	}
+	
+}
+
+function goBackFromPatient() {
+
+	//$('.prv_calendar').html('Schedule appointment for:');
+	$('.prv_calendar').html('Schedule Your Appointment Now:');
+	$('#schedulerbox_patient').hide();
+	$('#schedulerbox_datetime').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	$('#optionsForOnlineSchedulingNote, #searchTypeButtons, #firstAvailNote2').show();
+	
+	if (columns == true) {
+	
+		//console.log("checking column holder height");
+		checkColumnHolderHeight();
+		
+	}
+	
+}
+function goNextFromPatient() {
+
+	var validForm = true;
+	
+	if ($('#patient_name').val() == '') {
+		validForm = false;
+		$('#patientNameLabel').addClass('error');
+		$('#errorMessagePatient').html('Please fill out all of the required fields').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if ($('#patient_phone').val() == '') {
+		validForm = false;
+		$('#patientPhoneLabel').addClass('error');
+		$('#errorMessagePatient').html('Please fill out all of the required fields').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if ($('#patient_phone').val() != '' && $('#patient_phone').val().length <= 9) {
+		validForm = false;
+		$('#patientPhoneLabel').addClass('error');
+		$('#errorMessagePatient').html('Please enter a valid phone number (with the area code)').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if ($('#patient_email').val() == '' && someoneElse == false) {
+		validForm = false;
+		$('#patientEmailLabel').addClass('error');
+		$('#errorMessagePatient').html('Please fill out all of the required fields').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if ($('#patient_email').val() != '' && !validateEmail($('#patient_email').val())) { // && someoneElse == false 
+		validForm = false;
+		$('#patientEmailLabel').addClass('error');
+		$('#errorMessagePatient').html('Please enter a valid email address').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	
+	if (validForm == true) {
+	
+		$('#patientNameLabel, #patientEmailLabel, #patientPhoneLabel').removeClass('error');
+		$('#errorMessagePatient').hide();
+		$('#schedulerbox_patient').hide();
+
+		if (someoneElse == true) {
+			$('#schedulerbox_someoneElse').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+		}
+		if (someoneElse == false && requireTransportation == true) {
+			$('#schedulerbox_transportation').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+		}
+		if (someoneElse == false && requireTransportation == false) {
+			buildConfirmation();
+			$('#schedulerbox_confirm').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+		}
+	
+	}
+	
+}
+function goNextFromSomeoneElse() {
+
+	var validForm = true;
+
+	if ($('#your_name').val() == '') {
+		validForm = false;
+		$('#yourNameLabel').addClass('error');
+		$('#errorMessageSomeoneElse').html('Please fill out all of the required fields').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if ($('#your_phone').val() == '') {
+		validForm = false;
+		$('#yourPhoneLabel').addClass('error');
+		$('#errorMessageSomeoneElse').html('Please fill out all of the required fields').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if ($('#your_phone').val() != '' && $('#your_phone').val().length <= 9) {
+		validForm = false;
+		$('#yourPhoneLabel').addClass('error');
+		$('#errorMessageSomeoneElse').html('Please enter a valid phone number (with the area code)').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if ($('#your_email').val() == '') {
+		validForm = false;
+		$('#yourEmailLabel').addClass('error');
+		$('#errorMessageSomeoneElse').html('Please fill out all of the required fields').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if ($('#your_email').val() != '' && !validateEmail($('#your_email').val())) {
+		validForm = false;
+		$('#yourEmailLabel').addClass('error');
+		$('#errorMessageSomeoneElse').html('Please enter a valid email address').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if ($('#your_relationship').val() == '') {
+		validForm = false;
+		$('#yourRelationshipLabel').addClass('error');
+		$('#errorMessageSomeoneElse').html('Please fill out all of the required fields').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	
+	if (validForm == true) {
+
+		$('#yourNameLabel, #yourEmailLabel, #yourPhoneLabel, #yourRelationshipLabel').removeClass('error');
+		$('#errorMessageSomeoneElse').hide();
+		$('#schedulerbox_someoneElse').hide();
+
+		if (requireTransportation == true) {
+			$('#schedulerbox_transportation').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+		}
+		if (requireTransportation == false) {
+			buildConfirmation();
+			$('#schedulerbox_confirm').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+		}
+	
+	}
+
+}
+function goBackFromSomeoneElse() {
+
+	$('#schedulerbox_someoneElse').hide();
+	$('#schedulerbox_patient').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+
+}
+function goNextFromTransportation() {
+
+	var validForm = true;
+
+	if ($('#pickup_address').val() == '') {
+		validForm = false;
+		$('#pickupAddressLabel').addClass('error');
+		$('#errorMessageTransportation').html('Please fill out all of the required fields').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if ($('#pickup_city').val() == '') {
+		validForm = false;
+		$('#pickupCityLabel').addClass('error');
+		$('#errorMessageTransportation').html('Please fill out all of the required fields').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if ($('#pickup_state').val() == '') {
+		validForm = false;
+		$('#pickupStateLabel').addClass('error');
+		$('#errorMessageTransportation').html('Please fill out all of the required fields').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if ($('#pickup_zip').val() == '') {
+		validForm = false;
+		$('#pickupZipLabel').addClass('error');
+		$('#errorMessageTransportation').html('Please fill out all of the required fields').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+
+	if (validForm == true) {
+
+		$('#pickupAddressLabel, #pickupCityLabel, #pickupStateLabel, #pickupZipLabel').removeClass('error');
+		$('#errorMessageTransportation').hide();
+		$('#schedulerbox_transportation').hide();
+
+		buildConfirmation();
+		$('#schedulerbox_confirm').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	
+	}
+
+}
+function goBackFromTransportation() {
+
+	$('#schedulerbox_transportation').hide();
+
+	if (someoneElse == true) {
+		$('#schedulerbox_someoneElse').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if (someoneElse == false) {
+		$('#schedulerbox_patient').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+
+}
+function goBackFromConfirm() {
+
+	$('#schedulerbox_confirm').hide();
+	
+	if (requireTransportation == true) {
+		$('#schedulerbox_transportation').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if (requireTransportation == false && someoneElse == true) {
+		$('#schedulerbox_someoneElse').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if (requireTransportation == false && someoneElse == false) {
+		$('#schedulerbox_patient').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	
+}
+function buildConfirmation() {
+
+	$('#confirm_date').html(SESS_DATE);
+	$('#confirm_time').html(formatDisplayTime(SESS_TIME));
+	$('#confirm_name').html($('#patient_name').val());
+	$('#confirm_phone').html($('#patient_phone').val());
+	if (someoneElse == false) {
+		$('#reminder_email').removeClass('halved');
+		$('#reminder_email2').hide();
+		$('#confirm_email').html($('#patient_email').val());
+		$('#reminder_email').val($('#patient_email').val());
+		$('#confirmEmailBlock').show();
+		$('#reminder_text').val($('#patient_phone').val());
+	}
+	if (someoneElse == true) {
+		if (accompanyPatient == true) {
+			$('#reminder_text').val($('#your_phone').val());
+		}
+		if (accompanyPatient == false) {
+			$('#reminder_text').val($('#patient_phone').val());
+		}
+		$('#confirmEmailBlock').hide();
+		if ($('#patient_email').val() == '') {
+			$('#reminder_email').removeClass('halved');
+			$('#reminder_email2').hide();
+			$('#reminder_email').val($('#your_email').val());
+		}
+		if ($('#patient_email').val() != '') {
+			$('#reminder_email').addClass('halved').val($('#patient_email').val());
+			$('#reminder_email2').show().val($('#your_email').val());
+		}
+	}
+	if (requireTransportation == false) {
+		$('#confirmPickupBlock').hide();
+	}
+	if (requireTransportation == true) {
+		$('#confirmPickupBlock').show();
+		$('#confirm_address').html($('#pickup_address').val());
+		$('#confirm_cityStateZip').html($('#pickup_city').val()+", "+$('#pickup_state').val()+" "+$('#pickup_zip').val());
+	}
+	
+}
+
+var appointmentResponseShown = false;
+function triggerApptButtonText() {
+
+	updateApptButtonText('Saving Appointment.');
+	setTimeout("updateApptButtonText('Saving Appointment..');", 700);
+	setTimeout("updateApptButtonText('Saving Appointment...');", 1400);
+	setTimeout("updateApptButtonText('Updating Calendar');", 2100);
+	setTimeout("updateApptButtonText('Updating Calendar.');", 2800);
+	setTimeout("updateApptButtonText('Updating Calendar..');", 3500);
+	setTimeout("updateApptButtonText('Updating Calendar...');", 4600);
+	setTimeout("updateApptButtonText('Sending Confirmation');", 4900);
+	setTimeout("updateApptButtonText('Sending Confirmation.');", 5600);
+	setTimeout("updateApptButtonText('Sending Confirmation..');", 6300);
+	setTimeout("updateApptButtonText('Sending Confirmation...');", 7000);
+	
+	setTimeout("updateApptButtonText('This Could Take Up to Two Minutes.');", 40000);
+	setTimeout("updateApptButtonText('This Could Take Up to Two Minutes..');", 41000);
+	setTimeout("updateApptButtonText('This Could Take Up to Two Minutes...');", 42000);
+	
+	setTimeout("updateApptButtonText('Still Working, Please Wait.');", 60000);
+	setTimeout("updateApptButtonText('Still Working, Please Wait..');", 61000);
+	setTimeout("updateApptButtonText('Still Working, Please Wait...');", 62000);
+	
+}
+function updateApptButtonText(myMessage) {
+	if (appointmentResponseShown == false) {
+		$('.confirmAndSubmit').html(myMessage);
+	}
+}
+
+var myTargetThankYou = '';
+function confirmAndSubmitAppointment() {
+
+	var validForm = true;
+	
+	/*if ($('#reminder_email').val() == '') {
+		validForm = false;
+		$('#reminderEmailLabel').addClass('error');
+		$('#errorMessageConfirm').html('Please fill out all of the required fields').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if ($('#reminder_text').val() == '') {
+		validForm = false;
+		$('#reminderTextLabel').addClass('error');
+		$('#errorMessageConfirm').html('Please fill out all of the required fields').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}*/
+	
+	if (validForm == true) {
+
+		$('.confirmAndSubmit').html('Stand by').css({ 'pointer-events': 'none' });
+		setTimeout("triggerApptButtonText();", 500);
+		
+		setSessionData('SESS_BOOKED_PRACTICE', $('h1').html());
+		setSessionData('SESS_BOOKED_ADDRESS', $('#providerAddressDisplay').html());
+		setSessionData('SESS_BOOKED_LOGO', $('.providerFeaturedPic img').attr("src"));
+
+		var fd = new FormData();
+		fd.append("action", 'BOOK_APPOINTMENT');
+
+		fd.append("account", provider_account);
+		fd.append("location_id", SESS_LOCATION_ID); // how to establish this...?
+		
+		if (provider_account != 'FL031') {
+			fd.append("provider_id", SESS_PROVIDER_ID); // staff member
+		}
+		if (provider_account == 'FL031') {
+			
+			var thisTimeNumeric = parseInt(SESS_TIME);
+			if (thisTimeNumeric <= 11) {
+				fd.append("provider_id", 503); // staff member
+			}
+			if (thisTimeNumeric >= 13) {
+				fd.append("provider_id", 502); // Mark Krywko, pm appts.
+			}
+			
+		}
+
+		fd.append("date", SESS_DATE);
+		fd.append("time", SESS_TIME);
+
+		fd.append("patient_name", $('#patient_name').val());
+		fd.append("patient_phone", $('#patient_phone').val());
+		fd.append("patient_email", $('#patient_email').val());
+
+		fd.append("your_name", $('#your_name').val());
+		fd.append("your_phone", $('#your_phone').val());
+		fd.append("your_email", $('#your_email').val());
+		fd.append("your_relationship", $('#your_relationship').val());
+
+		fd.append("pickup_address", $('#pickup_address').val());
+		fd.append("pickup_city", $('#pickup_city').val());
+		fd.append("pickup_state", $('#pickup_state').val());
+		fd.append("pickup_zip", $('#pickup_zip').val());
+		
+		fd.append("reminder_email", $('#reminder_email').val());
+		fd.append("reminder_email2", $('#reminder_email2').val());
+		fd.append("reminder_text", $('#reminder_text').val());
+
+		fd.append("comments", $('#comments').val());
+
+		if (someoneElse == false) { fd.append("someoneElse", 'false'); };
+		if (someoneElse == true) { fd.append("someoneElse", 'true'); };
+		if (currentWearer == false) { fd.append("currentWearer", 'false'); };
+		if (currentWearer == true) { fd.append("currentWearer", 'true'); };
+		if (primaryContact == false) { fd.append("primaryContact", 'false'); };
+		if (primaryContact == true) { fd.append("primaryContact", 'true'); };
+		if (accompanyPatient == false) { fd.append("accompanyPatient", 'false'); };
+		if (accompanyPatient == true) { fd.append("accompanyPatient", 'true'); };
+		if (requireTransportation == false) { fd.append("requireTransportation", 'false'); };
+		if (requireTransportation == true) { fd.append("requireTransportation", 'true'); };
+		if (isMinor == false) { fd.append("isMinor", 'false'); };
+		if (isMinor == true) { fd.append("isMinor", 'true'); };
+
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function(){
+			if (xhr.readyState == 4 && xhr.status == 200){
+			
+				//if (accountNum == 'TX105')
+				console.log("booked appt, response text is "+xhr.responseText);
+				
+				var responsePieces = xhr.responseText.split('***');
+				var myOMS = responsePieces[0];
+				var ifError = responsePieces[1];
+				
+				console.log("ifError is"+ifError);
+				
+				if (ifError == 'ERROR') {
+				
+					$('#errorMessageConfirm').html('We are sorry, but there is a problem with that date and time. Please try another.').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+					$('.confirmAndSubmit').html('Confirm and Schedule Appointment').css({ 'pointer-events': 'auto' });
+					
+				}
+				if (ifError != 'ERROR') {
+				
+					appt_response = JSON.parse('['+responsePieces[1]+']');
+					if (myOMS == "blueprint") {
+
+						if (appt_response[0]['appointment_id'] != undefined) {
+
+							appointmentResponseShown = true;
+							// success and thank you
+							$('.confirmAndSubmit').html('Success!').css({ 'pointer-events': 'none' });
+
+							myTargetThankYou = 'https://www.earq.com/thank-you-appointment?practice='+landingSlug2;
+							if (landingSlug3 != '') {
+								myTargetThankYou += '&city='+landingSlug3;
+							}
+							setTimeout("window.location.href = myTargetThankYou;", 1000);
+
+						}
+						if (appt_response[0]['appointment_id'] == undefined) {
+
+							appointmentResponseShown = true;
+							// error
+							$('#errorMessageConfirm').html('We are sorry, but there is a problem with that date and time. Please try another.').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+							$('.confirmAndSubmit').html('Confirm and Schedule Appointment').css({ 'pointer-events': 'auto' });
+
+						}
+
+					}
+					if (myOMS == "sycle") {
+
+						if (appt_response[0]['appt_id'] != undefined) {
+
+							appointmentResponseShown = true;
+							// success and thank you
+							$('.confirmAndSubmit').html('Success!').css({ 'pointer-events': 'none' });
+							//setTimeout("window.location.href = 'https://www.earq.com/thank-you-appointment';", 1000);
+
+							myTargetThankYou = 'https://www.earq.com/thank-you-appointment?practice='+landingSlug2;
+							if (landingSlug3 != '') {
+								myTargetThankYou += '&city='+landingSlug3;
+							}
+							setTimeout("window.location.href = myTargetThankYou;", 1000);
+
+						}
+						if (appt_response[0]['appt_id'] == undefined) {
+
+							appointmentResponseShown = true;
+							// error
+							$('#errorMessageConfirm').html('We are sorry, but there is a problem with that date and time. Please try another.').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+							$('.confirmAndSubmit').html('Confirm and Schedule Appointment').css({ 'pointer-events': 'auto' });
+
+						}
+
+					}
+				
+				}
+
+			}
+
+		}
+		xhr.open("POST", baseURL+"/process.php");
+		xhr.send(fd);
+	
+	}
+
+}
+function checkCurrentWearer() {
+
+	if ($('#currentWearer').prop('checked')) {
+		currentWearer = true;
+	}
+	if (!$('#currentWearer').prop('checked')) {
+		currentWearer = false;
+	}
+
+}
+function checkSomeoneElse() {
+	
+	if ($('#someoneElse').prop('checked')) {
+		someoneElse = true;
+		$('#patient_email').removeAttr("required");
+		$('#your_name').prop("required", true);
+		$('#your_phone').prop("required", true);
+		$('#your_email').prop("required", true);
+		$('#your_relationship').prop("required", true);
+		$('#patientEmailLabel').html('Patient E-mail');
+	}
+	if (!$('#someoneElse').prop('checked')) {
+		someoneElse = false;
+		$('#patient_email').prop("required", true);
+		$('#your_name').removeAttr("required");
+		$('#your_phone').removeAttr("required");
+		$('#your_email').removeAttr("required");
+		$('#your_relationship').removeAttr("required");
+		$('#patientEmailLabel').html('Patient E-mail*');
+	}
+	
+}
+function checkAccompanying() {
+	
+	if ($('#accompanying').prop('checked')) {
+		accompanyPatient = true;
+	}
+	if (!$('#accompanying').prop('checked')) {
+		accompanyPatient = false;
+	}
+	
+}
+function checkPrimaryContact() {
+	
+	if ($('#primaryContact').prop('checked')) {
+		primaryContact = true;
+	}
+	if (!$('#primaryContact').prop('checked')) {
+		primaryContact = false;
+	}
+	
+}
+function checkIsMinor() {
+	
+	if ($('#minor').prop('checked')) {
+		isMinor = true;
+	}
+	if (!$('#minor').prop('checked')) {
+		isMinor = false;
+	}
+	
+}
+function checkTransportation() {
+	
+	if ($('#transportation').prop('checked')) {
+		requireTransportation = true;
+		$('#pickup_address').prop("required", true);
+		$('#pickup_city').prop("required", true);
+		$('#pickup_state').prop("required", true);
+		$('#pickup_zip').prop("required", true);
+	}
+	if (!$('#transportation').prop('checked')) {
+		requireTransportation = false;
+		$('#pickup_address').removeAttr("required");
+		$('#pickup_city').removeAttr("required");
+		$('#pickup_state').removeAttr("required");
+		$('#pickup_zip').removeAttr("required");
+	}
+	
+}
+function validateEmail($email) {
+	  var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+	  if( !emailReg.test( $email ) ) {
+		return false;
+	  } else {
+		return true;
+	  }
+}
+
+function footerDateUpdated() {
+	$('#footer_search_zip').focus();
+	setSessionData('SESS_DATE', $('#footer_search_date').val());
+}
+function homeZipUpdated() {
+	$('.footer_search_submit').focus();
+	if ($.isNumeric($('#footer_search_zip').val())) {
+		setSessionData('SESS_ZIP', $('#footer_search_zip').val());
+	}
+}
+$("#footer_search_zip").keyup(function (e) {
+	if ($.isNumeric($('#footer_search_zip').val())) {
+		setSessionData('SESS_ZIP', $('#footer_search_zip').val());
+	}
+	if (e.keyCode == 13) {   footerSearchFindAppointments();   }
+});
+function footerSearchFindAppointments() {
+	var validForm = true;
+	if ($('#footer_search_zip').val() == '') { //  || $('#footer_search_date').val() == ''
+		validForm = false;
+		$('#footer_error_message').css({ display: 'block', opacity: 0 }).html('PLEASE ENTER VALID CITY AND STATE OR ZIP').animate({ opacity: 1 });
+		ga('send', 'event', { eventCategory: 'search', eventAction: 'emptyFooterSearch', eventLabel: $('#footer_search_zip').val() });
+	}
+	if (validForm == true && (!$.isNumeric($('#footer_search_zip').val()) || $('#footer_search_zip').val().indexOf(',') == -1 || $('#footer_search_zip').val().indexOf(' ') == -1 || $('#footer_search_zip').val().indexOf('-') == -1)) {
+		validForm = false;
+		$('#footer_error_message').css({ display: 'block', opacity: 0 }).html('PLEASE ENTER VALID CITY AND STATE OR ZIP').animate({ opacity: 1 });
+		//ga('send', 'event', { eventCategory: 'search', eventAction: 'invalidFooterSearch', eventLabel: $('#footer_search_zip').val() });
+	}
+	if ($('#footer_search_zip').val() != '' && ($.isNumeric($('#footer_search_zip').val()) || $('#footer_search_zip').val().indexOf(',') >= 1 || $('#footer_search_zip').val().indexOf(' ') >= 1 || $('#footer_search_zip').val().indexOf('-') >= 1)) { //  && $('#footer_search_date').val() != ''
+	
+		$('#footer_error_message').hide().html('&nbsp;');
+		
+		var valToSearch = $('#footer_search_zip').val();
+		if ($('#footer_search_zip').val() == '85248') {
+			valToSearch = 'Sun Lakes, AZ';
+		}
+		
+		var myJSON = "//maps.googleapis.com/maps/api/geocode/json?key="+googleAPIKey+"&address=" + valToSearch;
+		
+		$.getJSON(myJSON, function(data) {
+
+			var jsonText = JSON.stringify(data);
+
+			if (jsonText == '{"results":[],"status":"ZERO_RESULTS"}') {
+				$('#footer_error_message').css({ display: 'block', opacity: 0 }).html('PLEASE ENTER VALID CITY AND STATE OR ZIP').animate({ opacity: 1 });
+				ga('send', 'event', { eventCategory: 'search', eventAction: 'zeroResultsFooterSearch', eventLabel: $('#footer_search_zip').val() });
+			}
+			if (jsonText != '{"results":[],"status":"ZERO_RESULTS"}') {
+				
+				SESS_ZIP = $('#footer_search_zip').val();
+				SESS_DATE = $('#footer_search_date').val();
+				
+				setSessionData('SESS_ZIP', SESS_ZIP);
+				setSessionData('SESS_DATE', SESS_DATE);
+				
+				var split1 = jsonText.split('lat":');
+				var split1b = split1[1].split(',');
+				var split2 = split1[1].split(',"lng":');
+				var split2b = split2[1].split(',');
+				var split2c = split2b[0].split('}');
+
+				var split3 = jsonText.split('","types":["locality","political"');
+				var split3b = split3[0].split('"');
+
+				SESS_LATITUDE = split1b[0];
+				SESS_LONGITUDE = split2c[0];
+				
+				SESS_CITY = split3b[split3b.length-1];
+				setSessionData('SESS_LATITUDE', split1b[0]);
+				setSessionData('SESS_LONGITUDE', split2c[0]);
+				setSessionData('SESS_CITY', SESS_CITY);
+				$('#nearestCityName').html(SESS_CITY);
+				setTimeout('window.location = baseURL+"/locations";', 1500);
+				
+				$('.footer_search_submit').html('SEARCHING').css({ 'pointer-events': 'none' });
+				setTimeout("$('.footer_search_submit').html('SEARCHING.')", 500);
+				setTimeout("$('.footer_search_submit').html('SEARCHING..')", 900);
+				setTimeout("$('.footer_search_submit').html('SEARCHING...')", 1300);
+				
+				ga('send', 'event', { eventCategory: 'search', eventAction: 'footerSearch', eventLabel: $('#footer_search_zip').val() });
+				
+			}
+			
+		});
+
+	}
+}
+function showShareNote(myType) {
+
+	if ($('window').width() >= 1160) {
+
+		if (myType == "Facebook" || myType == "Twitter" || myType == "Pinterest" || myType == "LinkedIn") {
+			$('#share_label').show().addClass('visible').html('Share this on '+myType);
+		}
+		if (myType == "Email") {
+			$('#share_label').show().addClass('visible').html('Share this via Email');
+		}
+		var topness = $('.social'+myType).offset().top-$(document).scrollTop(); // -$('window').scrollTop()
+
+		$('#share_label').css({ 'top': topness+'px' });
+	
+	}
+}
+function hideShareNote() {
+	$('#share_label').hide().removeClass('visible');
+}
+
+var answerToClose = 0;
+function revealAnswer(myAnswer, myQuestionContent) {
+
+	
+
+	answerToClose = myAnswer;
+
+	$('.questionHolder').each(function(i, obj) {
+	
+		if ($(this).attr("id") != 'q'+myAnswer) {
+		
+			$(this).removeClass('activeQuestion');
+			$(this).find('.circle-plus').removeClass('opened');
+			$('#a'+$(this).attr("id").substr(1)).removeClass("activeAnswer").css({ display: 'none' });
+		
+		}
+	
+	});
+	
+	if ($('#q'+myAnswer).hasClass("activeQuestion")) {
+	
+		answerToClose = myAnswer;
+
+		setTimeout("$('#q'+answerToClose).removeClass('activeQuestion');", 0);
+		setTimeout("$('#q'+answerToClose+' .circle-plus').removeClass('opened');", 0);
+		setTimeout("$('#a'+answerToClose).removeClass('activeAnswer').css({ display: 'none', opacity: 0 });", 0);
+	
+	}
+	
+	if (!$('#q'+myAnswer).hasClass("activeQuestion")) {
+
+		$('#q'+myAnswer).addClass("activeQuestion");
+		$('#q'+myAnswer+' .circle-plus').addClass('opened');
+		$('#a'+myAnswer).addClass("activeAnswer").css({ display: 'block', opacity: 0 }).animate({ opacity: 1 }, 100);
+		
+		if (landingSlug2 == "frequently-asked-questions") {
+			ga('send', 'event', 'FAQ', 'click', myQuestionContent);
+		}
+		if (landingSlug2 != "frequently-asked-questions") {
+			ga('send', 'event', 'expandContent', 'click', myQuestionContent);
+		}
+	
+	}
+	
+}
+
+function goSub(mySub) {
+
+	$('.subBlock').removeClass('activeSubBlock');
+	$('.cont').css({ display: 'none', opacity: 0 });
+	
+	$('#sub_'+mySub).addClass('activeSubBlock');
+	$('#cont_'+mySub).css({ display: 'block' }).animate({ opacity: 1 });
+	
+	if ($(window).width() <= 929) {
+		
+		var target = ".subsHolder";
+		$target = $(target);
+		var targo = $target.offset().top-30;
+
+		$('html, body').stop().animate({ 'scrollTop': targo }, 500);	
+		
+	}
+
+}
+
+var stylesAnimating = false;
+
+function nextHAStyle() {
+
+	if (stylesAnimating == false) {
+	
+		stylesAnimating = true;
+		setTimeout("stylesAnimating = false;", 310);
+
+		var haStyleNudge = 432; // adjust as needed for smaller screen sizes
+		if ($(window).width() >= 1200 && $(window).width() <= 1499) {
+			haStyleNudge = 350;
+		}
+		if ($(window).width() >= 960 && $(window).width() <= 1199) {
+			haStyleNudge = 280;
+		}
+		if ($(window).width() >= 750 && $(window).width() <= 959) {
+			haStyleNudge = 220;
+		}
+		if ($(window).width() >= 370 && $(window).width() <= 749) {
+			haStyleNudge = 280;
+		}
+		if ($(window).width() <= 369) {
+			haStyleNudge = 240;
+		}
+		var haStyleCurrentMarginLeft = $('.stylesHolderInnerWide').css( 'margin-left' ).slice(0,-2);
+		var newNudge = haStyleCurrentMarginLeft-haStyleNudge;
+		
+		styleNode += 1;
+		$('.stylesZagLeft').removeClass('stylesZagDisabled');
+		
+		var maxNode = 4;
+		if ($(window).width() <= 749) {
+			maxNode = 6;
+		}
+		
+		if (styleNode == (maxNode+1)) {
+			newNudge = 0;
+			styleNode = 0;
+			$('.stylesZagLeft').addClass('stylesZagDisabled');
+		}
+
+		$('.stylesHolderInnerWide').css({ 'margin-left': newNudge+'px' });
+
+		checkActiveStyleDot();
+	
+	}
+
+}
+function handleResizeHA() {
+	
+	var haStyleNudge = 432;
+	if ($(window).width() >= 1200 && $(window).width() <= 1499) {
+		haStyleNudge = 350;
+	}
+	if ($(window).width() >= 960 && $(window).width() <= 1199) {
+		haStyleNudge = 280;
+	}
+	if ($(window).width() >= 750 && $(window).width() <= 959) {
+		haStyleNudge = 220;
+	}
+	if ($(window).width() >= 370 && $(window).width() <= 749) {
+		haStyleNudge = 280;
+	}
+	if ($(window).width() <= 369) {
+		haStyleNudge = 240;
+	}
+	if (styleNode >= 1) {
+		var newNudge = styleNode*haStyleNudge;
+	}
+	if (styleNode == 0) {
+		var newNudge = 0;
+	}
+	$('.stylesHolderInnerWide').css({ 'margin-left': (0-newNudge)+'px' });
+	
+}
+function prevHAStyle() {
+
+	if (stylesAnimating == false && styleNode != 0) {
+	
+		stylesAnimating = true;
+		setTimeout("stylesAnimating = false;", 310);
+
+		var haStyleNudge = -432; // adjust as needed for smaller screen sizes
+		if ($(window).width() >= 1200 && $(window).width() <= 1499) {
+			haStyleNudge = -350;
+		}
+		if ($(window).width() >= 960 && $(window).width() <= 1199) {
+			haStyleNudge = -280;
+		}
+		if ($(window).width() >= 750 && $(window).width() <= 959) {
+			haStyleNudge = -220;
+		}
+		if ($(window).width() >= 370 && $(window).width() <= 749) {
+			haStyleNudge = -280;
+		}
+		if ($(window).width() <= 369) {
+			haStyleNudge = -240;
+		}
+		var haStyleCurrentMarginLeft = $('.stylesHolderInnerWide').css( 'margin-left' ).slice(0,-2);
+		
+		var newNudge = haStyleCurrentMarginLeft-haStyleNudge;
+
+		$('.stylesHolderInnerWide').css({ 'margin-left': newNudge+'px' });
+		styleNode -= 1;
+
+		$('.stylesZagRight').removeClass('stylesZagDisabled');
+
+		if (styleNode == 0) {
+			$('.stylesZagLeft').addClass('stylesZagDisabled');
+		}
+		checkActiveStyleDot();
+	
+	}
+
+}
+function jumpToHAStyle(myNode) {
+
+	if (stylesAnimating == false) {
+	
+		ga('send', 'event', { eventCategory: 'jumpToHAStyle', eventAction: 'click', eventLabel: myNode });
+	
+		stylesAnimating = true;
+		setTimeout("stylesAnimating = false;", 1000);
+
+		styleNode = myNode;
+
+		var haStyleNudge = 432;
+		if ($(window).width() >= 1200 && $(window).width() <= 1499) {
+			haStyleNudge = 350;
+		}
+
+		if (myNode == 0) {
+			newNudge = 0;
+		}
+		if (myNode >= 1) {
+			newNudge = 0-(haStyleNudge*myNode);
+		}
+		$('.stylesHolderInnerWide').css({ 'margin-left': newNudge+'px' });
+		if (styleNode == 0) {
+			$('.stylesZagLeft').addClass('stylesZagDisabled');
+		}
+		if (styleNode >= 1) {
+			$('.stylesZagLeft').removeClass('stylesZagDisabled');
+		}
+		if (styleNode == 4) {
+			$('.stylesZagRight').addClass('stylesZagDisabled');
+		}
+		if (styleNode <= 3) {
+			$('.stylesZagRight').removeClass('stylesZagDisabled');
+		}
+		checkActiveStyleDot();
+	
+	}
+}
+function checkActiveStyleDot() {
+
+	$('.styleDot').removeClass('activeStyleDot');
+	$('#styleDot'+styleNode).addClass('activeStyleDot');
+
+}
+function showFeatureLabel(myLabel) {
+
+	$('.featuresLabel').addClass('active').html(myLabel);
+
+}
+function hideFeatureLabel() {
+
+	$('.featuresLabel').removeClass('active')
+
+}
+function goFeature(myFeature) {
+
+	for (i=0;i<features.length;i++) {
+	
+		if (features[i] == myFeature) {
+		
+			featureNode = i;
+			ga('send', 'event', { eventCategory: 'jumpToHAStyle', eventAction: 'click', eventLabel: features[i]});
+		}
+	
+	}
+	$('.feat').animate({ opacity: 0 }, function() {
+	
+		$('.feat').hide();
+		goHAFeature();
+	
+	});
+
+}
+function nextHAFeature() {
+	
+	featureNode += 1;
+	if (featureNode == 8) {
+		featureNode = 0;
+	}
+	$('.feat').animate({ opacity: 0 }, function() {
+	
+		$('.feat').hide();
+		goHAFeature();
+	
+	});
+	
+}
+function prevHAFeature() {
+	
+	featureNode -= 1;
+	if (featureNode == -1) {
+		featureNode = 7;
+	}
+	$('.feat').animate({ opacity: 0 }, function() {
+	
+		$('.feat').hide();
+		goHAFeature();
+	
+	});
+	
+}
+function goHAFeature() {
+	
+	$('#feat_'+features[featureNode]).css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	$('.featureDot').removeClass('activeFeatureDot');
+	$('#featureDot'+featureNode).addClass('activeFeatureDot');
+	
+}
+function nextFeaturedDevice(myFeature) {
+
+	if (myFeature == 'tinnitus') { featureNode_tinnitus += 1; };
+	if (myFeature == 'rechargeable') { featureNode_rechargeable += 1; };
+	if (myFeature == 'invisibility') { featureNode_invisibility += 1; };
+	if (myFeature == 'smartphone') { featureNode_smartphone += 1; };
+	if (myFeature == 'iphone') { featureNode_iphone += 1; };
+	if (myFeature == 'children') { featureNode_children += 1; };
+	if (myFeature == 'water') { featureNode_water += 1; };
+	if (myFeature == 'telecoil') { featureNode_telecoil += 1; };
+	
+	if (eval('featureNode_'+myFeature) == 3) {
+		if (myFeature == 'tinnitus') { featureNode_tinnitus = 0; };
+		if (myFeature == 'rechargeable') { featureNode_rechargeable = 0; }
+		if (myFeature == 'invisibility') { featureNode_invisibility = 0; };
+		if (myFeature == 'smartphone') { featureNode_smartphone = 0; };
+		if (myFeature == 'iphone') { featureNode_iphone = 0; };
+		if (myFeature == 'children') { featureNode_children = 0; }
+		if (myFeature == 'water') { featureNode_water = 0; };
+		if (myFeature == 'telecoil') { featureNode_telecoil = 0; };
+	}
+	slideFeaturedDevice(myFeature);
+
+}
+function prevFeaturedDevice(myFeature) {
+
+	if (myFeature == 'tinnitus') { featureNode_tinnitus -= 1; };
+	if (myFeature == 'rechargeable') { featureNode_rechargeable -= 1; };
+	if (myFeature == 'invisibility') { featureNode_invisibility -= 1; };
+	if (myFeature == 'smartphone') { featureNode_smartphone -= 1; };
+	if (myFeature == 'iphone') { featureNode_iphone -= 1; };
+	if (myFeature == 'children') { featureNode_children-= 1; };
+	if (myFeature == 'water') { featureNode_water -= 1; };
+	if (myFeature == 'telecoil') { featureNode_telecoil -= 1; };
+	
+	if (eval('featureNode_'+myFeature) == -1) {
+		if (myFeature == 'tinnitus') { featureNode_tinnitus = 2; };
+		if (myFeature == 'rechargeable') { featureNode_rechargeable = 2; };
+		if (myFeature == 'invisibility') { featureNode_invisibility = 2; };
+		if (myFeature == 'smartphone') { featureNode_smartphone = 2; };
+		if (myFeature == 'iphone') { featureNode_iphone = 2; };
+		if (myFeature == 'children') { featureNode_children = 2; };
+		if (myFeature == 'water') { featureNode_water = 2; };
+		if (myFeature == 'telecoil') { featureNode_telecoil = 2; };
+	}
+	slideFeaturedDevice(myFeature);
+
+}
+function slideFeaturedDevice(myFeature) {
+
+	$('#deviceLabel_'+myFeature).html(eval('devices_'+myFeature)[eval('featureNode_'+myFeature)]).css({ opacity: 0 }).animate({ opacity: 1 });
+
+	if (eval('featureNode_'+myFeature) == 0) {
+		$('#device_'+myFeature+'0, #device_'+myFeature+'1, #device_'+myFeature+'2').css({ 'margin-left': '0px' });
+	}
+	if (eval('featureNode_'+myFeature) == 1) {
+		$('#device_'+myFeature+'0').css({ 'margin-left': '-296px' });
+		$('#device_'+myFeature+'1, #device_'+myFeature+'2').css({ 'margin-left': '0px' });
+	}
+	if (eval('featureNode_'+myFeature) == 2) {
+		$('#device_'+myFeature+'1').css({ 'margin-left': '-296px' });
+		$('#device_'+myFeature+'0').css({ 'margin-left': '-592px' });
+	}
+
+}
+
+function setArticleFilter(myFilter) {
+	
+	console.log("setArticleFilter");
+	
+	if (landingSlug1 != "our-story") {
+
+		if ($('#filterButton_'+myFilter).hasClass('activeFilterButton')) {
+
+			setTimeout("removeArticleFilters()", 0);
+
+		}
+
+		if (!$('#filterButton_'+myFilter).hasClass('activeFilterButton')) {
+
+			$('.articleThumb').addClass('hidden');
+			$('.cat_'+myFilter).removeClass('hidden');
+			$('.cat_'+myFilter).addClass('unhidden');
+
+			$('.filterButton').removeClass('activeFilterButton');
+			$('#filterButton_'+myFilter).addClass('activeFilterButton');
+
+		}
+		
+	}
+
+}
+function removeArticleFilters() {
+
+	$('.articleThumb').removeClass('hidden');
+	$('.articleThumb').removeClass('unhidden');
+	$('.filterButton').removeClass('activeFilterButton');
+
+}
+function articlesAutoFilter(myFilter) {
+	
+	setSessionData('SESS_ARTICLEFILTER', myFilter);
+	setTimeout("window.location.href = '"+baseURL+"/hearing-health/articles'", 750);
+	
+}
+function headerSearchEnter() {
+
+	if ($('#header_search_term').val() == '' || $('#header_search_term').val().length <= 2) {
+	
+		alert("Please enter a valid search term");
+	
+	}
+	if ($('#header_search_term').val() != '' && $('#header_search_term').val().length >= 3) {
+	
+		ga('send', 'event', { eventCategory: 'search', eventAction: 'headerWebsiteSearch', eventLabel: $('#header_search_term').val() });
+		window.location = baseURL + '/search?term=' + $('#header_search_term').val();
+	
+	}
+
+}
+function submitSearchPage() {
+	
+	if ($('#search_term').val() == '' || $('#search_term').val().length <= 2) {
+	
+		alert("Please enter a valid search term");
+	
+	}
+	if ($('#search_term').val() != '' && $('#search_term').val().length >= 3) {
+	
+		window.location = baseURL + '/search?term=' + $('#search_term').val();
+		ga('send', 'event', { eventCategory: 'search', eventAction: 'searchPageSearch', eventLabel: $('#search_term').val() });
+	
+	}
+	
+}
+
+var acViews = ['all', 'outer', 'middle', 'inner'];
+
+function setAnatomyChart(myChartView) {
+	if (myChartView == 'all') {
+		$('#anatomyChartRight .divider').css({ display: 'block' });
+		if (!$('#acb_all').hasClass('activeAcButton')) {
+			$('#acb_all').addClass('activeAcButton');
+		}
+		for (var i=0;i<acViews.length;i++) {
+			$('#acContent_'+acViews[i]).css({ display: 'block' });
+			if ($('#anatomyChart_'+acViews[i]).hasClass('activeAnatomyLayer')) {
+				$('#anatomyChart_'+acViews[i]).removeClass('activeAnatomyLayer');
+				$('#acb_'+acViews[i]).removeClass('activeAcButton');
+			}
+		}
+	}
+	if (myChartView != 'all') {
+		$('#anatomyChartRight .divider').css({ display: 'none' });
+		$('#acb_all').removeClass('activeAcButton');
+		for (var i=0;i<acViews.length;i++) {
+			
+			if ($('#anatomyChart_'+acViews[i]).hasClass('activeAnatomyLayer') && acViews[i] != myChartView) {
+				$('#anatomyChart_'+acViews[i]).removeClass('activeAnatomyLayer');
+				$('#acb_'+acViews[i]).removeClass('activeAcButton');
+			}
+			if (!$('#anatomyChart_'+acViews[i]).hasClass('activeAnatomyLayer') && acViews[i] == myChartView) {
+				$('#anatomyChart_'+acViews[i]).addClass('activeAnatomyLayer');
+				$('#acb_'+acViews[i]).addClass('activeAcButton');
+				var acRatio = $('#anatomyChartLeft').width()/1.55;
+				$('.anatomyLayer').css({ width: '100%', height: acRatio+'px', 'margin-top': 0-acRatio+'px' });
+			}
+			if (acViews[i] != myChartView) {
+				$('#acContent_'+acViews[i]).css({ display: 'none' });
+			}
+			if (acViews[i] == myChartView) {
+				$('#acContent_'+acViews[i]).css({ display: 'block' });
+			}
+			
+		}
+	}
+	
+}
+
+function submitProviderPageContactForm() {
+	
+	submitContactPageContactForm('providerPage');
+
+}
+function locationBoxContactForm(myAccountNum) {
+
+	$('#errorMessage'+myAccountNum).html('Submitting, please wait...').css({ opacity: 0, display: 'block' }).animate({ opacity: 1 });
+	$('#contact_form'+myAccountNum+' .requestApptBox').css({ 'pointer-events': 'none' }).html('Please wait...');
+	$('#contact_form'+myAccountNum).attr("action", "thank-you");
+	$('#contact_form'+myAccountNum).submit();
+
+}
+function submitContactPageContactForm(mySource) {
+
+	var validForm = true;
+	if ($('#contact_firstname').val() == '' || $('#contact_lastname').val() == '' || $('#contact_phone').val() == '' || $('#contact_email').val() == '') {
+	
+		validForm = false;
+		$('#errorMessage').html('Please fill out all of the required fields.').css({ opacity: 0, display: 'block' }).animate({ opacity: 1 });
+	
+	}
+	if (validForm == true && !validateEmail($('#contact_email').val())) {
+	
+		validForm = false;
+		$('#errorMessage').html('Please enter a valid email address.').css({ opacity: 0, display: 'block' }).aniamte({ opacity: 1 });
+	
+	}
+	if (validForm == true) {
+	
+		$('#errorMessage').html('Submitting, please wait...').css({ opacity: 0, display: 'block' }).animate({ opacity: 1 });
+		$('#submit_button, .requestApptBox').css({ 'pointer-events': 'none' }).html('Please wait...');
+		if (mySource == 'providerPage') {
+			$('#contact_form').attr("action", baseURL+"/thank-you");
+		}
+		if (mySource == 'contactPage' || mySource == 'business') {
+			$('#contact_form').attr("action", baseURL+"/thank-you-contact");
+		}
+		
+		$('#contact_form').submit();
+	
+	}
+
+}
+function goDbLevel(myLevel) {
+
+	$('.dbDot').removeClass('activeDbDot');
+	$('#dbDot_'+myLevel).addClass('activeDbDot');
+	
+	$('.dbIcon').css({ opacity: 0 });
+	$('.db_'+myLevel).css({ display: 'block', opacity: 1 });
+	
+	if (myLevel == "normal") {
+		$('.dbLabel').html('Normal Conversation:');
+		$('.dbLevel').html('50-60 dB');
+	}
+	if (myLevel == "dishwasher") {
+		$('.dbLabel').html('Dishwasher:');
+		$('.dbLevel').html('75 dB');
+	}
+	if (myLevel == "lawnmower") {
+		$('.dbLabel').html('Lawnmower:');
+		$('.dbLevel').html('85-90 dB');
+	}
+	if (myLevel == "orchestra") {
+		$('.dbLabel').html('Symphony Orchestra:');
+		$('.dbLevel').html('110 dB');
+	}
+	if (myLevel == "concert") {
+		$('.dbLabel').html('Rock Concert:');
+		$('.dbLevel').html('110-140 dB');
+	}
+	if (myLevel == "fireworks") {
+		$('.dbLabel').html('Fireworks:');
+		$('.dbLevel').html('145 dB');
+	}
+	
+	$('.dbLabel, .dbLevel').css({ opacity: 0 }).animate({ opacity: 1 });
+
+}
+function dbNext() {
+	if ($('.dbLabel').html() == 'Normal Conversation:') {
+		setTimeout("goDbLevel('dishwasher');", 0);
+	}
+	if ($('.dbLabel').html() == 'Dishwasher:') {
+		setTimeout("goDbLevel('lawnmower');", 0);
+	}
+	if ($('.dbLabel').html() == 'Lawnmower:') {
+		setTimeout("goDbLevel('orchestra');", 0);
+	}
+	if ($('.dbLabel').html() == 'Symphony Orchestra:') {
+		setTimeout("goDbLevel('concert');", 0);
+	}
+	if ($('.dbLabel').html() == 'Rock Concert:') {
+		setTimeout("goDbLevel('fireworks');", 0);
+	}
+	if ($('.dbLabel').html() == 'Fireworks:') {
+		setTimeout("goDbLevel('normal');", 0);
+	}
+}
+function dbBack() {
+	if ($('.dbLabel').html() == 'Normal Conversation:') {
+		setTimeout("goDbLevel('fireworks');", 0);
+	}
+	if ($('.dbLabel').html() == 'Dishwasher:') {
+		setTimeout("goDbLevel('normal');", 0);	
+	}
+	if ($('.dbLabel').html() == 'Lawnmower:') {
+		setTimeout("goDbLevel('dishwasher');", 0);
+	}
+	if ($('.dbLabel').html() == 'Symphony Orchestra:') {
+		setTimeout("goDbLevel('lawnmower');", 0);
+	}
+	if ($('.dbLabel').html() == 'Rock Concert:') {
+		setTimeout("goDbLevel('orchestra');", 0);
+	}
+	if ($('.dbLabel').html() == 'Fireworks:') {
+		setTimeout("goDbLevel('concert');", 0);
+		
+	}
+}
+careerQuoteNode = 0;
+function goCareerQuote(quoteNode) {
+
+	careerQuoteNode = quoteNode;
+
+	$('.dbDot').removeClass('activeDbDot');
+	$('#quoteDot'+quoteNode).addClass('activeDbDot');
+	
+	$('.careerQuoteDiv').hide().css({ opacity: 0 });
+	$('#quote'+quoteNode).css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+
+}
+function careerQuoteBack() {
+	careerQuoteNode -= 1;
+	if (careerQuoteNode == -1) {
+		careerQuoteNode = 4;
+	}
+	goCareerQuote(careerQuoteNode);
+}
+function careerQuoteNext() {
+	careerQuoteNode += 1;
+	if (careerQuoteNode == 5) {
+		careerQuoteNode = 0;
+	}
+	goCareerQuote(careerQuoteNode);
+}
+
+function submitMailchimpForm() {
+
+    var validForm = true;
+    
+    if ($('#mceNAME').val() == "" || $('#mceSTATE').val() == "") {
+        validForm = false;
+        $('#errorMessage').css({ display: 'block', color: '#990000', opacity: 0 }).animate({ opacity: 1 }).html('Please fill out the required fields.');
+    }
+    
+    if (validForm == true) {
+        if ($('#mceEMAIL').val().indexOf('@') <= 0 || $('#mceEMAIL').val().indexOf('.') <= 0 || $('#mceEMAIL').val().indexOf(' ') >= 0) {
+            validForm = false;
+            $('#errorMessage').css({ display: 'block', color: '#990000', opacity: 0 }).animate({ opacity: 1 }).html('Please enter a valid e-mail address.');
+        }
+    }
+    
+    if (validForm == true) {
+        $('#errorMessage').css({ display: 'block', color: '#aaa', opacity: 0 }).animate({ opacity: 1 }).html('Submitting, please wait...');
+        $('#mc-embedded-subscribe-form').submit();
+        setTimeout("switchMessages();", 2000);
+	   $('#submitButton').html('Submitting...').css({ 'pointer-events': 'none' });
+    }
+    
+}
+
+function switchMessages() {
+
+    $('#errorMessage').css({ color: '#111', opacity: 0 }).animate({ opacity: 1 }).html('Thank you for joining the EarQ Monthly Newsletter! Stay tuned for upcoming messages from the world of hearing healthcare.');
+    
+}
+
+var acAnimating = false;
+
+function nextAssociatedCondition() {
+
+	if (acAnimating == false) {
+	
+		acAnimating = true;
+		setTimeout("acAnimating = false;", 1000);
+
+		var acNudge = 432;
+		if ($(window).width() >= 1200 && $(window).width() <= 1499) {
+			acNudge = 350;
+		}
+		if ($(window).width() >= 960 && $(window).width() <= 1199) {
+			acNudge = 280;
+		}
+		if ($(window).width() >= 750 && $(window).width() <= 959) {
+			acNudge = 220;
+		}
+		if ($(window).width() >= 370 && $(window).width() <= 749) {
+			acNudge = 280;
+		}
+		if ($(window).width() <= 369) {
+			acNudge = 240;
+		}
+		var acCurrentMarginLeft = $('.stylesHolderInnerWide').css( 'margin-left' ).slice(0,-2);
+		var newNudge = acCurrentMarginLeft-acNudge;
+
+		$('.stylesHolderInnerWide').css({ 'margin-left': newNudge+'px' });
+		acNode += 1;
+
+		$('.stylesZagLeft').removeClass('stylesZagDisabled');
+
+		if (acNode == 8) {
+			$('.stylesZagRight').addClass('stylesZagDisabled');
+		}
+		checkActiveACDot();
+	
+	}
+
+}
+function prevAssociatedCondition() {
+
+	if (acAnimating == false) {
+	
+		acAnimating = true;
+		setTimeout("acAnimating = false;", 1000);
+
+		var acNudge = -432;
+		if ($(window).width() >= 1200 && $(window).width() <= 1499) {
+			acNudge = -350;
+		}
+		if ($(window).width() >= 960 && $(window).width() <= 1199) {
+			acNudge = -280;
+		}
+		if ($(window).width() >= 750 && $(window).width() <= 959) {
+			acNudge = -220;
+		}
+		if ($(window).width() >= 370 && $(window).width() <= 749) {
+			acNudge = -280;
+		}
+		if ($(window).width() <= 369) {
+			acNudge = -240;
+		}
+		var acCurrentMarginLeft = $('.stylesHolderInnerWide').css( 'margin-left' ).slice(0,-2);
+		var newNudge = acCurrentMarginLeft-acNudge;
+
+		$('.stylesHolderInnerWide').css({ 'margin-left': newNudge+'px' });
+		acNode -= 1;
+
+		$('.stylesZagRight').removeClass('stylesZagDisabled');
+
+		if (acNode == 0) {
+			$('.stylesZagLeft').addClass('stylesZagDisabled');
+		}
+		checkActiveACDot();
+		
+	}
+
+}
+function jumpToAssociatedCondition(myNode) {
+
+	if (acAnimating == false) {
+	
+		acAnimating = true;
+		setTimeout("acAnimating = false;", 1000);
+
+		acNode = myNode;
+
+		var acStyleNudge = 432;
+		if ($(window).width() >= 1200 && $(window).width() <= 1499) {
+			acStyleNudge = 350;
+		}
+
+		if (myNode == 0) {
+			newNudge = 0;
+		}
+		if (myNode >= 1) {
+			newNudge = 0-(acStyleNudge*myNode);
+		}
+		$('.stylesHolderInnerWide').css({ 'margin-left': newNudge+'px' });
+		if (acNode == 0) {
+			$('.stylesZagLeft').addClass('stylesZagDisabled');
+		}
+		if (acNode >= 1) {
+			$('.stylesZagLeft').removeClass('stylesZagDisabled');
+		}
+		if (acNode == 8) {
+			$('.stylesZagRight').addClass('stylesZagDisabled');
+		}
+		if (acNode <= 7) {
+			$('.stylesZagRight').removeClass('stylesZagDisabled');
+		}
+		checkActiveACDot();
+	
+	}
+}
+function checkActiveACDot() {
+
+	$('.styleDot').removeClass('activeStyleDot');
+	$('#acDot'+acNode).addClass('activeStyleDot');
+	$('.acButton').removeClass('activeAcButton');
+
+	var subToTrigger = subs[acNode];
+	$('#sub_'+subToTrigger).addClass('activeAcButton');
+	goAssociatedCondition(subToTrigger);
+	
+}
+function goAssociatedCondition(mySub) {
+
+	$('.acButton').removeClass('activeAcButton');
+	$('.cont').css({ display: 'none', opacity: 0 });
+	
+	$('#sub_'+mySub).addClass('activeAcButton');
+	$('#cont_'+mySub).css({ display: 'block' }).animate({ opacity: 1 });
+
+}
+function showUberDescription() {
+	$('#uber_car .description').addClass('fadedIn');
+	$('#uber_health_blurb .question').addClass('activeQuestion').html('X').attr("onclick", "hideUberDescription();");
+}
+function hideUberDescription() {
+	$('#uber_car .description').removeClass('fadedIn');
+	$('#uber_health_blurb .question').removeClass('activeQuestion').html('?').attr("onclick", "showUberDescription();");
+}
+function showUberDescriptionFooter() {
+	$('#footer_uber_description').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	$('#cc_footer_uberHolder .question').addClass('activeQuestion').html('X').attr("onclick", "hideUberDescriptionFooter();");
+}
+function hideUberDescriptionFooter() {
+	$('#footer_uber_description').animate({ opacity: 0 }, function() { $('#footer_uber_description').hide(); })
+	$('#cc_footer_uberHolder .question').removeClass('activeQuestion').html('?').attr("onclick", "showUberDescriptionFooter();");
+}
+function showUberDescriptionProvider() {
+	$('#cc_transportationbox_uber').css({ 'margin-bottom': '20px' });
+	$('#provider_uber_description').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	$('#transportationBox .question').addClass('activeQuestion').html('X').attr("onclick", "hideUberDescriptionProvider();");
+}
+function hideUberDescriptionProvider() {
+	$('#provider_uber_description').animate({ opacity: 0 }, function() { $('#provider_uber_description').hide(); })
+	$('#transportationBox .question').removeClass('activeQuestion').html('?').attr("onclick", "showUberDescriptionProvider();");
+}
+var currentFilterHeight = 0;
+function showUberDescriptionLeft() {
+	$('#leftUberDescription').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	$('#left_criteria #cc_ta_holder .question').addClass('activeQuestion').html('X').attr("onclick", "hideUberDescriptionLeft();");
+	if ($(window).width() <= 579) {
+		currentFilterHeight = parseInt($('#mobileFilters').css("height").slice(0, -2));
+		$('#mobileFilters').animate({ height: currentFilterHeight+120+'px' });
+	}
+}
+function hideUberDescriptionLeft() {
+	$('#leftUberDescription').animate({ opacity: 0 }, function() { 
+		
+		$('#leftUberDescription').hide(); 
+		if (locationsPageVer == 1) {
+			$('#mobileFilters').animate({ height: currentFilterHeight+'px' });
+		}
+	
+	})
+	$('#leftUberDescription').hide();
+	$('#left_criteria #cc_ta_holder .question').removeClass('activeQuestion').html('?').attr("onclick", "showUberDescriptionLeft();");
+}
+function showLocationsMobileFilters() {
+
+	var filterBoxHeight = $('.lc_halfLeft').css("height").slice(0, -2);
+	if (locationsPageVer == 2 && $(window).width() >= 1250) {
+		//filterBoxHeight = parseInt($('.lc_halfLeft').css("height").slice(0, -2))+parseInt($('.lc_halfRight').css("height").slice(0, -2));
+		filterBoxHeight = 604;
+		console.log("v2, filterBoxHeight is "+filterBoxHeight);
+		$('#left_map').animate({ opacity: 0 });
+	}
+
+	if ($(window).width() <= 579) {
+		filterBoxHeight = parseInt($('.lc_halfLeft').css("height").slice(0, -2))+parseInt($('.lc_halfRight').css("height").slice(0, -2));
+	}
+
+	if ($("#mobileFilters").html() == '') {
+	
+		var htmlToMove = $("#left_criteria").html();
+		$("#left_criteria").html('');
+
+		$("#mobileFilters").html('<div id="left_criteria">'+htmlToMove+'</div>');
+	
+	}
+	
+	$("#mobileFilters").css({ display: 'block', height: '0px' });
+	$('#mobileFiltersButtonHolder').addClass('expanded');
+	
+	$("#mobileFilters").animate({ height: (parseInt(filterBoxHeight)+40)+'px' }, function (){
+	
+		$("#mobileFilters #left_criteria").animate({ opacity: 1 });
+	
+	})
+	if (locationsPageVer == 2 && $(window).width() >= 1250) {
+		$("#mobileFiltersButtonHolder").animate({ height: (parseInt(filterBoxHeight)+68)+'px' });
+	}
+	$('#mobileFiltersButton').addClass('expanded').attr('onclick', 'hideLocationsMobileFilters()').html('Hide Filters');
+	
+	ga('send', 'event', { eventCategory: 'showLocationsMobileFilters', eventAction: 'click', eventLabel: "opened" });
+	
+	if (locationsPageVer == 2 && $(window).width() >= 1250) {
+		
+		$('#mobileFiltersButtonHolderOuter').css({ 'z-index': 1300 }); // higher than left_map
+		$('#mobileFiltersButton').html('Hide Filters / Show Map');
+			
+	}
+	
+}
+function hideLocationsMobileFilters() {
+
+	if (locationsPageVer == 1 || $(window).width() <= 1249) {
+	
+		$("#mobileFilters").css({ display: 'none', height: '0px' }); // html('').
+		$("#mobileFilters #left_criteria").css({ opacity: 0 });
+		$('#mobileFiltersButtonHolder').removeClass('expanded');
+	
+	}
+	
+	$('#mobileFiltersButton').removeClass('expanded').attr('onclick', 'showLocationsMobileFilters()').html('Show Filters');
+	
+	if (locationsPageVer == 2 && $(window).width() >= 1250) {
+	
+			$("#mobileFilters #left_criteria").animate({ opacity: 0 });
+			$('#mobileFiltersButtonHolderOuter').css({ 'z-index': 1100 }); // lower than left_map
+			$('#left_map').animate({ opacity: 1 });
+			$('#mobileFiltersButtonHolder').animate({ 'height': '26px' }); // lower than left_map
+			$("#mobileFilters").animate({  height: '0px' }, function() { $("#mobileFilters").hide(); });
+		
+	}
+	
+}
+function showMobileSearchForm() {
+	if ($(window).width() <= 619) {
+	
+		$('#magButton').hide();
+		$('#header_search_form').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+		$('#phone').css({ 'margin': '0 auto', 'margin-bottom': '20px' });
+		
+	}
+}
+
+function showUberAlternate() {
+	$('#uber_alternate_mobile_button').hide();
+	$('.uber_alternate_description').html('If you indicate that you need a ride, you will be emailed a voucher that is valid for Uber trips to and from your appointment. EarQ will cover your rides for up to $20 each way. At participating locations.').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+}
+
+function moveSubmitButtonV2() {
+	if ($('#someoneElse').prop('checked')) {
+		$('#confirmAndSubmit1').hide();
+		$('#next_patientInfo').show();
+		
+		if ($('#transportation').prop('checked')) {
+			$('#confirmAndSubmit2').hide();
+			$('#next_someoneElse').show();
+			$('#confirmAndSubmit3').show();
+		}
+	}
+	if (!$('#someoneElse').prop('checked')) {
+	
+		$('#confirmAndSubmit1').show();
+		$('#next_patientInfo').hide();
+		
+		if ($('#transportation').prop('checked')) {
+			$('#confirmAndSubmit1').hide();
+			$('#next_patientInfo').show();
+			$('#confirmAndSubmit3').show();
+		}
+		
+	}
+}
+
+function confirmAndSubmitAppointment_1() {
+
+	var validForm = true;
+	
+	if ($('#patient_name').val() == '') {
+		validForm = false;
+		$('#patientNameLabel').addClass('error');
+		$('#errorMessagePatient').html('Please fill out all of the required fields').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if ($('#patient_phone').val() == '') {
+		validForm = false;
+		$('#patientPhoneLabel').addClass('error');
+		$('#errorMessagePatient').html('Please fill out all of the required fields').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if ($('#patient_phone').val() != '' && $('#patient_phone').val().length <= 9) {
+		validForm = false;
+		$('#patientPhoneLabel').addClass('error');
+		$('#errorMessagePatient').html('Please enter a valid phone number (with the area code)').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if ($('#patient_email').val() == '' && someoneElse == false) {
+		validForm = false;
+		$('#patientEmailLabel').addClass('error');
+		$('#errorMessagePatient').html('Please fill out all of the required fields').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if ($('#patient_email').val() != '' && !validateEmail($('#patient_email').val())) { // && someoneElse == false 
+		validForm = false;
+		$('#patientEmailLabel').addClass('error');
+		$('#errorMessagePatient').html('Please enter a valid email address').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	
+	if (validForm == true) {
+	
+		$('#patientNameLabel, #patientEmailLabel, #patientPhoneLabel').removeClass('error');
+		$('#errorMessagePatient').hide();
+	
+		buildConfirmation();
+		setTimeout("confirmAndSubmitAppointment();", 100);
+	
+	}
+
+}
+
+function confirmAndSubmitAppointment_2() {
+	
+	var validForm = true;
+
+	if ($('#your_name').val() == '') {
+		validForm = false;
+		$('#yourNameLabel').addClass('error');
+		$('#errorMessageSomeoneElse').html('Please fill out all of the required fields').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if ($('#your_phone').val() == '') {
+		validForm = false;
+		$('#yourPhoneLabel').addClass('error');
+		$('#errorMessageSomeoneElse').html('Please fill out all of the required fields').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if ($('#your_phone').val() != '' && $('#your_phone').val().length <= 9) {
+		validForm = false;
+		$('#yourPhoneLabel').addClass('error');
+		$('#errorMessageSomeoneElse').html('Please enter a valid phone number (with the area code)').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if ($('#your_email').val() == '') {
+		validForm = false;
+		$('#yourEmailLabel').addClass('error');
+		$('#errorMessageSomeoneElse').html('Please fill out all of the required fields').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if ($('#your_email').val() != '' && !validateEmail($('#your_email').val())) {
+		validForm = false;
+		$('#yourEmailLabel').addClass('error');
+		$('#errorMessageSomeoneElse').html('Please enter a valid email address').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if ($('#your_relationship').val() == '') {
+		validForm = false;
+		$('#yourRelationshipLabel').addClass('error');
+		$('#errorMessageSomeoneElse').html('Please fill out all of the required fields').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	
+	if (validForm == true) {
+	
+		$('#yourNameLabel, #yourEmailLabel, #yourPhoneLabel, #yourRelationshipLabel').removeClass('error');
+		$('#errorMessageSomeoneElse').hide();
+		
+		buildConfirmation();
+		setTimeout("confirmAndSubmitAppointment();", 100);
+	
+	}
+	
+}
+
+function confirmAndSubmitAppointment_3() {
+	
+	var validForm = true;
+
+	if ($('#pickup_address').val() == '') {
+		validForm = false;
+		$('#pickupAddressLabel').addClass('error');
+		$('#errorMessageTransportation').html('Please fill out all of the required fields').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if ($('#pickup_city').val() == '') {
+		validForm = false;
+		$('#pickupCityLabel').addClass('error');
+		$('#errorMessageTransportation').html('Please fill out all of the required fields').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if ($('#pickup_state').val() == '') {
+		validForm = false;
+		$('#pickupStateLabel').addClass('error');
+		$('#errorMessageTransportation').html('Please fill out all of the required fields').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+	if ($('#pickup_zip').val() == '') {
+		validForm = false;
+		$('#pickupZipLabel').addClass('error');
+		$('#errorMessageTransportation').html('Please fill out all of the required fields').css({ display: 'block', opacity: 0 }).animate({ opacity: 1 });
+	}
+
+	if (validForm == true) {
+
+		$('#pickupAddressLabel, #pickupCityLabel, #pickupStateLabel, #pickupZipLabel').removeClass('error');
+		$('#errorMessageTransportation').hide();
+		
+		buildConfirmation();
+		setTimeout("confirmAndSubmitAppointment();", 100);
+		
+	}
+	
+}
+
+function providerPageChangeView(myView) {
+	if (myView == 'date') {
+		$('#providerPageView_times, #firstAvailNote2').hide();
+		$('#providerPageView_date').show();
+		
+		$('#searchTypeButtons').html('<a style="cursor: pointer; text-decoration: underline;" onclick="providerPageChangeView(\'times\');">Search by Times</a> | Search by Date');
+		
+	}
+	if (myView == 'times') {
+		$('#providerPageView_times, #firstAvailNote2').show();
+		$('#providerPageView_date').hide();
+		
+		$('#searchTypeButtons').html('Search by Times | <a style="cursor: pointer; text-decoration: underline;" onclick="providerPageChangeView(\'date\');">Search by Date</a>');
+	}
+}
+
+function createLocationsPageMap() {
+
+	// console.log("createLocationsPageMap()");
+
+	if (typeof google === 'undefined') {
+		
+		// console.log("undefined, setting timeout");
+		setTimeout("createLocationsPageMap()", 1000);
+		
+	}
+
+	if (typeof google !== 'undefined' && SESS_LATITUDE != '' && SESS_LONGITUDE != '' && SESS_LATITUDE != 0 && SESS_LONGITUDE != 0) {
+	
+		if ($('#left_map').length == 0) {
+		
+			if ($(window).width() >= 1250) {
+	
+				$('body').append('<div id="left_map"></div>'); // grab this text // <div id="leftmapItself"></div>
+				$('#left_map').css({ height: ($(window).height())+'px' });
+				setTimeout("handleScroll();", 2000);
+			
+			}
+			if ($(window).width() <= 1249) {
+			
+				$('<div id="left_map"></div>').insertAfter($('#local_providers'));
+				//$('#local_providers').insertAfter('<div id="left_map"></div>');
+			
+			}
+		
+		}
+	
+		// console.log("SESS LATITUDE is "+SESS_LATITUDE+", longitude is "+SESS_LONGITUDE);
+		var myLatLng = { lat: Number(SESS_LATITUDE), lng: Number(SESS_LONGITUDE) };
+		//var myLatLngCenterAdjust = { lat: (SESS_LATITUDE+.0015), lng: (SESS_LONGITUDE+0) };
+
+		var myGestureHandling2 = 'greedy';
+		if ($(window).width() <= 1249) {
+			var myGestureHandling2 = 'cooperative';
+		}
+
+		var mapOptions = {
+
+			center: myLatLng,
+			zoom: 9,
+		     //gestureHandling: 'cooperative',
+			gestureHandling: myGestureHandling2
+		     //mapTypeId: google.maps.MapTypeId.ROADMAP
+
+		};
+		
+		googlemap = new google.maps.Map(document.getElementById("left_map"), mapOptions);
+
+		var geocoder = new google.maps.Geocoder;
+		var infowindow = new google.maps.InfoWindow;
+		
+		goLocationPageMarkers();
+	
+	} // end of if undefined
+	
+}
+
+function goLocationPageMarkers() {
+
+	if ($('.location_block').length == 0) {
+		
+		setTimeout("goLocationPageMarkers();", 500);
+		
+	}
+
+	if ($('.location_block').length >= 1) {
+	
+			var fd = new FormData();
+			fd.append("action", 'PUTPINSONMAP');
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function(){
+				if (xhr.readyState == 4 && xhr.status == 200){
+
+					if (xhr.responseText != '') {
+
+
+
+						var responseLines = xhr.responseText.split("***NEWLINE***");
+						for (var i=0;i<responseLines.length-1;i++) {
+
+							var rlPieces = responseLines[i].split('|||');
+							var rAccount = rlPieces[0];
+							var rPractice = rlPieces[1];
+
+							var rAddress = rlPieces[3];
+							var rCity = rlPieces[4];
+							var rState = rlPieces[5];
+							var rZip = rlPieces[6];
+
+							var rLatitude = rlPieces[7];
+							var rLongitude = rlPieces[8];
+
+							var rNick = rlPieces[9];
+
+							var rBooking = rlPieces[14];
+
+							placeMarker(rPractice, rLatitude, rLongitude, rAddress, rCity, rState, rZip, rBooking, rNick, rAccount, myPinSize);
+
+						}
+
+					}
+
+				}
+			}
+			xhr.open("POST", baseURL+"/process.php");
+			xhr.send(fd);
+
+			/*$('.location_block').each(function (index, value) {
+			
+				// function placeMarker(myPractice, myLatitude, myLongitude, myAddress, myCity, myState, myZip, myBooking, myNick, myAccount, myPinSize) {
+				
+				var matchedPractice = $(this).attr("data-practice");
+				var matchedLatitude = $(this).attr("data-latitude");
+				var matchedLongitude = $(this).attr("data-longitude");
+				var matchedAccount = $(this).attr("data-account");
+				var matchedNick = $(this).attr("data-nick");
+				var matchedAddress = $(this).attr("data-address");
+				var matchedCity = $(this).attr("data-city");
+				var matchedState = $(this).attr("data-state");
+				var matchedZip = $(this).attr("data-zip");
+				var matchedScheduler = $(this).attr("data-scheduler");
+				
+				placeMarker(matchedPractice, matchedLatitude, matchedLongitude, matchedAddress, matchedCity, matchedState, matchedZip, matchedScheduler, matchedNick, 'large');
+
+				// console.log("placing marker for "+matchedPractice);
+
+			});*/
+		
+		}
+
+}
+
+function populateSplashScreenProvider() {
+
+	if (SESS_LOCATIONSPAGEVISITED != 'true' && SESS_SPLASHCLOSED != 'true') {
+
+		//$('#threeFeaturedHolder').show();
+
+		var fd = new FormData();
+		fd.append("action", 'GETSPLASHDATA');
+		fd.append("SESS_LATITUDE", SESS_LATITUDE);
+		fd.append("SESS_LONGITUDE", SESS_LONGITUDE);
+
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function(){
+
+			// console.log("splash response: "+xhr.responseText);
+
+			if (xhr.readyState == 4 && xhr.status == 200){
+
+				//if (xhr.responseText == '***NEWLINE***') {
+					//$('.homeProviderName').html('<span class="loading"></span>');
+				//	setTimeout("populateSplashScreenProvider();", 5000);
+				//}
+
+				if (xhr.responseText != '' && xhr.responseText != 'START|||') {
+
+					var fpPieces = xhr.responseText.split('|||');
+
+						var providerURLExtra = '';
+						if (fpPieces[1].indexOf('-') >= 1) {
+							if (fpPieces[12] == '') {
+								providerURLExtra = '/'+fpPieces[5].replace(/ /g,"-").toLowerCase();
+							}
+							if (fpPieces[12] != '') {
+								providerURLExtra = '/'+fpPieces[12];
+							}
+						}
+						
+						ga('send', 'event', 'splashScreenGenerated', 'show', fpPieces[10]+providerURLExtra);
+
+						var htmlToAppend = '';
+						if (fpPieces[11] != '' && fpPieces[11] != 'LOGONO') { // logo
+
+							htmlToAppend += '<a onclick="ga(\'send\', \'event\', \'splashLogoClicked\', \'click\', \''+fpPieces[10]+providerURLExtra+'\');" href="https://www.earq.com/locations/'+fpPieces[10]+providerURLExtra+'"><img class="splash_logo" src="'+fpPieces[11]+'" border="0"/></a>';
+
+						}
+
+						htmlToAppend += '<p><a onclick="ga(\'send\', \'event\', \'splashPracticeNameClicked\', \'click\', \''+fpPieces[10]+providerURLExtra+'\');" href="https://www.earq.com/locations/'+fpPieces[10]+providerURLExtra+'">'+fpPieces[2]+'<br>'+fpPieces[4]+'<br>'+fpPieces[5]+', '+fpPieces[6]+' '+fpPieces[7]+'</a></p>';
+
+						htmlToAppend += '<div class="clear"></div>';
+
+						htmlToAppend += '<div id="splash_map"></div>';
+
+						htmlToAppend += '<a class="learnMoreButton" onclick="ga(\'send\', \'event\', \'splashCTAClicked\', \'click\', \''+fpPieces[10]+providerURLExtra+'\');" href="https://www.earq.com/locations/'+fpPieces[10]+providerURLExtra+'">Schedule Appointment</a>';
+
+						htmlToAppend += '<p class="closeThisWindow"><a onclick="javascript:closeSplashScreen();">- Close this Window -</a></p>';
+
+						$('#splash_provider').html(htmlToAppend);
+
+						createSplashMap(fpPieces[2], fpPieces[8], fpPieces[9]);
+
+						// make visible:
+
+						$('#splash, #undersplash').show();
+						setTimeout("$('#splash, #undersplash').addClass('active');", 50);
+
+				}
+
+			}
+
+		}
+		xhr.open("POST", baseURL+"/process.php");
+		xhr.send(fd);
+	
+	}
+
+}
+
+function closeSplashScreen() {
+	
+	$('#splash, #undersplash').removeClass('active');
+	setTimeout("$('#splash, #undersplash').hide();", 750);
+	setSessionData('SESS_SPLASHCLOSED', 'true');
+	
+}
+
+function createSplashMap(myPracticeName, myLat, myLon) {
+	
+	var myLatLng = { lat: Number(myLat), lng: Number(myLon) };
+	var myLatLngCenterAdjust = { lat: (Number(myLat)+.0015), lng: Number(myLon) };
+	
+	var map = new google.maps.Map(document.getElementById('splash_map'), {
+
+		center: myLatLngCenterAdjust,
+		//zoom: 10
+		zoom: 14
+
+	});
+
+	var geocoder = new google.maps.Geocoder;
+	var infowindow = new google.maps.InfoWindow;
+
+	var marker = new google.maps.Marker({
+	
+		map: map,
+		position: myLatLng,
+		title: myPracticeName,
+		icon: 'https://cdn.earq.com/platform_images/icon-location3.png'
+		
+	});
+	
+}
+
+function submitCQLandingPageForm(myPlace) {
+	
+	// .cqFormTop, .cqFormFooter
+	
+	var validForm = true;
+	
+	if (myPlace == 'footer') {
+	
+		if ($('#contact_firstname').val() == '' || $('#contact_lastname').val() == '' || $('#contact_phone').val() == '' || $('#contact_email').val() == '') {
+
+			validForm = false;
+			$('#errorMessage').html('Please fill out all of the required fields.').css({ opacity: 0, display: 'block' }).animate({ opacity: 1 });
+
+		}
+		if (validForm == true && !validateEmail($('#contact_email').val())) {
+
+			validForm = false;
+			$('#errorMessage').html('Please enter a valid email address.').css({ opacity: 0, display: 'block' }).aniamte({ opacity: 1 });
+
+		}
+		if (validForm == true) {
+
+			$('#errorMessage').html('Submitting, please wait...').css({ opacity: 0, display: 'block' }).animate({ opacity: 1 });
+			
+			$('#submit_button, .requestApptBox').css({ 'pointer-events': 'none' }).html('Please wait...');
+			
+			$('.cqFormFooter').attr("action", baseURL+"/thank-you-cq-partners");
+
+			setTimeout("$('.cqFormFooter').submit();", 2500);
+
+		}
+		
+	}
+	if (myPlace == 'top') {
+		
+		$('.topRightForm').addClass('tall');
+	
+		if ($('#contact_firstname2').val() == '' || $('#contact_lastname2').val() == '' || $('#contact_phone2').val() == '' || $('#contact_email2').val() == '') {
+
+			validForm = false;
+			$('#errorMessage2').html('Please fill out all of the required fields.').css({ opacity: 0, display: 'block' }).animate({ opacity: 1 });
+
+		}
+		if (validForm == true && !validateEmail($('#contact_email2').val())) {
+
+			validForm = false;
+			$('#errorMessage2').html('Please enter a valid email address.').css({ opacity: 0, display: 'block' }).aniamte({ opacity: 1 });
+
+		}
+		if (validForm == true) {
+
+			$('#errorMessage2').html('Submitting, please wait...').css({ opacity: 0, display: 'block' }).animate({ opacity: 1 });
+			
+			$('#submit_button, .requestApptBox').css({ 'pointer-events': 'none' }).html('Please wait...');
+			
+			$('.cqFormTop').attr("action", baseURL+"/thank-you-cq-partners");
+
+			setTimeout("$('.cqFormTop').submit();", 2500);
+
+		}
+		
+	}
+	
+}
+
+function submitCQCoopForm(myPlace) {
+	
+	var validForm = true;
+	
+	if (myPlace == 'footer') {
+	
+		if ($('#contact_firstname').val() == '' || $('#contact_lastname').val() == '' || $('#contact_phone').val() == '' || $('#contact_email').val() == '' || $('#contact_attendees').val() == '' || $('#contact_manufacturers').val() == '') {
+
+			validForm = false;
+			$('#errorMessage').html('Please fill out all of the required fields.').css({ opacity: 0, display: 'block' }).animate({ opacity: 1 });
+
+		}
+		if (validForm == true && !validateEmail($('#contact_email').val())) {
+
+			validForm = false;
+			$('#errorMessage').html('Please enter a valid email address.').css({ opacity: 0, display: 'block' }).aniamte({ opacity: 1 });
+
+		}
+		if (validForm == true) {
+
+			$('#errorMessage').html('Submitting, please wait...').css({ opacity: 0, display: 'block' }).animate({ opacity: 1 });
+			
+			$('#submit_button, .requestApptBox').css({ 'pointer-events': 'none' }).html('Please wait...');
+			
+			$('.cqFormFooter').attr("action", baseURL+"/thank-you-cq-2022-coop");
+
+			setTimeout("$('.cqFormFooter').submit();", 2500);
+
+		}
+		
+	}
+	if (myPlace == 'top') {
+		
+		$('.topRightForm').addClass('tall');
+	
+		if ($('#contact_firstname2').val() == '' || $('#contact_lastname2').val() == '' || $('#contact_phone2').val() == '' || $('#contact_email2').val() == '' || $('#contact_attendees2').val() == '' || $('#contact_manufacturers2').val() == '') {
+
+			validForm = false;
+			$('#errorMessage2').html('Please fill out all of the required fields.').css({ opacity: 0, display: 'block' }).animate({ opacity: 1 });
+
+		}
+		if (validForm == true && !validateEmail($('#contact_email2').val())) {
+
+			validForm = false;
+			$('#errorMessage2').html('Please enter a valid email address.').css({ opacity: 0, display: 'block' }).aniamte({ opacity: 1 });
+
+		}
+		if (validForm == true) {
+
+			$('#errorMessage2').html('Submitting, please wait...').css({ opacity: 0, display: 'block' }).animate({ opacity: 1 });
+			
+			$('#submit_button, .requestApptBox').css({ 'pointer-events': 'none' }).html('Please wait...');
+			
+			$('.cqFormTop').attr("action", baseURL+"/thank-you-cq-2022-coop");
+
+			setTimeout("$('.cqFormTop').submit();", 2500);
+
+		}
+		
+	}
+	
+}

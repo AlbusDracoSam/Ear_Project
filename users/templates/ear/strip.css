@@ -1,0 +1,32 @@
+#strip {
+	
+	width: calc(100% - 20px);
+	padding: 12px 0px 12px 20px;
+	height: 21px;
+	background: #004993;
+	color: #fff;
+	font-size: 1.2em;
+	line-height: 21px;
+	
+}
+#strip a {
+	
+	color: #ffffff;
+	text-decoration: underline;
+	transition: color 0.3s ease;
+	
+}
+#strip a:hover {
+	
+	color: #75b800;
+	
+}
+@media only screen and (min-height:20px) and (max-width: 639px) {
+	
+	#strip { 
+		padding: 12px 20px 12px 20px;
+		height: auto;	
+		width: calc(100% - 40px);
+	}
+
+}

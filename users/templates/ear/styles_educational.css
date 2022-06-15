@@ -1,0 +1,1751 @@
+@charset "utf-8";
+/* CSS Document */
+
+h1.educational, h2.innerH2 {
+	
+	display: block;
+	width: 744px;
+	height: 70px;
+	margin: 0 auto;
+	text-align: center;
+	font-size: 3em;
+	font-weight: var(--font-medium);
+	margin-top: 100px;
+	margin-bottom: 100px;
+	
+}
+h2.innerH2.centered {
+	text-align: center;
+}
+h1.educationalWide {
+	width: 1300px;
+}
+h1.iconChatBlue {
+
+	background: url("https://cdn.earq.com/platform_images/icon-chat.png") no-repeat left;
+	min-height: 70px;
+	
+}
+h1.iconChatYellow, h2.iconChatYellow {
+
+	background: url("https://cdn.earq.com/platform_images/icon-chat-yellow.png") no-repeat left !important;
+	min-height: 70px;
+	
+}
+h2.iconChatYellow {
+	text-align: center !important;
+	width: 950px !important;
+	min-height: 70px;
+}
+h1.iconSearchBlue {
+
+	/* background: url("https://cdn.earq.com/platform_images/icon-magnifying-blue2.png") no-repeat left; */
+	background: url("https://cdn.earq.com/platform_images/icon-search2.png") no-repeat left;
+	min-height: 66px;
+	
+}
+
+h1.iconCrossRed {
+
+	background: url("https://cdn.earq.com/platform_images/icon-cross.png") no-repeat left;
+	min-height: 70px;
+	
+}
+h1.iconEarRed {
+
+	background: url("https://cdn.earq.com/platform_images/icon-ear.png") no-repeat left;
+	width: 600px;
+	min-height: 70px;
+	
+}
+h1.iconHearingAidRed, h2.iconHearingAidRed {
+
+	background: url("https://cdn.earq.com/platform_images/icon-hearing-aid3.png") no-repeat left !important;
+	height: 72px;
+	min-height: 72px;
+	
+}
+h2.iconHearingAidRed {
+	text-align: center !important;
+	width: 500px !important;
+}
+h1.iconReadingBlue {
+
+	background: url("https://cdn.earq.com/platform_images/icon-reading-blue.png") no-repeat left;
+	
+}
+h2.iconNewsRed {
+
+	background: url("https://cdn.earq.com/platform_images/icon-news.png") no-repeat left !important;
+	width: 400px !important;
+	text-align: center !important;
+	margin-bottom: 20px !important;
+	min-height: 53px;
+	
+}
+h2.iconFileYellow {
+	background: url("https://cdn.earq.com/platform_images/icon-file.png") no-repeat left !important;
+	width: 400px !important;
+	text-align: center !important;
+	margin-bottom: 20px !important;
+	min-height: 65px;
+}
+
+h2.innerH2 {
+	
+	text-align: left;
+	margin-top: 40px;
+	margin-bottom: 40px;
+	width: 100%;
+	background: transparent;
+	
+}
+
+/*** FAQ ***/
+
+.questionHolder {
+
+	display: block;
+	width: 1300px;
+	height: 24px;
+	padding: 16px 0px 24px 0px;
+	margin: 0 auto;
+	margin-bottom: 20px;
+	cursor: pointer;
+	text-decoration: none;
+	border-radius: 16px;
+	background: #fff;
+	transition: background 0.3s ease, border 0.3s ease;
+
+}
+.questionHolder .questionItself {
+	display: block;
+	float: left;
+	margin-left: 76px;
+	font-size: 1.4em;
+	font-weight: var(--font-medium);
+	color: #111;
+	transition: color 0.3s ease;
+	width: calc(100% - 152px);
+	height: 20px;
+	text-transform: uppercase;
+}
+.questionBlue {
+	border: 2px solid #009ecc;
+}
+.questionBlue:hover, .questionBlue.activeQuestion {
+	background: #009ecc;
+	border: 2px solid #006282;
+}
+.questionHolder:hover .questionItself, .questionHolder.activeQuestion .questionItself {
+	color: #fff;
+}
+
+.questionRed {
+	border: 2px solid #ef3c3c;
+}
+.questionRed:hover, .questionRed.activeQuestion {
+	border: 2px solid #901615;
+	background: #ef3c3c;
+}
+.questionYellow {
+	border: 2px solid #f9a01b;
+}
+.questionYellow:hover, .questionYellow.activeQuestion {
+	border: 2px solid #c56118;
+	background: #f9a01b;
+}
+
+.answerHolder {
+	display: block;
+	margin: 0 auto;
+	padding: 20px 68px 20px 68px;
+	width: 1164px;
+	height: auto;
+	display: none;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+}
+.answerHolder.activeAnswer {
+	display: block;
+	opacity: 1;
+	margin-bottom: 20px;
+}
+.answerHolder ul, .answerHolder ol {
+	margin-left: 40px;
+}
+.answerHolder p, .answerHolder li {
+	font-size: 1.2em;
+	font-weight: var(--font-book);
+	margin-bottom: 20px;
+}
+.answerHolder p.noMargin, .answerHolder li.noMargin {
+	margin-bottom: 0px;
+}
+.answerHolder strong {
+	font-weight: var(--font-medium);
+}
+.answerHolder h3 {
+	font-size: 1.6em;
+	font-weight: var(--font-medium);
+	margin-bottom: 20px;
+	margin-top: 80px;
+}
+.answerHolder img {
+	max-width: 100%;
+	height: auto;
+}
+.answerBlue p a, .answerBlue li a {
+	color: #009ecc;
+}
+.answerBlue p a:hover, .answerBlue li a:hover {
+	color: #006282;
+}
+.answerYellow p a, .answerYellow li a {
+	color: #f9a01b;
+}
+.answerYellow p a:hover, .answerYellow li a:hover {
+	color: #c56118;
+}
+.cont, .contTop {
+	
+	display: block;
+	margin: 0 auto;
+	width: 1300px;
+	margin-bottom: 100px;
+	
+}
+.contTop {
+
+	margin-bottom: 40px;
+	
+}
+#cont_chart {
+	width: calc(100% - 160px);
+	margin-left: 80px;
+}
+.cont .intro, .contTop .intro {
+	
+	font-size: 1.4em;
+	
+}
+.cont .intro strong, .cont strong, .contTop .intro strong, .contTop strong {
+	font-weight: var(--font-semibold);
+	font-weight: var(--font-medium);
+}
+.cont h2 {
+
+	/*text-transform: uppercase;*/
+	font-size: 2.4em;
+	font-weight: var(--font-medium);
+	margin-bottom: 20px;
+	opacity: 1;
+
+}
+.cont .yellowH2 { /*color: #f9a01b;*/ }
+.cont .blueH2 { /*color: #009ecc;*/ }
+.cont .redH2 { /*color: #ef3c3c;*/ }
+
+.contactBlockHalf {
+	display: block;
+	float: left;
+	width: 50%;
+	height: 120px;
+}
+.contactLine {
+
+	display: block;
+	padding-left: 60px;
+	width: calc(100% - 60px);
+	height: auto;
+	min-height: 50px;
+	margin-bottom: 20px;
+
+}
+.contactLineText {
+
+	font-size: 1.8em;
+	font-weight: var(--font-medium);
+	color: #111;
+	line-height: 110%;
+	
+}
+.contactLinePhone {
+
+	/*background: url('platform_images/icon-circle-phone.png') no-repeat top left;*/
+	background: url('platform_images/contactIcon_phone.png') no-repeat top left;
+
+}
+.contactLineFax {
+
+	/*background: url('platform_images/icon-circle-fax.png') no-repeat top left;*/
+	background: url('platform_images/contactIcon_fax.png') no-repeat top left;
+
+}
+.contactLineAddress {
+
+	/*background: url('platform_images/icon-circle-map.png') no-repeat top left;*/
+	background: url('platform_images/contactIcon_address.png') no-repeat top left;
+
+}
+.contactLineEmail {
+
+	background: url('platform_images/icon-circle-chat.png') no-repeat top left;
+
+}
+.efhp_participant {
+
+	display: block;
+	float: left;
+	margin-right: 40px;
+	margin-bottom: 20px;
+
+}
+
+/*** SPINNY PLUS/MINUS FOR FAQ BAR ***/
+
+.closed .vertical {
+    transition: all 0.3s ease-in-out;
+    transform: rotate(-90deg);
+  }
+  
+.closed .horizontal {
+    transition: all 0.3s ease-in-out;
+    transform: rotate(-90deg);
+    opacity: 1;
+}
+
+.circle-plus.opened .vertical {
+    transition: all 0.3s ease-in-out;
+    transform: rotate(90deg);
+    background-color: white;
+}
+.opened .horizontal {
+    transition: all 0.3s ease-in-out;
+    transform: rotate(90deg);
+    opacity: 0;
+}
+.questionHolder:hover .circle-plus .circle .vertical, .questionHolder:hover .circle-plus .circle .horizontal, .activeQuestion .circle-plus .circle .vertical {
+	background-color: white;
+}
+
+.circle-plus {
+    display: block;
+    float: left;
+    height: 20px;
+    width: 20px;
+    font-size: 1em;
+    opacity: 1;
+    margin-top: 6px;
+}
+
+.circle-plus .circle {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    transition: background-color 0.3s ease;
+}
+.circle-plus .circle .horizontal {
+    position: absolute;
+    background-color: black;
+    width: 20px;
+    height: 2px;
+    left: 50%;
+    margin-left: -10px;
+    top: 50%;
+    margin-top: -1px;
+}
+.circle-plus .circle .vertical {
+    position: absolute;
+    background-color: black;
+    width: 2px;
+    height: 20px;
+    left: 50%;
+    margin-left: -1px;
+    top: 50%;
+    margin-top: -10px;
+}
+
+/*** END SPINNY PLUS/MINUS FOR FAQ BAR ***/
+
+/*** SUB BLOCKS ***/
+
+.subsHolder {
+	
+	display: block;
+	margin: 0 auto;
+	margin-bottom: 100px;
+	
+}
+.subBlocksFour {
+
+	width: 1300px;
+	height: 208px;
+
+}
+.subBlocksThree {
+
+	width: 960px;
+	height: 208px;
+
+}
+.subBlock {
+	
+	display: block;
+	float: left;
+	width: 262px;
+	height: 204px;
+	
+	padding: 28px 20px 20px 20px;
+	width: 222px;
+	height: 156px;
+	
+	margin-right: 78px;
+	border-radius: 16px;
+	transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
+	background: #fff;
+	font-size: 2em;
+	font-weight: var(--font-medium);
+	text-align: center;
+	
+	cursor: pointer;
+	
+}
+.subBlockShort {
+
+	font-size: 1.4em;
+	padding: 8px 20px 10px 20px;
+	font-weight: var(--font-semibold);
+	height: 80px;
+	margin-bottom: 10px;
+
+}
+.subBlock .single {
+	display: block;
+	padding: 22px 0px 22px 0px;
+}
+.subBlockYellow {
+
+	border: 2px solid #f9a01b;
+
+}
+.subBlockYellow:hover, .subBlockYellow.activeSubBlock {
+	border: 2px solid #c56118;
+	background: #f9a01b;
+	color: #fff;
+}
+.subBlockRed {
+
+	border: 2px solid #ef3c3c;
+
+}
+.subBlockRed:hover, .subBlockRed.activeSubBlock {
+
+	border: 2px solid #901615;
+	background: #ef3c3c;
+	color: #fff;
+
+}
+.subBlockBlue {
+
+	border: 2px solid #009ecc;
+
+}
+.subBlockBlue:hover, .subBlockBlue.activeSubBlock {
+
+	border: 2px solid #006282;
+	background: #009ecc;
+	color: #fff;
+
+}
+.subBlock .arrows {
+
+	display: block;
+	width: 40px;
+	height: 40px;
+	margin: 0 auto;
+	margin-top: 20px;
+	
+}
+.subBlockShort .arrows {
+	margin-top: 6px;
+}
+.subBlock .arrows .arrow {
+
+	width: 40px;
+	height: 40px;
+	display: block;
+	float: left;
+	z-index: 1;
+	opacity: 1;
+	transition: opacity 0.3s ease;
+	border-radius: 22px;
+	background: #111 url("https://cdn.earq.com/platform_images/zag-white-down2.png") no-repeat center;
+	
+}
+.subBlockYellow .arrows .arrow {
+
+	background: #f9a01b url("https://cdn.earq.com/platform_images/zag-white-down2.png") no-repeat center;
+	border: 2px solid #c56118;
+	
+}
+.subBlockYellow .arrows .arrow-inverted {
+
+	border: 2px solid #c56118;
+	
+}
+.subBlockRed .arrows .arrow {
+
+	background: #ef3c3c url("https://cdn.earq.com/platform_images/zag-white-down2.png") no-repeat center;
+	border: 2px solid #901615;
+	
+}
+.subBlockRed .arrows .arrow-inverted {
+
+	border: 2px solid #901615;
+	
+}
+.subBlockBlue .arrows .arrow {
+
+	background: #009ecc url("https://cdn.earq.com/platform_images/zag-white-down2.png") no-repeat center;
+	border: 2px solid #006282;
+	
+}
+.subBlockBlue .arrows .arrow-inverted {
+
+	border: 2px solid #006282;
+	
+}
+.subBlock .arrows .arrow-inverted {
+
+	display: block;
+	float: left;
+	width: 40px;
+	height: 40px;
+	margin-top: -44px;
+	border-radius: 22px;
+	opacity: 0;
+	z-index: 2;
+	transition: opacity 0.3s ease;
+	background: #fff url("https://cdn.earq.com/platform_images/zag-black-down2.png") no-repeat center;
+
+}
+.subBlock.activeSubBlock .arrows .arrow, .subBlock:hover .arrows .arrow {
+
+	opacity: 0;
+	
+}
+.subBlock.activeSubBlock .arrows .arrow-inverted, .subBlock:hover .arrows .arrow-inverted {
+
+	opacity: 1;
+	
+}
+
+/*** END SUB BLOCKS ***/
+
+/*** shareable image - adopted from old site ***/
+
+.shareableIMG {
+    display: block;
+    margin: 0 auto;
+    font-size: 1em;
+    font-weight: var(--font-book);
+    max-width: 360px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    background: rgba(0,0,0,0.1);
+    padding: 4px;
+    border-radius: 16px;
+}
+.shareableIMG .shareNote {
+    font-weight: var(--font-semibold);
+    color: #111;
+    float: right;
+    padding-top: 10px;
+    margin-right: 4px;
+    text-transform: uppercase;
+    opacity: .3;
+}
+.shareableIMG .siTop {
+    width: 360px;
+    height: auto;
+    margin-bottom: 8px;
+    display: block;
+    border-radius: 16px;
+}
+.shareableIMG .shareIcon {
+    float: right !important;
+    margin-left: 6px !important;
+    margin-right: 0px !important;
+    opacity: .3;
+    transition: opacity 0.3s ease;
+    margin-bottom: 6px;
+}
+.shareableIMG .shareIcon:hover {
+	opacity: 1;
+}
+.shareableIMG .siPinterest {
+	margin-right: 60px !important;
+}
+.cont .caption {
+
+	text-align: center;
+	font-size: 1em;
+	color: #111;
+	opacity: .5;
+
+}
+.cont .caption a {
+
+	color: #111;
+
+}
+
+/*** end shareable image ***/
+
+/*** hearing health - new index page ***/
+
+.threePreviewsHolder {
+
+	display: block;
+	width: 1270px;
+	margin: 0 auto;
+
+}
+.threePreviewsHolder .third {
+
+	display: block;
+	float: left;
+	width: 360px;
+	height: 360px;
+	margin-right: 90px;
+
+}
+.threePreviewsHolder .third.shortThird {
+	height: 180px;
+}
+.threePreviewsHolder .third .crossIcon {
+	
+	display: block;
+	width: 46px;
+	height: 46px;
+	background: url("https://cdn.earq.com/platform_images/icon-cross-46-blue.png") no-repeat center;
+	margin-bottom: 20px;
+	
+}
+.threePreviewsHolder .third .crossIconRed {
+	background: url("https://cdn.earq.com/platform_images/icon-cross-46-red.png") no-repeat center;
+}
+.threePreviewsHolder .third .crossIconYellow {
+	background: url("https://cdn.earq.com/platform_images/icon-cross-46-yellow.png") no-repeat center;
+}
+.threePreviewsHolder .third .accent {
+	display: block;
+	width: 100%;
+	height: 75px;
+	margin-bottom: 8px;
+}
+.threePreviewsHolder .third .accent48 {
+	background: url("https://cdn.earq.com/platform_images/accent-america.png") no-repeat center;
+}
+.threePreviewsHolder .third .accent1in5 {
+	background: url("https://cdn.earq.com/platform_images/accent-1-in-5.png") no-repeat center;
+}
+.threePreviewsHolder .third .accentFlag {
+	background: url("https://cdn.earq.com/platform_images/accent-flag.png") no-repeat center;
+}
+.threePreviewsHolder .third h3 {
+	
+	font-size: 1.8em;
+	font-weight: var(--font-medium);
+	color: #111;
+	margin-bottom: 20px;
+	
+}
+.threePreviewsHolder .third h3 a {
+	text-decoration: none;
+	color: #111;
+	transition: color 0.3s ease;
+}
+.threePreviewsHolder .third h3 a:hover {
+	text-decoration: underline;
+	color: var(--earq-red-hex);
+}
+.threePreviewsHolder .third p {
+
+	font-size: 1.2em;
+	font-weight: var(--font-light);
+	display: block;
+	height: 120px;
+
+}
+.threePreviewsHolder .third p.largeP {
+	font-size: 1.4em;
+	text-align: center;
+}
+.threePreviewsHolder .third p.largeP strong {
+	font-weight: var(--font-semibold);
+	font-weight: var(--font-medium);
+}
+.nextArrow, .nextArrowBlue, .nextArrowRed, .nextArrowYellow {
+
+	display: block;
+	width: 28px;
+	height: 28px;
+	border: 2px solid #056484;
+	
+	background: url("https://cdn.earq.com/platform_images/zag_right_20_black3.png") no-repeat center;
+	border-radius: 16px;
+
+}
+.nextArrowRed {
+	border: 2px solid #921b1a;
+	border-radius: 16px;
+}
+.nextArrowYellow {
+	border: 2px solid #c7651e;
+	border-radius: 16px;
+}
+.nextArrowBlue .innerArrow, .nextArrowRed .innerArrow, .nextArrowYellow .innerArrow {
+	
+	display: block;
+	width: 28px;
+	height: 28px;
+	border-radius: 16px;
+	opacity: 0;
+	background: url("https://cdn.earq.com/platform_images/zag_right_20_white3.png") no-repeat center;
+	transition: opacity 0.3s ease;
+	
+}
+.nextArrowBlue:hover .innerArrow, .nextArrowRed:hover .innerArrow, .nextArrowYellow:hover .innerArrow {
+
+	opacity: 1;
+
+}
+.nextArrowBlue .innerArrow {
+	/*border: 2px solid #006282;*/
+     background: #009ecc url("https://cdn.earq.com/platform_images/zag_right_20_white3.png") no-repeat center;
+}
+.nextArrowRed .innerArrow {
+	/*border: 2px solid #901615;*/
+     background: #ef3c3c url("https://cdn.earq.com/platform_images/zag_right_20_white3.png") no-repeat center;
+}
+.nextArrowYellow .innerArrow {
+	/*border: 2px solid #c56118;*/
+     background: #f9a01b url("https://cdn.earq.com/platform_images/zag_right_20_white3.png") no-repeat center;
+}
+h2.iconTinnitusYellow {
+
+	background: url("https://cdn.earq.com/platform_images/icon-tinnitus-white2.png") no-repeat left;
+	width: 500px;
+	height: 73px;
+	min-height: 73px;
+	text-align: center;
+	
+}
+.hhPreview {
+	display: block;
+	margin: 0 auto;
+	width: 1000px;
+	font-size: 1.4em;
+	font-weight: var(--font-book);
+	margin-bottom: 32px;
+	text-align: center;
+}
+.hhPreview strong {
+	font-weight: var(--font-semibold);
+	font-weight: var(--font-medium);
+}
+.hhGray {
+	display: block;
+	width: 100%;
+	height: auto;
+	background: #f5f5f5;
+	padding: 96px 0px 96px 0px;
+}
+.learnMoreCentered {
+	margin: 0 auto;
+	margin-bottom: 40px;
+}
+.decibelIconHolder {
+	display: block;
+	margin: 0 auto;
+	width: 133px;
+	height: 133px;
+	margin-bottom: 40px;
+}
+.dbIcon {
+	display: block;
+	float: left;
+	margin: 0 auto;
+	width: 133px;
+	height: 133px;
+	transition: opacity 0.3s ease;
+}
+.db_normal {
+	z-index: 1;
+	background: url("https://cdn.earq.com/platform_images/icon-normal-conversations.png");
+}
+.db_dishwasher, .db_lawnmower, .db_orchestra, .db_concert, .db_fireworks {
+	z-index: 2;
+	margin-top: -133px;
+}
+.db_dishwasher { background: url("https://cdn.earq.com/platform_images/icon-dishwasher.png"); }
+.db_lawnmower { background: url("https://cdn.earq.com/platform_images/icon-lawnmower.png"); }
+.db_orchestra { background: url("https://cdn.earq.com/platform_images/icon-symphony-orchestra.png"); }
+.db_concert { background: url("https://cdn.earq.com/platform_images/icon-rock-concert.png"); }
+.db_fireworks { background: url("https://cdn.earq.com/platform_images/icon-fireworks.png"); }
+
+.dbZagsHolder {
+	display: block;
+	margin: 0 auto;
+	width: 604px;
+	height: 39px;
+}
+.dbZagLeft, .dbZagRight, .dbLabel {
+	display: block;
+	float: left;
+	width: 21px;
+	height: 39px;
+}
+.dbZagLeft { background: url("https://cdn.earq.com/platform_images/zag-left-red.png"); cursor: pointer; }
+.dbZagRight { background: url("https://cdn.earq.com/platform_images/zag-right-red.png"); cursor: pointer; }
+.dbLabel {
+	width: calc(100% - 42px);
+	text-align: center;
+	font-size: 2em;
+	font-weight: var(--font-medium);
+}
+.dbLevel {
+	display: block;
+	width: 100%;
+	text-align: center;
+	font-size: 2.4em;
+	font-weight: var(--font-light);
+	margin-top: 8px;
+	margin-bottom: 80px;
+}
+.dbDotsHolder {
+	display: block;
+	margin: 0 auto;
+	width: 150px;
+	height: 14px;
+	margin-bottom: 100px;
+}
+.dbDot {
+	display: block;
+	float: left;
+	cursor: pointer;
+	width: 12px;
+	height: 12px;
+	border: 2px solid #982726;
+	border-radius: 7px;
+	margin-right: 10px;
+	background: rgba(239, 60, 60, 0);
+	transition: background 0.3s ease;
+}
+.dbDot:hover, .activeDbDot {
+	background: rgba(239, 60, 60, 1);
+}
+
+/*** end hearing health index ***/
+
+/*** careers page ***/
+
+.hhCenteredUL {
+
+	display: block;
+	margin: 0 auto;
+	width: 600px;
+	height: 140px;
+
+}
+.hhCenteredUL li {
+
+	display: block;
+	float: left;
+	width: 50%;
+	height: 36px;
+	font-size: 1.4em;
+	font-weight: var(--font-light);
+
+}
+#wordsToLiveBy {
+
+	display: block;
+     margin: 0 auto;
+     margin-top: 80px;
+     margin-bottom: 120px;
+     padding: 40px;
+     width: 960px;
+     box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.2);
+     background: #fff;
+
+}
+#wordsToLiveBy p {
+	font-size: 1.4em;
+}
+#wordsToLiveBy h2 {
+	font-size: 2em;
+	margin-bottom: 20px;
+}
+#wordsToLiveBy h4 {
+	font-weight: var(--font-semibold);
+	font-size: 1.4em;
+	margin-bottom: 20px;
+}
+.careerQuotesHolder {
+	
+	display: block;
+	width: 90%;
+	margin: 0 auto;
+	height: auto;
+	min-height: 300px;
+	
+}
+.careerQuoteHolder {
+
+	display: block;
+	float: left;
+	padding: 0px 80px 0px 80px;
+	width: calc(100% - 202px);
+	height: auto;
+	min-height: 200px;
+
+}
+.careerQuote {
+
+	font-size: 1.8em;
+	font-style: italic;
+	margin-bottom: 20px;
+	font-weight: var(--font-light);
+
+}
+.careerQuoteAuthor {
+
+	font-size: 1.2em;
+	/*font-style: italic;*/
+	margin-bottom: 0px;
+	font-weight: var(--font-semibold);
+	opacity: .4;
+	/*text-indent: 40px;*/
+	text-align: right;
+
+}
+.careerQuotesDotsHolder {
+	display: block;
+	margin: 0 auto;
+	width: 130px;
+	height: 14px;
+	margin-bottom: 100px;
+}
+
+/*** end careers CSS ***/
+
+.nflpaSection {
+
+	width: 1350px;
+	display: block;
+	margin: 0 auto;
+
+}
+
+.nflpaLeft {
+
+	display: block;
+	float: left;
+	width: 480px;
+	height: 256px;
+	margin-left: 74px;
+
+}
+.nflpaRight {
+
+	display: block;
+	padding-left: 660px;
+
+}
+.nflpaRight p {
+
+	font-size: 1.4em;
+	
+}
+.nflpaRight li {
+	
+	font-size: 1.4em;
+	margin-bottom: 20px;
+	font-weight: var(--font-light);
+	
+}
+.nflpaRight li strong {
+	
+	font-weight: var(--font-semibold);
+	font-weight: var(--font-medium);
+	
+}
+.nflpaRight ul {
+	margin-left: 40px;
+}
+.newsletterBullets {
+
+	display: block;
+	width: 400px;
+	margin: 0 auto;
+
+}
+.newsletterBullets li {
+
+	font-size: 1.4em;
+	margin-bottom: 0px;
+
+}
+#mc-embedded-subscribe-form {
+	
+	display: block;
+	width: 500px !important;
+	margin: 0 auto !important;
+	
+}
+#mc-embedded-subscribe-form label, #mc-embedded-subscribe-form input {
+	float: none !important;
+	width: 100% !important;
+	border-radius: 16px;
+}
+
+/*** end Mailchimp stuff ***/
+
+/*** associated conditions ***/
+
+.acCont {
+	display: block;
+	margin: 0 auto;
+	border: 2px solid #f04d4d;
+	padding: 40px 60px 40px 60px;
+	width: calc(100% - 124px);
+	margin-top: 40px;
+	margin-bottom: 40px;
+	
+	max-width: 1140px;
+}
+.acCont.acContBlue {
+	border: 2px solid #009ecc;
+}
+.acCont.acContYellow {
+	border: 2px solid #f9a01b;
+}
+.acContRed p a:link {
+	color: #f04d4d;
+}
+.acContBlue p a:link {
+	color: #009ecc;
+}
+.acContYellow p a:link {
+	color: #f9a01b;
+}
+.acButton {
+	/*padding-top: 30px;
+	height: 204px;*/
+	background: #ffffff !important;
+	
+	padding-top: 130px;
+	height: 104px;
+	
+	cursor: pointer;
+	transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-weight: var(--font-medium);
+	text-align: center;
+	font-size: 1.5em;
+	
+	width: 230px;
+	height: 230px;
+	padding: 100px 20px 0px 20px !important;
+	width: 190px !important;
+	height: 130px !important;
+}
+.acButtonRed {
+    border: 2px solid #ef3c3c;
+}
+.acButtonBlue {
+    border: 2px solid #009ecc;
+}
+.acButtonYellow {
+    border: 2px solid #f9a01b;
+}
+.acTwoLines {
+	padding: 85px 20px 0px 20px !important;
+	height: 145px !important;
+}
+.acButtonRed:hover, .acButtonRed.activeAcButton {
+	border: 2px solid #901615;
+     background: #ef3c3c !important;
+     color: #fff;
+}
+.acButtonBlue:hover, .acButtonBlue.activeAcButton {
+	border: 2px solid #006282;
+     background: #009ecc !important;
+     color: #fff;
+}
+.acButtonYellow:hover, .acButtonYellow.activeAcButton {
+	border: 2px solid #c56118;
+     background: #f9a01b !important;
+     color: #fff;
+}
+.acButtonsHolder {
+	height: 250px !important;
+	margin-bottom: 40px !important;
+	margin-top: 40px !important;
+}
+.acButtonsHolder .stylesHolderInner {
+	height: 250px !important;
+}
+.acButtonsZag {
+	height: 250px !important;
+}
+.acDots {
+	width: 226px !important;
+}
+.acCont h2 {
+	color: #111 !important;
+	text-transform: none !important;
+	font-size: 1.6em !important;
+}
+.acHolderWide {
+	width: 4700px !important;
+}
+.acCont .caption a {
+	
+	color: #111 !important;
+}
+.acCont .caption {
+	display: block;
+	margin-top: 40px;
+}
+
+.contBullets ul {
+	margin-left: 40px;
+}
+.contBullets li {
+	font-size: 1.2em;
+}
+.contBullets li li {
+	font-size: 1em;
+}
+
+@media only screen and (min-width:20px) and (max-width: 1499px)  {
+
+	#cont_chart {
+		width: calc(100% - 40px);
+		margin: 0 auto;
+		padding: 0px;
+	}
+	#cont_chart p.intro {
+		padding: 0px 20px 0px 20px;
+	}
+
+}
+
+@media only screen and (min-width:20px) and (max-width: 1459px)  {
+
+	.nflpaSection {
+    		width: calc(100% - 160px);
+     }
+	.nflpaLeft {
+		width: 230px;
+		height: 171px;
+		margin-left: 0px;
+	}
+	.nflpaLeft img {
+		width: 230px;
+		height: auto;
+	}
+	.nflpaRight {
+		padding-left: 250px;
+	}
+
+}
+
+@media only screen and (min-width:20px) and (max-width: 1419px)  {
+
+	.threePreviewsHolder {
+	    width: 920px;
+	}
+	.subBlocksFour {
+		width: 860px;
+		margin-bottom: 50px;
+	}
+	.subBlocksThree {
+		width: 644px;
+		margin-bottom: 50px;
+		height: 150px;
+	}
+	.threePreviewsHolder .third {
+		width: 280px;
+		margin-right: 40px;
+	}
+	.threePreviewsHolder .third h3 {
+		font-size: 1.4em;
+	}
+	.threePreviewsHolder .third br {
+		display: none;
+	}
+	.subBlock {
+		width: 235px;
+		
+		padding: 18px 15px 10px 15px;
+		width: 165px;
+		font-size: 1.4em;
+		margin-right: 20px;
+		height: 130px;
+	}
+	.cont, .contTop, .searchResults {
+		padding: 0px 100px 0px 100px;
+		width: calc(100% - 200px);
+	}
+	.acCont {
+		padding: 40px;
+		width: calc(100% - 80px);
+	}
+	.questionHolder {
+		width: calc(100% - 4px);
+	}
+	.answerHolder {
+		width: 100%;
+		padding: 20px 0px 20px 0px;
+	}
+	h1.educational {
+		font-size: 2.4em;
+		margin-top: 50px;
+		margin-bottom: 50px;
+		width: 540px;
+	}
+	h1.educationalWide.iconCrossRed { 
+		text-align: left;
+		padding-left: 90px;
+		width: calc(100% - 290px);
+		/*margin-left: 100px;*/
+		line-height: 125%;
+	}
+	.cont .intro, .contTop .intro {
+	    font-size: 1.4em;
+	    margin-bottom: 20px;
+	}
+	.subBlock .single {
+	    display: block;
+	    padding: 0px;
+	}
+	.subBlocksThree .subBlock {
+	    height: 106px;
+	}
+	.cont h2 {
+		font-size: 2.4em;
+	}
+	#sub_diseases {
+		padding: 4px 15px 24px 15px;
+	}
+	#sub_diseases .arrows {
+		margin-top: 8px;
+	}
+
+}
+@media only screen and (min-width:20px) and (max-width: 1309px)  {
+	.acCont {
+		padding: 20px !important;
+		width: calc(100% - 80px) !important;
+	}
+	.acCont h2 {
+		font-size: 1.4em !important;
+	}
+	.acCont p, .acCont p.intro {
+		font-size: 1.2em !important;
+	}
+	.acCont img {
+		max-width: 100%;
+		height: auto;
+	}
+}
+@media only screen and (min-width:20px) and (max-width: 1259px)  {
+	
+	.careerQuotesHolder {
+	
+		width: 100%;
+	
+	}
+	.careerQuotesHolder .dbZagLeft {
+		margin-left: 20px;
+		margin-top: -60px
+	}
+	.careerQuotesHolder .dbZagRight {
+		margin-right: 20px;
+		margin-top: -60px;
+		float: right;
+	}
+	.careerQuoteHolder {
+		width: calc(100% - 40px);
+		margin: 0 auto;
+		margin-top: 80px;
+		padding: 0px;
+		height: auto;
+		float: none;
+	}
+	.careerQuote {
+    		font-size: 1.4em;
+     }
+	.careerQuoteAuthor {
+		font-size: 1em;
+	}
+	
+}
+@media only screen and (min-width:20px) and (max-width: 1199px)  {
+
+	.hhPreview {
+		width: calc(100% - 80px);
+		font-size: 1.2em !important;
+	}
+	.hhPreview strong {
+		font-weight: var(--font-semibold);
+	}
+	.hhCenteredUL {
+		width: 300px;
+	}
+	.hhCenteredUL li {
+		font-size: 1.2em;
+		margin-bottom: 20px;
+		line-height: 105%;
+	}
+	#wordsToLiveBy {
+		width: calc(100% - 80px);
+		padding: 20px;
+	}
+	#wordsToLiveBy p, #wordsToLiveBy h4 {
+	    font-size: 1.2em;
+	}
+	#wordsToLiveBy .divider {
+		margin-bottom: 20px;
+	}
+
+}
+@media only screen and (min-width:930px) and (max-width: 1159px)  {
+	 .cont, .contTop, .searchResults {
+	    padding: 0px 50px 0px 50px;
+	    width: calc(100% - 100px);
+	 }
+	 .bannerHeaderHolder p {
+	 	width: calc(100% - 100px);
+		font-size: 1.2em;
+	 }
+	 .bannerHeaderHolder p strong {
+	 	font-weight: var(--font-semibold);
+	 }
+	 .questionHolder {
+	 	padding: 14px 0px 16px 0px;
+		height: 24px;
+		margin-bottom: 10px;
+	 }
+	 .questionHolder .questionItself {
+	 	font-size: 1.2em;
+		margin-left: 24px;
+		width: calc(100% - 72px);
+		font-weight: var(--font-semibold);
+	 }
+	 .circle-plus {
+	 	margin-top: 3px;
+	 }
+	 
+}
+@media only screen and (min-width:20px) and (max-width: 1159px)  {
+	.hhGray h2, h2.innerH2 {
+	 	font-size: 1.8em;
+		margin-bottom: 20px;
+		height: auto;
+	 }
+	 .nflpaRight p, .nflpaRight li {
+	    font-size: 1.2em;
+	}
+	.nflpaRight li strong {
+		font-weight: var(--font-semibold);
+	}
+	.nflpaRight ul {
+		margin-left: 40px;
+	}
+}
+@media only screen and (min-width:20px) and (max-width: 1049px)  {
+	/*h2.iconChatYellow {
+		width: 640px !important;
+	}*/
+	h2.iconChatYellow, h2.iconChatBlue, h2.iconTinnitusYellow, h2.iconHearingAidRed, h2.iconFileYellow, h1.iconEarRed, h2.iconCrossRed, h1.iconHearingAidRed, h1.iconCrossRed, h2.iconNewsRed {
+		width: calc(100% - 40px) !important;
+		padding: 80px 20px 0px 20px !important;
+		font-size: 1.8em !important;
+		line-height: 125% !important;
+		background-position: top center !important;
+		height: auto !important;
+		min-height: 24px !important;
+		margin: 0 auto;
+		margin-bottom: 20px;
+	}
+	h1.iconCrossRed {
+		text-align: center !important;
+	}
+	h1.educationalWide, h1.educational {
+		margin-bottom: 40px;
+	}
+	
+}
+@media only screen and (min-width:20px) and (max-width: 999px)  {
+	.threePreviewsHolder .third p.largeP {
+		font-size: 1.2em;
+	}
+}
+@media only screen and (min-width:20px) and (max-width: 989px)  {
+	
+	.threePreviewsHolder {
+		width: calc(100% - 30px);
+	}
+	.threePreviewsHolder .third {
+		width: calc(33.3% - 30px);
+		margin-right: 30px;
+	}
+	.threePreviewsHolder .third h3 {
+		font-size: 1.2em;
+		font-weight: var(--font-semibold);
+	}
+	.threePreviewsHolder .third p {
+		font-size: 1em;
+		height: 100px;
+	}
+	
+}
+@media only screen and (min-width:20px) and (max-width: 839px)  {
+	.threePreviewsHolder .third h3 {
+		font-size: 1em;
+		margin-bottom: 12px;
+	}
+	.threePreviewsHolder .third p {
+		height: 140px;
+	}
+}
+@media only screen and (min-width:20px) and (max-width: 929px)  {
+
+	h1.educational {
+		font-size: 1.8em;
+		width: 420px;
+		line-height: 225%;
+	}
+	/*h1.iconHearingAidRed, h2.iconHearingAidRed {
+		width: 460px;
+	}*/
+	.subBlocksFour {
+		width: 420px;
+		height: 370px;
+	}
+	.subBlock {
+		margin-bottom: 20px;
+	}
+	#sub_conductive, #sub_batteries {
+		margin-right: 0px !important;
+	}
+	.cont, .contTop, .searchResults {
+	    padding: 0px 20px 0px 20px;
+	    width: calc(100% - 40px);
+	}
+	.cont .intro, .contTop .intro {
+	    font-size: 1.2em;
+	    margin-bottom: 16px;
+	}
+	.bannerHeaderHolder p {
+	 	width: calc(100% - 40px);
+		font-size: 1.1em;
+	}
+	.bannerHeaderHolder p strong, .cont .intro strong, .cont strong, .contTop .intro strong, .contTop strong {
+	 	font-weight: var(--font-semibold);
+	}
+	.questionHolder {
+	 	padding: 10px 0px 14px 0px;
+		height: 20px;
+		margin-bottom: 8px;
+	 }
+	 .questionHolder .questionItself {
+	 	font-size: 1.1em;
+		margin-left: 14px;
+		width: calc(100% - 50px);
+		font-weight: var(--font-semibold);
+	 }
+	 .circle-plus {
+	 	margin-top: 2px;
+	 }
+	 .answerHolder p, .answerHolder li {
+    		font-size: 1.05em;
+      }
+	 .answerHolder {
+	    padding: 10px 0px 10px 0px;
+	 }
+	 .cont h2 {
+	    font-size: 1.6em;
+	 }
+	
+}
+@media only screen and (min-width:20px) and (max-width: 879px)  {
+	.hhGray {
+		padding: 40px 0px 40px 0px;
+	}
+	
+	.nflpaSection {
+		width: calc(100% - 80px);
+	}
+	.nflpaLeft {
+		float: none;
+		width: 260px;
+		height: auto;
+		margin: 0 auto;
+		margin-bottom: 20px;
+	}
+	.nflpaLeft img {
+		width: 100%;
+		height: auto;
+	}
+	.nflpaRight {
+		float: none;
+		width: 100%;
+		height: auto;
+		padding: 0px;
+		margin: 0 auto;
+	}
+	.faqCont .questionHolder {
+		height: auto;
+	}
+	.faqCont .questionHolder .questionItself {
+		width: calc(100% - 70px);
+		margin-right: 20px;
+		height: auto;
+	}
+	.contactBlockHalf {
+		float: none;
+		width: 100%;
+		height: auto;
+		margin-bottom: 20px;
+	}
+}
+@media only screen and (min-width:20px) and (max-width: 749px)  {
+	.threePreviewsHolder {
+		height: auto;
+	}
+	.threePreviewsHolder .third, .threePreviewsHolder .third.shortThird {
+		float: none;
+		width: 100%;
+		margin: 0 auto;
+		height: auto;
+		margin-bottom: 40px;
+	}
+	.threePreviewsHolder .third h3 {
+		font-size: 1.2em;
+		margin-bottom: 8px;
+		text-align: center;
+	}
+	.threePreviewsHolder .third p {
+		height: auto;
+		margin-bottom: 8px;
+		font-size: 1.2em;
+		text-align: center;
+	}
+	.threePreviewsHolder .third .crossIcon {
+		margin: 0 auto;
+		margin-bottom: 8px;
+	}
+	.acButton {
+		width: 150px !important;
+		height: 80px !important;
+	}
+}
+@media only screen and (min-width:20px) and (max-width: 729px)  {
+	.dbDotsHolder {
+		display: none;
+	}
+	.dbZagsHolder {
+		width: calc(100% - 40px);
+	}
+	.dbLabel {
+		font-size: 1.2em;
+		font-weight: var(--font-semibold);
+		height: 24px;
+	}
+	.dbLevel {
+		margin-top: 0px;
+		font-size: 2em;
+	}
+	#mc-embedded-subscribe-form {
+		width: calc(100% - 40px) !important;
+	}
+	#mc-embedded-subscribe-form label, #mc-embedded-subscribe-form input {
+		width: calc(100% - 20px) !important;
+	}
+	
+}
+@media only screen and (min-width:20px) and (max-width: 709px)  {
+	/*h2.iconChatYellow, h2.iconChatBlue {
+		width: calc(100% - 130px) !important;
+		margin-left: 20px !important;
+		padding-left: 90px !important;
+		padding-right: 20px !important;
+	}
+	h2.iconTinnitusYellow {
+		text-align: center;	
+		width: 260px !important;
+		margin-left: 20px;
+	}
+	h2.iconHearingAidRed {
+		width: calc(100% - 130px) !important;
+		padding-left: 80px !important;
+		padding-right: 20px !important;
+		margin-left: 20px !important;
+	}*/
+	.careerQuotesDotsHolder {
+		display: none;
+	}
+	
+}
+@media only screen and (min-width:20px) and (max-width: 699px)  {
+	
+	.subBlocksThree {
+		width: 404px;
+	}
+	.subBlocksThree .subBlock {
+		padding: 8px 10px 5px 10px;
+		width: 100px;
+		font-size: 1.2em;
+		margin-right: 10px;
+		font-weight: var(--font-semibold);
+	}
+	.subBlocksThree .subBlock .arrows {
+		margin-top: 6px;
+	}
+	#sub_tinnitus .arrows {
+		margin-top: 32px;
+	}
+	#sub_diseases {
+		height: 96px;
+	}
+	
+}
+@media only screen and (min-width:20px) and (max-width: 659px)  {
+	
+	.hhPreview {
+		font-size: 1.1em;
+		width: calc(100% - 40px);
+	}
+	.threePreviewsHolder .third p, .threePreviewsHolder .third h3 {
+		font-size: 1.1em;
+	}
+	
+}
+@media only screen and (min-width:20px) and (max-width: 599px)  {
+	.nflpaRight p, .nflpaRight li {
+		font-size: 1.1em;
+	}
+	.newsletterBullets {
+		width: 280px;
+	}
+	.newsletterBullets li {
+    		font-size: 1.1em;
+    }
+    h1.educational, h1.educationalWide {
+    		font-size: 1.4em;
+		max-width: calc(100% - 40px);
+		line-height: 125%;
+    }
+    /*h2.iconFileYellow {
+    	   padding-left: 70px !important;
+	   padding-right: 20px !important;
+	   margin-left: 20px !important;
+	   width: calc(100% - 160px) !important;
+	   text-align: center !important;
+    }
+    h1.iconEarRed {
+    	   font-size: 1.6em !important;
+	   padding-left: 70px !important;
+	   width: 200px !important;
+    }*/
+}
+@media only screen and (min-width:20px) and (max-width: 499px)  {
+	.subBlocksFour, .subBlocksThree {
+		width: calc(100% - 40px);
+		height: auto !important;
+	}
+	.subBlocksFour .subBlock, .subBlocksThree .subBlock {
+		width: calc(50% - 30px);
+		margin-right: 10px;
+		margin-bottom: 10px;
+		font-size: 1.1em;
+		font-weight: var(--font-semibold);
+		padding: 14px 10px 10px 10px;
+		height: 110px;
+	}
+	.acCont p, .acCont p.intro {
+	    font-size: 1.1em !important;
+	}
+	.subBlocksThree .subBlock {
+		height: 100px;
+	}
+	/*h2.iconCrossRed, h1.iconCrossRed, h1.iconHearingAidRed {
+		margin-left: 20px !important;
+		padding-left: 90px !important;
+		padding-right: 20px !important;
+		width: calc(100% - 130px) !important;
+		line-height: 125% !important;
+	}*/
+	.cont .intro, .contTop .intro {
+		font-size: 1.1em;
+	}
+	#sub_menieres, #sub_operations, #sub_diseases {
+		clear: both;
+		float: none;
+		margin-left: 25%;
+	}
+	#sub_infections, #sub_how, #sub_marketing {
+		margin-right: 0px;
+	}
+	#sub_infections .arrows {
+	    margin-top: 32px;
+	}
+}
+@media only screen and (min-width:20px) and (max-width: 459px)  {
+
+	.bannerHeaderHolder h1 {
+		font-size: 2em;
+	}
+	.hhGray h2, h2.innerH2 {
+		font-size: 1.4em;
+		font-weight: var(--font-semibold);
+		padding: 0px 20px 0px 20px;
+		width: calc(100% - 40px);
+	}
+	/*h2.iconNewsRed {
+		font-size: 1.6em;
+		width: 280px !important;
+		line-height: 250%;
+	}*/
+	.cont h2 {
+	    font-size: 1.4em;
+	}
+	.cont p, .cont li, .contTop p, .contTop li, #anatomyChartRight li {
+		font-size: 1.1em !important;
+	}
+	#anatomyChartRight li li {
+		font-size: .9em !important;
+	}
+
+}
+@media only screen and (min-width:20px) and (max-width: 399px)  {
+    .contactLineText {
+    	   font-size: 1.4em;
+    }
+    .careerQuote {
+    		font-size: 1.2em;
+    }
+}
+@media only screen and (min-width: 380px) and (max-width: 499px)  {
+	#sub_mixed .arrows {
+		margin-top: 42px !important;
+	}
+}

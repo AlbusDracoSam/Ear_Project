@@ -1,0 +1,293 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+    <style>
+    h1 {
+  margin: 60px 0;
+}
+    body{
+        background-color: #f8f8fb;
+    }
+
+.accordion__item {
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #f2f2f2;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+.accordion__body {
+  display: none;
+  padding-top: 10px;
+}
+.accordion__body p {
+    font-size: 20px;
+    text-align: justify;
+  text-justify: inter-word;
+    letter-spacing: 1px;
+  margin-bottom: 0;
+    padding: 10px 15px;
+}
+.accordion__title {
+  font-size: 22px;
+  cursor: pointer;
+  margin-bottom: 0;
+  position: relative;
+}
+.accordion__title:after {
+  content: "";
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAABlUlEQVRIS72V6zEEQRSFv81ABogAESADIiADRIAIEAEiQASIABmQgQyor+rerZ7enp71Y92qqZrpxznnPmfGim22YnyWITgGdoHteNT0Hs8j8NQT2SM4AK6AjQkvP4EzQLIFGyO4Bk7i9Bfg90uodllv9oBTYD3OeUaigbUISnAv+N0zSfRUuwnS+fmawLA8xO5OoXiqFvToLQ4dluGqCYynLi+jvCZNT8TYzM2SwGq5BYz5VGLHPEqBcy9KgjvgqFJ/ETn4HkFci2K4jP304h5Q8KAPrO0tIGMv+HnkYR+oSQR/joqSwPOZC7HEGRD8hIr0SgBLU1IvlCQl+EeUbAoY4JQhqgnka5G4nsprcPdGCeoQZdhrkmy0FniGyD3fByFqJblF4loL3PVukrPJBnVcVE964pJjolVZ3TL14lSjSaK1wFP9oI/+fVSorhx2qnKA9exPwy6BShLD5vdrNa79CQmeY2VhktZVVKs06QLnvB/zwphL9KcfTgkmkY91bVdnmdo3gjaBE2CZf/JECvrbKyf4BdpXaxkir2UhAAAAAElFTkSuQmCC") no-repeat;
+  background-size: 20px;
+}
+.accordion__title.active {
+  color: #2B9FDF;
+}
+.accordion__title.active:after {
+  transform: rotate(-180deg);
+}
+h2.educational, h2.innerH2 {
+
+	display: block;
+	width: 744px;
+	height: 70px;
+	margin: 0 auto;
+	text-align: center;
+	font-size: 3em;
+	margin-top: 100px;
+	margin-bottom: 100px;
+
+}
+h2.iconChatBlue {
+
+	background: url("https://cdn.earq.com/platform_images/icon-chat.png") no-repeat left;
+	min-height: 70px;
+
+}
+    </style>
+    <!-- SECTION BANNER -->
+    <div class="section-banner">
+      <!-- SECTION BANNER ICON -->
+      <img class="section-banner-icon" src="{% static 'img/banner/accounthub-icon.png' %}" alt="accounthub-icon">
+      <!-- /SECTION BANNER ICON -->
+
+      <!-- SECTION BANNER TITLE -->
+      <p class="section-banner-title">FAQ</p>
+      <!-- /SECTION BANNER TITLE -->
+
+      <!-- SECTION BANNER TEXT -->
+      <p class="section-banner-text"></p>
+      <!-- /SECTION BANNER TEXT -->
+    </div>
+    <!-- /SECTION BANNER --><br><br>
+    <main class="site-wrapper container">
+        <h2 class="educational iconChatBlue" style="margin-bottom: 10px;">Hearing Health: FAQs</h2>
+        <br/><br/><br/><br/>
+
+	<div class="accordion">
+        <div class="accordion__item">
+			<h2 class="accordion__title active">WHAT CAUSES HEARING LOSS?</h2>
+			<div class="accordion__body">
+                <p>Hearing loss can be caused by several different factors. The most common cause, scientifically called presbycusis, means that aging or genetics are causing your hearing to slowly decline over time, similar to many people's experience with their eyesight.
+                    <br/><br/>You could also experience noise-induced hearing loss. This type of hearing loss is a result of over-exposure to loud sounds. Even sounds over 85 decibels can cause permanent hearing damage after 15 minutes of exposure—that's about as loud as the average lawnmower!
+                    <br/><br/>If you have earwax, or another object blocking our ear canal, that could be causing hearing loss as well. Usually not permanent, this is known as conductive hearing loss and can usually be cured with the proper course of treatment.
+                    <br/><br/>Some less common causes of hearing loss may be linked to high blood pressure, diabetes, medicinal reactions, and more. You should always consult your hearing healthcare provider if you think you may be experiencing hearing loss due to a medical condition.</p></div>
+		</div>
+		<!-- 	END Item -->
+		<div class="accordion__item">
+			<h2 class="accordion__title active">What is the name for a doctor who specializes in medicine only related to the ear?</h2>
+			<div class="accordion__body">
+                <p>An otologist is a doctor who specializes in medicine related to the ear. An otologist is a specialized type of otolaryngologist,
+                    which is a specialist in disorders of the ear, nose, and throat (also called an ENT).</p></div>
+		</div>
+		<!-- 	END Item -->
+		<div class="accordion__item">
+			<h2 class="accordion__title">What is the purpose of earwax?</h2>
+			<div class="accordion__body">
+                <p>Earwax, also called cerumen, helps keep the ears healthy by lubricating the ear canals, cleaning out the
+                    ears, and trapping dirt and germs.</p></div>
+		</div>
+		<!-- 	END Item -->
+		<div class="accordion__item">
+			<h2 class="accordion__title">Doctors encourage "candling" as a way to remove excess earwax. True or False?</h2>
+			<div class="accordion__body">
+                <p>Doctors do not recommend ear "candling," which involves lighting a long, hollow candle (typically made from cloth soaked in beeswax)
+                    on one end and placing the other end in the ear canal.</p></div>
+		</div>
+		<!-- 	END Item -->
+		<div class="accordion__item">
+			<h2 class="accordion__title">What disorders are directly related to the inner ear?</h2>
+			<div class="accordion__body">
+                <p>Balance disorders that cause you to feel unstable or dizzy including Meniere's disease, vertigo,
+                    and labyrinthitis actually originate from the inner ear where the body's vestibular system is located.</p></div>
+		</div>
+		<!-- 	END Item -->
+        <div class="accordion__item">
+			<h2 class="accordion__title">How can you treat tinnitus?</h2>
+			<div class="accordion__body">
+                <p>Tinnitus, or ringing in the ears, can often be treated. If the tinnitus is due to earwax buildup,
+                    getting the ears cleaned by your doctor may relieve symptoms.
+spread?</p></div>
+		</div>
+		<!-- 	END Item --><div class="accordion__item">
+			<h2 class="accordion__title">How many kinds of ear infections are there?</h2>
+			<div class="accordion__body">
+                <p>There are three different types of ear infections:
+<br/><br/>1. Otitis media with effusion (OME), or "middle ear infection," is a buildup of fluid in the middle ear which may occur as a result of a cold or upper respiratory infection
+<br/><br/>2. Acute otitis media (AOM) occurs when otitis media fluid becomes infected
+<br/><br/>3. Otitis externa, also called "swimmer's ear," is inflammation of the ear canal</p></div>
+		</div>
+		<!-- 	END Item --><div class="accordion__item">
+			<h2 class="accordion__title">At what decibel level of sound does one begin to experience hearing loss?</h2>
+			<div class="accordion__body">
+                <p>Hearing loss may occur when a person is exposed to sounds at or above 85 decibels for long or repeated periods of time.
+
+<br/><br/>Sounds of 75 decibels or less do not usually cause hearing loss. The louder the sound, the shorter the time it would take for it to cause problems with hearing. Here is a comparison of the decibel levels of certain common sounds:
+<br/><br/>- 45 decibels – the humming of a refrigerator
+<br/><br/>- 60 decibels – normal conversation
+<br/><br/>- 85 decibels – noise from heavy city traffic (*repeated or prolonged exposure to this decibel level or higher can cause hearing loss)
+<br/><br/>- 95 decibels – motorcycles
+<br/><br/>- 105 decibels – mp3 player at maximum volume
+<br/><br/>- 120 decibels – sirens
+<br/><br/>- 150 decibels – firecrackers and firearms</p></div>
+		</div>
+		<!-- 	END Item --><div class="accordion__item">
+			<h2 class="accordion__title">Hearing loss is one of the most common conditions affecting older and elderly adults. True or False?</h2>
+			<div class="accordion__body">
+                <p>True.
+
+<br/>Hearing loss is extremely common in older adults. About one third of adults between the ages of 65 and 74 in the U.S.
+                    has some hearing loss, and about half of those older than 75 have some difficulty hearing.
+                    Changes in the ear or along the nerve pathways from the ear to the brain as we age are the most
+                    common cause of hearing decline in older adults. Some medical conditions or medications can
+                    also affect hearing.</p></div>
+		</div>
+		<!-- 	END Item --><div class="accordion__item">
+			<h2 class="accordion__title">HOW COMMON IS HEARING LOSS?</h2>
+			<div class="accordion__body">
+                <p>According to current statistics, hearing loss affects:
+
+<br/><br/>20% of adults in the U.S.
+<br/><br/>67% of people over age 75
+<br/><br/>33% of people over age 65
+<br/><br/>14% of people ages 45-64
+<br/><br/>15% of children ages 6-19
+<br/><br/>Overall, almost 36 million Americans suffer from hearing loss. That's approximately 1 in 8 people! Keep in mind that 60% of people who have hearing loss are below retirement age.</p></div>
+		</div>
+		<!-- 	END Item --><div class="accordion__item">
+			<h2 class="accordion__title">WHAT ARE THE COMMON SYMPTOMS OF HEARING LOSS?</h2>
+			<div class="accordion__body">
+                <p>
+                    <br/><br/> - You are constantly asking people to repeat themselves
+<br/><br/> - You have difficulty while having a conversation in a noisy environment
+<br/><br/> - You often mishear words
+<br/><br/> - It seems as though many of the people in your life mumble
+<br/><br/> - People are always telling you to turn the TV down
+<br/><br/> - It's very difficult to understand the person on the other end of the phone
+<br/><br/> - You have a constant annoying ringing or buzzing in your ears
+<br/><br/> - Most importantly: friends and family members have asked you to get your hearing checked.
+<br/><br/><br/> - IMPORTANT: If you are experiencing any of the following symptoms, seek medical attention as soon as possible:
+
+<br/><br/> - Sudden hearing loss
+<br/><br/> - Blood or fluid draining from your ears
+<br/><br/> - Sudden onset of dizziness
+<br/><br/> - Fluctuating hearing loss
+<br/><br/> - Head trauma
+</p></div>
+		</div>
+		<!-- 	END Item --><div class="accordion__item">
+			<h2 class="accordion__title">ARE THERE DIFFERENT KINDS OF HEARING LOSS?</h2>
+			<div class="accordion__body">
+                <p>Yes! There are three different types of hearing loss, as determined by where in your ear the problem lies.
+
+<br/><br/>Types of hearing loss:
+<br/><br/><br/>Conductive Hearing Loss: Sound can't travel from the outer ear (the part you can see) to the inner ear (the part you can't see). This is often the result of wax build-up, trauma to the ear, or even ear infections. Typically, conductive hearing loss “turns the volume down” but doesn't necessarily affect the clarity of your hearing. Conductive hearing losses may also be corrected by medical intervention so it is always important to make an appointment with an ear, nose, and throat specialist for further consultation.
+<br/><br/><br/>Sensorineural Hearing Loss: With sensorineural hearing loss, the problem may be damage to the inner ear (cochlea) or within the hearing nerve. Most of the time, the hair cells in the inner ear have been worn down due to aging or noise exposure, but sometimes, medications, cancer treatments or illness can create deterioration as well. With sensorineural loss, it's not just that “the volume is turned down,” but your ability to understand speech suffers too. This is the most common type of hearing loss as 90% of people with hearing loss have this kind. The most effective treatment is hearing devices.
+<br/><br/><br/>Mixed Hearing Loss: Just like it sounds, this is a mixture of conductive and sensorineural hearing loss.</p></div>
+		</div>
+		<!-- 	END Item --><div class="accordion__item">
+			<h2 class="accordion__title">WHAT ARE THE DEGREES OF HEARING LOSS?</h2>
+			<div class="accordion__body">
+                <p>The degree of hearing loss is determined during your hearing evaluation, and the results are shown in an audiogram. Your hearing evaluation rates the highness or lowness in pitch that is difficult for you to hear, and how loud sounds have to be before you can pick up on them. Based on that, your EarQ provider will figure out your degree of hearing loss.
+
+<br/><br/>The different levels of hearing loss are:
+
+<br/><br/><br/>Mild: This means that you may have some trouble hearing conversations in a noisy room or when someone is speaking quietly. In quiet environments, mild hearing loss is manageable.
+
+<br/><br/><br/>Moderate: This degree of hearing loss makes it even harder to hear conversation in group settings. People with moderate loss are those that have the TV and radio turned up too loud for comfort.
+
+<br/><br/><br/>Moderately Severe: Hearing and understanding speech is significantly reduced at this level and group environments are an extreme challenge.
+
+<br/><br/><br/>Severe: This degree of hearing loss means that normal conversation is not audible. Even shouting can be challenging to comprehend.
+
+<br/><br/><br/>Profound: This is the greatest degree of hearing loss. Only the loudest sounds are audible and even shouting may not be heard at all.</p></div>
+		</div>
+		<!-- 	END Item --><div class="accordion__item">
+			<h2 class="accordion__title">IS IT POSSIBLE TO HAVE HEARING LOSS IN ONLY ONE EAR?</h2>
+			<div class="accordion__body">
+                <p>Yes, although it’s not very common. The vast majority of people with hearing loss have a loss in both ears (bilateral loss). However, some causes of hearing loss in only one ear (unilateral loss) may be:
+
+<br/><br/><br/>Congenital or genetics
+<br/><br/><br/>Illness or infection
+<br/><br/><br/>Head or ear trauma
+<br/><br/><br/>Some people also may have a hearing loss in one ear that is so severe with poor clarity that a conventional hearing aid will not help, but instead, will make things distorted.
+                    This is called single-sided deafness, or SSD. There are specific hearing aids that may help route sounds from the poor ear over to the good ear using Bluetooth technology.
+                    Your hearing healthcare provider will be able to identify this at your evaluation appointment and talk to you about the appropriate options.
+                    If you think you may be experiencing unilateral or bilateral loss, make an appointment with your local EarQ provider.</p></div>
+		</div>
+		<!-- 	END Item --><div class="accordion__item">
+			<h2 class="accordion__title">I ONLY MISS A WORD OR TWO OCCASIONALLY... DO I HAVE HEARING LOSS?</h2>
+			<div class="accordion__body">
+                <p>While a small amount of hearing loss is normal, especially during the aging process, no amount of hearing loss should be taken lightly.
+                    If you’re only missing a few words here and there, you could still fall into a normal hearing range. If it’s more serious than that, though, it’s not a good idea to wait any longer to have your hearing checked. Make an appointment with your local EarQ professional if there’s any question in your mind.
+
+<br/><br/><br/>Either way, it’s recommended that you get an annual hearing test, just like you have an annual physician’s checkup.
+                    This will allow you to monitor your hearing health and take action as soon as you notice any changes.</p></div>
+		</div>
+		<!-- 	END Item --><div class="accordion__item">
+			<h2 class="accordion__title">DOES EARWAX CAUSE HEARING LOSS?</h2>
+			<div class="accordion__body">
+                <p>Absolutely. Earwax can build up or become impacted and then partially or completely block your ear canal. In fact, earwax is the most common cause of conductive hearing loss.
+
+<br/><br/><br/>Your hearing provider can quickly and easily deal with excess wax. If you're worried that you're producing too much earwax and it's affecting your hearing ability, make an appointment.
+
+<br/><br/><br/>Note: the use of cotton swabs to clean your ear canals is NOT recommended by hearing healthcare professionals. It can actually be the cause of earwax buildup!</p></div>
+		</div>
+		<!-- 	END Item --><div class="accordion__item">
+			<h2 class="accordion__title">IS IT OKAY TO USE COTTON SWABS TO CLEAN MY EARS?</h2>
+			<div class="accordion__body">
+                <p>Unless you're using the cotton swab to clean the very outside of your ear (the part that sticks out from your head), the answer is no.
+
+<br/><br/><br/>Your ear canal is self-cleaning, and a little earwax actually helps to keep things like dirt and dust from getting to the important parts of the ear.
+                    There's a layer of tissue that lines your ear canal and grows outward at about the same pace as your hair and nails. Dirt, dust,
+                    and other unwanted things migrate out with cerumen on its own towards the outside of the ear before they can reach the area of your
+                    ear that could be damaged by them. When you use a cotton swab to clean your ear, in addition to the risk of harming the canal or eardrum,
+                    you also risk pushing the wax in further and causing more build-up and possibly impaction.</p></div>
+		</div>
+		<!-- 	END Item -->
+	</div>
+	<!-- 	END Accordion -->
+</main>
+{% endblock content %}
+{% block scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+
+            $(".accordion__title.active").next().slideDown();
+        $(".accordion__title").on("click", function () {
+          if( $(this).hasClass('active') ) {
+                $(this).removeClass("active").next().slideUp();
+            } else {
+                $(".accordion__title.active").removeClass("active").next(".accordion__body").slideUp();
+            $(this).addClass('active').next('.accordion__body').slideDown();
+            }
+        });
+
+    </script>
+
+{% endblock scripts %}

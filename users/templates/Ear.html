@@ -1,0 +1,2997 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+        <title>Hearing Health Concerns | Info for Family Members | EarQ</title>
+        <meta name="description"
+              content="Educating yourself on hearing is an important step toward improving your quality of life, learn more about your hearing health and how you can live better.">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    </head>
+
+
+    <div id="wrapper">
+
+        <div id="page_content">
+
+            <link rel="stylesheet" href="./ear/styles_banner.css">
+            <link rel="stylesheet" href="./ear/styles_educational.css">
+
+            <div class="bannerHolder576">
+
+                <div class="bannerImageHolder">
+                    <div class="bannerImageHolderInner bannerThinking">
+
+
+                    </div>
+                </div>
+
+                <div class="bannerDecoHolder">
+
+                    <div class="bannerDecoLeft"></div>
+                    <div class="bannerDecoRight bannerDecoSwoop340"></div>
+                    <div class="clear"></div>
+
+                </div>
+
+                {#            <div class="bannerHeaderHolder">#}
+                {##}
+                {#                <h1>Your Hearing Health</h1>#}
+                {##}
+                {#                <p>There is a lot to learn when it comes to your health and well-being. In addition to <a#}
+                {#                        href="https://www.earq.com/locations" target="_blank" rel="noopener noreferrer">making an#}
+                {#                    appointment</a> with a professional, educating yourself on your hearing is an important step toward#}
+                {#                    improving your quality of life, health, and happiness!</p>#}
+                {##}
+                {#            </div>#}
+
+                <div class="clear"></div>
+
+            </div>
+
+            {#        <div class="mobile_banner"><img src="./ear/mature-woman-with-hearing-aids-thinking2.jpg" width="920"#}
+            {#                                        height="551" alt="Mature woman with hearing aids thinking"></div>#}
+
+            <div class="clear" style="margin-bottom: 80px;"></div>
+
+
+            <div class="divider"></div>
+
+            <h2 class="innerH2 iconTinnitusYellow" style="margin-top: 80px;">Tinnitus</h2>
+
+            <p class="hhPreview centered">If you've ever experienced a ringing, roaring, clicking, hissing, or buzzing
+                sound
+                in your ears when no outside sound is present, you are not alone. <strong>50 million Americans
+                    experience <a
+                            href="https://www.mayoclinic.org/diseases-conditions/tinnitus/symptoms-causes/syc-20350156#:~:text=Tinnitus%20is%20when%20you%20experience,especially%20common%20in%20older%20adults."
+                            target="_blank" rel="noopener noreferrer">tinnitus</a> to some degree, and 16 million
+                    Americans have
+                    tinnitus that is severe enough that they seek medical attention.</strong> Although tinnitus can be
+                disruptive to your everyday life, there are effective treatment options available.</p>
+
+
+            <div class="hhGray" style="margin-bottom: 50px">
+
+                <h2 class="innerH2 centered">Hearing Loss</h2>
+
+                <div class="threePreviewsHolder">
+
+                    <div class="third shortThird">
+
+                        <div class="accent accent48"></div>
+
+                        <p class="largeP"><strong>48 million Americans&nbsp;</strong><br>have hearing loss</p>
+
+                    </div>
+
+                    <div class="third shortThird">
+
+                        <div class="accent accent1in5"></div>
+
+                        <p class="largeP">Hearing loss affects people of all ages.&nbsp;<br><strong>1 in 5 teens has
+                            hearing
+                            loss.</strong></p>
+
+                    </div>
+
+                    <div class="third shortThird" style="margin-right: 0px;">
+
+                        <div class="accent accentFlag"></div>
+
+                        <p class="largeP">Hearing loss and tinnitus are the top health concerns of <strong>active
+                            service
+                            members and veterans</strong></p>
+
+                    </div>
+
+                    <div class="clear"></div>
+
+                </div>
+
+
+            </div>
+
+            <h2 class="innerH2 iconHearingAidRed" style="margin-top: 80px;">Hearing Aids</h2>
+
+            <p class="hhPreview">Almost all cases of hearing loss can be treated with <a
+                    href="https://www.mayoclinic.org/diseases-conditions/hearing-loss/in-depth/hearing-aids/art-20044116"
+                    target="_blank" rel="noopener noreferrer">hearing aids</a>. In the past few years, hearing aids have
+                evolved tremendously to be smaller and more effective than hearing aids of the past. Many are <strong>smartphone
+                    compatible</strong> and allow you to stream music, phone calls, and more directly to your devices.
+            </p>
+
+
+            <div class="hhGray">
+
+                <h2 class="innerH2 centered iconChatYellow">Have questions about hearing health?</h2>
+
+                <p class="hhPreview"><strong>We've got you covered.</strong> See the most <a
+                        href="http://127.0.0.1:8000/faq/" target="_blank"
+                        rel="noopener noreferrer">frequently asked questions</a> from patients like you.</p>
+
+
+            </div>
+
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+                    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+                    crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+                    integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+                    crossorigin="anonymous"></script>
+
+            <style>
+                .carousel .carousel-item {
+                    height: 300px;
+                }
+
+                .carousel-item img {
+                    position: absolute;
+                    object-fit: contain;
+                    /* height: fit-content;
+                    width: fit-content; */
+                    height: auto;
+                    max-width: 100%;
+                    line-height: 1;
+                    margin: auto;
+                    width: 100%;
+                }
+
+                #headerPopup {
+                    width: 75%;
+                    margin: 0 auto;
+                }
+
+                #headerPopup iframe {
+                    width: 100%;
+                    margin: 0 auto;
+                }
+
+                .videoWrapper {
+                    position: relative;
+                    padding-bottom: 56.25%; /* 16:9 */
+                    padding-top: 25px;
+                    height: 0;
+                }
+
+                .videoWrapper iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                }
+
+                /* .parent-container {
+                  padding-top: 50px;
+                }
+
+                a {
+                  border: 1px solid black;
+                  border-radius: 5px;
+                  padding: 20px;
+                  margin-top: 20px;
+                }
+
+                a:link {
+                  text-decoration: none;
+                } */
+            </style>
+
+            <h2 class="innerH2 centered" style="margin-top: 80px;">Do you know the scales of commonly heard sounds?</h2>
+
+
+            <link rel="stylesheet"
+                  href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.0.0/magnific-popup.min.css">
+            <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
+                    <li data-target="#carouselExampleCaptions" data-slide-to="3"></li>
+                    <li data-target="#carouselExampleCaptions" data-slide-to="4"></li>
+                    <li data-target="#carouselExampleCaptions" data-slide-to="5"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="https://p.kindpng.com/picc/s/672-6725452_lawn-mower-icon-free-lawnmower-transparent-icon-hd.png"
+                             class="d-block w-100 container-fluid" alt="..." style="width:175px; height:175px">
+                        <div class="carousel-caption d-none d-md-block"
+                             style="-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: black;">
+                            <h1 style="color:orangered; font-weight: lighter"><b>Lawnmower</b></h1>
+                            <p style="color:orangered; font-weight: lighter; font-size: 28px"><b>85 - 90 dB</b></p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://cdn-icons-png.flaticon.com/128/3820/3820107.png"
+                             class="d-block w-100 container-fluid" alt="..." style="width:175px; height:175px">
+                        <div class="carousel-caption d-none d-md-block"
+                             style="-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: black;">
+                            <h1 style="color:orangered; font-weight: lighter"><b>Normal conversation</b></h1>
+                            <p style="color:orangered; font-weight: lighter; font-size: 28px"><b>50 - 60 dB</b></p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://cdn5.vectorstock.com/i/1000x1000/63/59/open-dishwasher-icon-simple-style-vector-21036359.jpg"
+                             class="d-block w-100 container-fluid" alt="..." style="width:175px; height:175px">
+                        <div class="carousel-caption d-none d-md-block"
+                             style="-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: black;">
+                            <h1 style="color:orangered; font-weight: lighter"><b>Dishwasher</b></h1>
+                            <p style="color:orangered; font-weight: lighter; font-size: 28px"><b>75dB</b></p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://cdn2.iconfinder.com/data/icons/people-18/125/people-person-worker-profession-work-job_05-512.png"
+                             class="d-block w-100 container-fluid" alt="..." style="width:175px; height:175px">
+                        <div class="carousel-caption d-none d-md-block"
+                             style="-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: black;">
+                            <h1 style="color:orangered; font-weight: lighter"><b>Orchestra</b></h1>
+                            <p style="color:orangered; font-weight: lighter; font-size: 28px"><b>110dB</b></p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://img.freepik.com/free-vector/rock-music-concert-symbol-electric-guitar-icon-isolated-white-background_445292-105.jpg?w=2000"
+                             class="d-block w-100 container-fluid" alt="..." style="width:175px; height:175px">
+                        <div class="carousel-caption d-none d-md-block"
+                             style="-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: black;">
+                            <h1 style="color:orangered; font-weight: lighter"><b>Rock concert</b></h1>
+                            <p style="color:orangered; font-weight: lighter; font-size: 28px"><b>110 - 140 dB</b></p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://user-images.githubusercontent.com/4598274/32601320-850ce5ba-c542-11e7-8f0b-fa970680f807.png"
+                             class="d-block w-100 container-fluid" alt="..." style="width:175px; height:175px">
+                        <div class="carousel-caption d-none d-md-block"
+                             style="-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: black;">
+                            <h1 style="color:orangered; font-weight: lighter"><b>Fire works</b></h1>
+                            <p style="color:orangered; font-weight: lighter; font-size: 28px"><b>150 dB</b></p>
+                        </div>
+                    </div>
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev"
+                   style="background-color: lightsteelblue">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next"
+                   style="background-color: lightsteelblue">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+            <br>
+
+            <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.0.0/jquery.magnific-popup.min.js"></script>
+
+            <script>
+                $('.popup-youtube').magnificPopup({
+                    disableOn: 700,
+                    type: 'iframe',
+                    mainClass: 'mfp-fade',
+                    removalDelay: 160,
+                    preloader: false,
+
+                    fixedContentPos: false
+                });
+
+                const openEls = document.querySelectorAll("[data-open]");
+                const closeEls = document.querySelectorAll("[data-close]");
+                const isVisible = "is-visible";
+
+                for (const el of openEls) {
+                    el.addEventListener("click", function () {
+                        const modalId = this.dataset.open;
+                        document.getElementById(modalId).classList.add(isVisible);
+                    });
+                }
+
+                for (const el of closeEls) {
+                    el.addEventListener("click", function () {
+                        this.parentElement.parentElement.parentElement.classList.remove(isVisible);
+                    });
+                }
+
+                document.addEventListener("click", e => {
+                    if (e.target == document.querySelector(".modal.is-visible")) {
+                        document.querySelector(".modal.is-visible").classList.remove(isVisible);
+                    }
+                });
+
+                document.addEventListener("keyup", e => {
+                    // if we press the ESC
+                    if (e.key == "Escape" && document.querySelector(".modal.is-visible")) {
+                        document.querySelector(".modal.is-visible").classList.remove(isVisible);
+                    }
+                });
+
+            </script>
+
+
+            {#        <div class="decibelIconHolder">#}
+            {##}
+            {#            <div class="dbIcon db_normal" style="opacity: 0;"></div>#}
+            {#            <div class="dbIcon db_dishwasher" style="display: block; opacity: 0;"></div>#}
+            {#            <div class="dbIcon db_lawnmower" style="display: block; opacity: 0;"></div>#}
+            {#            <div class="dbIcon db_orchestra" style="display: block; opacity: 0;"></div>#}
+            {#            <div class="dbIcon db_concert" style="display: block; opacity: 0;"></div>#}
+            {#            <div class="dbIcon db_fireworks" style="display: block; opacity: 1;"></div>#}
+            {##}
+            {#        </div>#}
+            {##}
+            {#        <div class="dbZagsHolder">#}
+            {##}
+            {#            <a class="dbZagLeft" onclick="dbBack();"></a>#}
+            {#            <div class="dbLabel" style="opacity: 1;">Fireworks:</div>#}
+            {#            <a class="dbZagRight" onclick="dbNext();"></a>#}
+            {##}
+            {#            <div class="clear"></div>#}
+            {##}
+            {#        </div>#}
+            {##}
+            {#        <div class="dbLevel" style="opacity: 1;">145 dB</div>#}
+            {##}
+            {#        <div class="dbDotsHolder">#}
+            {##}
+            {#            <a class="dbDot" id="dbDot_normal" onclick="goDbLevel(&#39;normal&#39;);"></a>#}
+            {#            <a class="dbDot" id="dbDot_dishwasher" onclick="goDbLevel(&#39;dishwasher&#39;);"></a>#}
+            {#            <a class="dbDot" id="dbDot_lawnmower" onclick="goDbLevel(&#39;lawnmower&#39;);"></a>#}
+            {#            <a class="dbDot" id="dbDot_orchestra" onclick="goDbLevel(&#39;orchestra&#39;);"></a>#}
+            {#            <a class="dbDot" id="dbDot_concert" onclick="goDbLevel(&#39;concert&#39;);"></a>#}
+            {#            <a class="dbDot activeDbDot" id="dbDot_fireworks" onclick="goDbLevel(&#39;fireworks&#39;);"#}
+            {#               style="margin-right: 0px;"></a>#}
+            {#            <div class="clear"></div>#}
+            {##}
+            {#        </div>#}
+
+            <p class="hhPreview"><strong>See how the everyday sounds you are exposed to could impact your
+                hearing.</strong>
+            </p>
+
+
+            <div class="hhGray">
+
+                <h2 class="innerH2 centered iconChildrenRed">Hearing Loss in Children</h2>
+
+                <p class="hhPreview">Hearing loss affects people of all ages—<a
+                        href="https://www.cdc.gov/ncbddd/hearingloss/facts.html" target="_blank"
+                        rel="noopener noreferrer">even
+                    children</a>! In fact, hearing loss is a condition that affects over 3 million children in the
+                    United
+                    States alone. <strong>If your child is showing signs of hearing loss, it is important that it is
+                        identified early on.</strong> Your local provider will be able to recommend the best course of
+                    action and treatment options.</p>
+
+                <h2 class="innerH2 centered iconChildrenRed">Signs and Symptoms in Children</h2>
+
+                <p class="hhPreview">
+                    The signs and symptoms of hearing loss are different for each child.
+                    If you think that your child might have hearing loss, ask the child’s doctor for
+                    a hearing screening as soon as possible. Don’t wait!
+                    Even if a child has passed a hearing screening before, it is important to look out for the
+                    following signs.</p>
+
+                <h2 class="innerH2 centered iconChildrenRed">Signs in Babies</h2>
+
+                <ul>
+                  <li> &#9658; Does not startle at loud noises.</li>
+                  <li>&#9658; Does not turn to the source of a sound after 6 months of age.</li>
+                  <li>&#9658; Does not say single words, such as “dada” or “mama” by 1 year of age.</li>
+                    <li>&#9658; Turns head when he or she sees you but not if you only call out his or her name.
+                        This sometimes is mistaken for not paying attention or just ignoring,
+                        but could be the result of a partial or complete hearing loss.</li>
+                    <li>&#9658; Seems to hear some sounds but not others.</li>
+                </ul>
+
+
+                <p class="hhPreview"></p>
+
+
+
+
+            </div>
+
+            <h2 class="innerH2 centered" style="margin-top: 80px;">Tips for Family</h2>
+
+            <p class="hhPreview"><strong>Does your loved one have hearing loss?</strong> Here are some <a
+                    href="https://www.earq.com/hearing-health/tips-for-family" target="_blank"
+                    rel="noopener noreferrer">things
+                you can do</a> to support them in their journey.</p>
+
+
+        </div>
+
+    </div>
+
+
+    <style type="text/css">
+
+        .htBox {
+            outline: 2px solid #3989a0;
+            width: calc(100% - 114px);
+            padding: 40px 55px 70px 55px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .htBox h3 {
+            font-size: 3em;
+            font-weight: var(--font-light);
+            margin-bottom: 20px;
+        }
+
+        .htBox p {
+            font-size: 1.4em;
+            font-weight: var(--font-light);
+            margin-bottom: 40px;
+        }
+
+        .htBox p li {
+            font-size: 1em !important;
+            margin-bottom: 0px !important;
+        }
+
+        .htBox p .blue, .htBox p .red, .htBox p .orange {
+            font-weight: var(--font-semibold);
+            color: #009ecd;
+        }
+
+        .htBox p .red {
+            color: #ef3c3c;
+        }
+
+        .htBox p .orange {
+            color: #f9a01b;
+        }
+
+        .htBox #htQuestion {
+            text-align: center;
+            width: 95%;
+            font-size: 1.8em;
+            font-weight: var(--font-medium);
+        }
+
+        .questionArea {
+            display: block;
+            background: #f5f5f5;
+            padding: 50px 0px 40px 0px;
+        }
+
+        .landingPageContent h4 {
+            font-size: 1.4em;
+            color: #111;
+            font-weight: var(--font-semibold);
+            margin-bottom: 20px;
+        }
+
+        .htBox .yesButton, .htBox .noButton, .htBox .sometimesButton {
+            display: block;
+            float: left;
+            width: 150px;
+            height: 45px;
+            padding-top: 15px;
+            box-shadow: 0px 0px 0px 2px #009ecd;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: var(--font-semibold);
+            cursor: pointer;
+            transition: color 0.3s ease, background 0.3s ease;
+            background: #fff;
+            border-radius: 32px;
+        }
+
+        .htBox .yesButton {
+            margin-right: 50px;
+            margin-right: 10px;
+            margin-left: calc(50% - 238px);
+        }
+
+        .htBox .yesButton:hover {
+            color: #fff;
+            background: #006282;
+        }
+
+        .htBox .noButton {
+            /*outline: 2px solid #ffcac9;*/
+            box-shadow: 0px 0px 0px 2px #ef3c3c;
+        }
+
+        .htBox .noButton:hover {
+            background: #901615;
+            color: #fff;
+        }
+
+        .htBox .sometimesButton {
+            width: 150px;
+            box-shadow: 0px 0px 0px 2px #c56118;
+            margin-right: 10px;
+        }
+
+        .htBox .sometimesButton:hover {
+            background: #f9a01b;
+            color: #fff;
+        }
+
+        .htBox .yesButton:active, .htBox .noButton:active, .htBox .sometimesButton:active {
+            background: #fff !important;
+        }
+
+        .contSurvey {
+            font-size: 1.4em;
+        }
+
+        .subnav {
+            font-size: .9em;
+            opacity: 1;
+            margin-bottom: 40px;
+            font-weight: var(--font-medium);
+            color: #999;
+        }
+
+        .subnav a {
+            color: #ef3c3c;
+            text-decoration: underline;
+            cursor: pointer;
+            transition: color 0.3s ease;
+
+            color: #111;
+            color: #999;
+        }
+
+        .subnav a:hover {
+            color: #901615;
+            color: #ef3c3c;
+            color: #111;
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 1023px) {
+            .htBox {
+                padding: 20px;
+                width: calc(100% - 44px);
+            }
+
+            .htBox h3 {
+                font-size: 2em;
+            }
+
+            .htBox p, p.contSurvey {
+                font-size: 1.2em;
+            }
+
+            .htBox #htQuestion {
+                font-size: 1.4em;
+                padding: 0px 20px 0px 20px;
+            }
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 679px) {
+            .htBox .yesButton, .htBox .noButton, .htBox .sometimesButton {
+                float: none;
+                margin: 0 auto;
+                margin-bottom: 8px;
+            }
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 499px) {
+            .htBox h3 {
+                font-size: 1.4em;
+            }
+
+            .htBox p, p.contSurvey {
+                font-size: 1em;
+            }
+
+            .htBox #htQuestion {
+                font-size: 1.4em;
+                padding: 0px 12px 0px 12px;
+            }
+
+            .htBox {
+                padding: 10px;
+                width: calc(100% - 24px);
+            }
+        }
+
+        @media (pointer: coarse) and (hover: none) {
+
+            .htBox .yesButton:hover {
+                box-shadow: 0px 0px 0px 2px #009ecd;
+                background: #fff;
+                color: #111;
+            }
+
+            .htBox .noButton:hover {
+                background: #fff;
+                box-shadow: 0px 0px 0px 2px #ef3c3c;
+                color: #111;
+            }
+
+            .htBox .sometimesButton:hover {
+                background: #fff;
+                box-shadow: 0px 0px 0px 2px #c56118;
+                color: #111;
+            }
+
+        }
+
+        .pyhtt {
+
+            font-size: 1.5em !important;
+
+        }
+
+        .htBox .learnMoreButton {
+            width: 400px;
+            height: 30px;
+            font-size: 1.05em !important;
+            color: #fff !important;
+            transition: background 0.3s ease, border 0.3s ease !important;
+        }
+
+        .htBox .learnMoreButton:hover {
+            color: #fff !important;
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 849px) {
+            .pyhtt {
+                font-size: 1.5em !important;
+            }
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 519px) {
+            .htBox .learnMoreButton {
+                padding-left: 20px;
+                padding-right: 20px;
+                width: calc(100% - 44px);
+                height: auto;
+                font-size: 1.05em !important;
+            }
+        }
+
+        #testProgressBarOuter {
+            display: block;
+            width: 240px;
+            height: 4px;
+            border-radius: 0px;
+            background: #fff;
+            margin: 0 auto;
+            margin-top: 40px;
+            overflow: hidden;
+        }
+
+        #testProgressBarInner {
+            display: block;
+            width: 20px;
+            height: 100%;
+            background: #009ecd;
+            background: #aaa;
+            transition: width 0.7s ease;
+        }
+
+        #testProgressText {
+            font-size: 1em !important;
+            font-weight: var(--font-semibold);
+            text-align: center;
+            opacity: 1;
+            margin-top: 8px;
+            margin-bottom: 0px;
+            text-transform: uppercase;
+            opacity: .4;
+        }
+
+    </style>
+
+
+    <div class="divider" style="margin-top: 80px;"></div>
+
+
+    <div class="padded_content landingPageContent" style="max-width: 1250px; margin: 0 auto;">
+
+
+        <p class="contSurvey pyhtt" style="margin-bottom: 20px;"><strong>Put Your Hearing to the Test</strong></p>
+
+        <p class="contSurvey" style="margin-bottom: 40px; margin-top: 20px;">Sometimes, hearing loss happens so
+            gradually
+            that it can be difficult to notice at first. However, there are some common signs that indicate you may have
+            hearing loss. Want some answers now? Take this <a
+                    href="http://127.0.0.1:8000/test/" target="_blank" rel="noopener noreferrer">short survey
+            </a>you can do to determine if it's time for you to make a hearing
+            appointment. </p>
+
+
+        {#    <div class="htBox">#}
+        {##}
+        {#        <h3 id="surveyH3">Take a 3-minute hearing test!</h3>#}
+        {##}
+        {#        <p id="surveyBlurb">Read the following statements and select <span class="blue">“yes”</span> if they apply to#}
+        {#            you most of the time, <span class="orange">“sometimes”</span> if they apply once in a while, and <span#}
+        {#                    class="red">“no”</span> if they don't apply at all.</p>#}
+        {##}
+        {#        <div class="questionArea">#}
+        {##}
+        {#            <p id="htQuestion">I have trouble hearing the other person on the phone.</p>#}
+        {##}
+        {#            <a class="yesButton" onclick="hearingTestAnswer(&#39;yes&#39;);">YES</a>#}
+        {#            <a class="sometimesButton" onclick="hearingTestAnswer(&#39;sometimes&#39;);">SOMETIMES</a>#}
+        {#            <a class="noButton" onclick="hearingTestAnswer(&#39;no&#39;);">NO</a>#}
+        {#            <div class="clear"></div>#}
+        {##}
+        {#            <div id="testProgressBarOuter">#}
+        {#                <div id="testProgressBarInner">#}
+        {##}
+        {#                </div>#}
+        {#            </div>#}
+        {##}
+        {#            <p id="testProgressText">1 of 12</p>#}
+        {##}
+        {#        </div>#}
+        {##}
+        {#    </div>#}
+        {##}
+        {#</div>#}
+        {##}
+        {#<script>#}
+        {##}
+        {#    var answerNode = 0;#}
+        {#    var questions = ["I have trouble hearing the other person on the phone.",#}
+        {#        "It seems like everyone around me mumbles.",#}
+        {#        "I have a difficult time understanding people in noisy environments.",#}
+        {#        "I often ask people to repeat themselves.",#}
+        {#        "People complain that I have the TV or radio volume turned up too loud.",#}
+        {#        "I can hear, just not clearly.",#}
+        {#        "I have difficulty understanding young children and women's voices.",#}
+        {#        "I hear a ringing or buzzing sound in my ears.",#}
+        {#        "I can't understand someone when I'm not facing them directly.",#}
+        {#        "I get frustrated because I have trouble hearing.",#}
+        {#        "I have a difficult time following conversations.",#}
+        {#        "My friends and family complain that I'm not hearing well."];#}
+        {##}
+        {#    //var yeses = 0;#}
+        {#    //var nos = 0;#}
+        {#    var score = 0;#}
+        {#    // score possibilities: 12 - 36#}
+        {#    // ranges:#}
+        {#    // 12-15#}
+        {#    // 16-28#}
+        {#    // 28-36#}
+        {##}
+        {#    function hearingTestAnswer(myAnswer) {#}
+        {##}
+        {#        if (myAnswer == 'yes') {#}
+        {#            //yeses += 1;#}
+        {#            score += 3;#}
+        {#        }#}
+        {#        if (myAnswer == 'sometimes') {#}
+        {#            //yeses += 1;#}
+        {#            score += 2;#}
+        {#        }#}
+        {#        if (myAnswer == 'no') {#}
+        {#            //yeses += 1;#}
+        {#            score += 1;#}
+        {#        }#}
+        {##}
+        {#        ga('send', 'event', 'hearingTestSurveyClick', 'click', (answerNode + ': ' + myAnswer));#}
+        {##}
+        {#        answerNode += 1;#}
+        {#        $('#testProgressBarInner').css({width: (20 * (answerNode + 1)) + 'px'});#}
+        {#        $('#testProgressText').html((answerNode + 1) + ' of 12');#}
+        {##}
+        {#        if (answerNode == 12) {#}
+        {##}
+        {##}
+        {#            var resultsBlurb;#}
+        {##}
+        {#            //alert("test is done!");#}
+        {#            if (score >= 28) {#}
+        {##}
+        {#                ga('send', 'event', 'hearingTestSurveyComplete', 'click', 'LIKELY HAVE HEARING LOSS');#}
+        {##}
+        {#                //resultsBlurb = 'Many of your responses indicate that <strong>you likely have hearing loss</strong>. To get an accurate diagnosis and explore your treatment options, it’s important to make an appointment with a professional as soon as possible. <a style="color: #111; font-weight: 300;" href="https://www.earq.com/hearing-health/types-of-hearing-loss">Hearing loss</a> often worsens over time, so it’s important to monitor any changes in your hearing health <a style="color: #111; font-weight: 300;" href="https://www.earq.com/hearing-health/articles/do-i-really-need-annual-hearing-test">annually</a> the way same you get your teeth checked every year. Schedule an appointment with your local EarQ provider today:<br><br><a class="learnMoreButton" href="locations">Schedule Appointment</a><br><span style="font-size: .8em;">* This quiz is intended to give general recommendations based on your answers to the previous questions. This is not a replacement for a medical assessment by a professional hearing healthcare provider.</span>';#}
+        {##}
+        {#                resultsBlurb = 'Many of your responses indicate that <strong>you likely have hearing loss</strong>. Here&rsquo;s what to do next!<br><br><ul style="padding-left: 20px";><li>Schedule an appointment: Annual hearing tests are important to your overall health.</li><li>Determine your needs: This is just a starting point. A hearing professional can give you an accurate diagnosis.</li><li>Explore your treatment options: Your EarQ provider will work with you to find your solution.</li></ul><br><a class="learnMoreButton" href="https://www.google.co.in/search?q=ear+hospital+near+me&sxsrf=ALiCzsYWaVaKRFeS8hiGDuiZbHBTp1VmIg%3A1653234596768&ei=pFuKYtrHLuuUseMPob-2kAM&oq=ear+hospital&gs_lcp=Cgdnd3Mtd2l6EAEYATIFCAAQgAQyCAgAEIAEEMkDMgUIABCABDIFCAAQgAQyBQgAEIAEMgUIABCABDIFCAAQgAQyBQgAEIAEMgUIABCABDIFCAAQgAQ6CggAEEcQsAMQiwM6BAgjECc6BAgAEEM6BwgAELEDEEM6CggAELEDEIMBEEM6CAgAEIAEELEDOgoIABCABBCxAxAKOgUIABCSAzoLCAAQgAQQsQMQgwFKBAhBGABKBAhGGABQqQFYhB1gyC5oAnABeAKAAYkGiAGaHZIBDTAuNy4xLjEuMS4xLjGYAQCgAQHIAQi4AQLAAQE&sclient=gws-wiz" target="_blank" rel="noopener noreferrer">Schedule Appointment</a><br><span style="font-size: .8em;">* This quiz is intended to give general recommendations based on your answers to the previous questions. This is not a replacement for a medical assessment by a professional hearing healthcare provider.</span>';#}
+        {##}
+        {#            }#}
+        {#            if (score >= 16 && score <= 27) {#}
+        {##}
+        {#                ga('send', 'event', 'hearingTestSurveyComplete', 'click', 'MAY HAVE HEARING LOSS');#}
+        {##}
+        {#                //resultsBlurb = 'Your results indicate that <strong>you may have hearing loss</strong>. To get an accurate diagnosis and explore your treatment options, it’s important to make an appointment with a professional as soon as possible. <a style="color: #111; font-weight: 300;" href="https://www.earq.com/hearing-health/types-of-hearing-loss">Hearing loss</a> often worsens over time, so it’s important to monitor any changes in your hearing health <a style="color: #111; font-weight: 300;" href="https://www.earq.com/hearing-health/articles/do-i-really-need-annual-hearing-test">annually</a> the way same you get your teeth checked every year. Schedule an appointment with your local EarQ provider today:<br><br><a class="learnMoreButton" href="locations">Schedule Appointment</a><br><span style="font-size: .8em;">* This quiz is intended to give general recommendations based on your answers to the previous questions. This is not a replacement for a medical assessment by a professional hearing healthcare provider.</span>';#}
+        {##}
+        {#                resultsBlurb = 'Your results indicate that <strong>you may have hearing loss</strong>. Here&rsquo;s what to do next!<br><br><ul style="padding-left: 20px;"><li>Schedule an appointment: Annual hearing tests are important to your overall health.</li><li>Determine your needs: This is just a starting point. A hearing professional can give you an accurate diagnosis.</li><li>Explore your treatment options: Your EarQ provider will work with you to find your solution.</li></ul><br><a class="learnMoreButton" href="https://www.google.co.in/search?q=ear+hospital+near+me&sxsrf=ALiCzsYWaVaKRFeS8hiGDuiZbHBTp1VmIg%3A1653234596768&ei=pFuKYtrHLuuUseMPob-2kAM&oq=ear+hospital&gs_lcp=Cgdnd3Mtd2l6EAEYATIFCAAQgAQyCAgAEIAEEMkDMgUIABCABDIFCAAQgAQyBQgAEIAEMgUIABCABDIFCAAQgAQyBQgAEIAEMgUIABCABDIFCAAQgAQ6CggAEEcQsAMQiwM6BAgjECc6BAgAEEM6BwgAELEDEEM6CggAELEDEIMBEEM6CAgAEIAEELEDOgoIABCABBCxAxAKOgUIABCSAzoLCAAQgAQQsQMQgwFKBAhBGABKBAhGGABQqQFYhB1gyC5oAnABeAKAAYkGiAGaHZIBDTAuNy4xLjEuMS4xLjGYAQCgAQHIAQi4AQLAAQE&sclient=gws-wiz" target="_blank" rel="noopener noreferrer">Schedule Appointment</a><br><span style="font-size: .8em;">* This quiz is intended to give general recommendations based on your answers to the previous questions. This is not a replacement for a medical assessment by a professional hearing healthcare provider.</span>';#}
+        {##}
+        {#            }#}
+        {#            if (score <= 15) {#}
+        {##}
+        {#                ga('send', 'event', 'hearingTestSurveyComplete', 'click', 'NO HEARING LOSS');#}
+        {##}
+        {#                //resultsBlurb = 'Although your results do not indicate that you have hearing loss, it’s important to schedule regular hearing exams, just like you would make a dentist appointment or get your eyes checked! Maintaining your <a style="color: #111; font-weight: 300;" href="https://www.earq.com/hearing-health">hearing health</a> is important to your overall health and well-being. Schedule an appointment with your local EarQ provider today:<br><br><a class="learnMoreButton" href="locations">Schedule Appointment</a><br><span style="font-size: .8em;">* This quiz is intended to give general recommendations based on your answers to the previous questions. This is not a replacement for a medical assessment by a professional hearing healthcare provider.</span>';#}
+        {##}
+        {#                resultsBlurb = 'Although your results do not indicate that you have hearing loss, it&rsquo;s important to schedule regular hearing exams, just like you would make a dentist appointment or get your eyes checked! Schedule an appointment with your local EarQ provider today.<br><br><a class="learnMoreButton" href="https://www.google.co.in/search?q=ear+hospital+near+me&sxsrf=ALiCzsYWaVaKRFeS8hiGDuiZbHBTp1VmIg%3A1653234596768&ei=pFuKYtrHLuuUseMPob-2kAM&oq=ear+hospital&gs_lcp=Cgdnd3Mtd2l6EAEYATIFCAAQgAQyCAgAEIAEEMkDMgUIABCABDIFCAAQgAQyBQgAEIAEMgUIABCABDIFCAAQgAQyBQgAEIAEMgUIABCABDIFCAAQgAQ6CggAEEcQsAMQiwM6BAgjECc6BAgAEEM6BwgAELEDEEM6CggAELEDEIMBEEM6CAgAEIAEELEDOgoIABCABBCxAxAKOgUIABCSAzoLCAAQgAQQsQMQgwFKBAhBGABKBAhGGABQqQFYhB1gyC5oAnABeAKAAYkGiAGaHZIBDTAuNy4xLjEuMS4xLjGYAQCgAQHIAQi4AQLAAQE&sclient=gws-wiz" target="_blank" rel="noopener noreferrer">Schedule Appointment</a><br><span style="font-size: .8em;">* This quiz is intended to give general recommendations based on your answers to the previous questions. This is not a replacement for a medical assessment by a professional hearing healthcare provider.</span>';#}
+        {##}
+        {#            }#}
+        {##}
+        {#            //$('#surveyH3').html('Thank You!').css({ opacity: 0 }).animate({ opacity: 1 });#}
+        {#            $('#surveyH3').html('Your Results').css({opacity: 0}).animate({opacity: 1});#}
+        {#            $('#surveyBlurb').html(resultsBlurb).css({opacity: 0, 'margin-bottom': '0px'}).animate({opacity: 1});#}
+        {#            $('.questionArea, #testProgressBarOuter, #testProgressText').hide();#}
+        {##}
+        {#        }#}
+        {#        if (answerNode <= 11) {#}
+        {#            $('#htQuestion').html(questions[answerNode]).css({opacity: 0}).animate({opacity: 1});#}
+        {#        }#}
+        {##}
+        {#    }#}
+        {##}
+        {#    function goHTSub(mySub) {#}
+        {#        $('.sc').hide();#}
+        {#        $('#sc_' + mySub).css({opacity: 0, display: 'block'}).animate({opacity: 1});#}
+        {##}
+        {#        if (mySub == 'what') {#}
+        {#            $('.subnav').html('What is a Hearing Test? / <a onclick="goHTSub(\'happens\');">What Happens at a Hearing Test?</a> / <a onclick="goHTSub(\'results\');">Hearing Test Results</a> / <a onclick="goHTSub(\'next\');">Next Steps after a Hearing Test</a>');#}
+        {#        }#}
+        {#        if (mySub == 'happens') {#}
+        {#            $('.subnav').html('<a onclick="goHTSub(\'what\');">What is a Hearing Test?</a> / What Happens at a Hearing Test? / <a onclick="goHTSub(\'results\');">Hearing Test Results</a> / <a onclick="goHTSub(\'next\');">Next Steps after a Hearing Test</a>');#}
+        {#        }#}
+        {#        if (mySub == 'results') {#}
+        {#            $('.subnav').html('<a onclick="goHTSub(\'what\');">What is a Hearing Test?</a> / <a onclick="goHTSub(\'happens\');">What Happens at a Hearing Test?</a> / Hearing Test Results / <a onclick="goHTSub(\'next\');">Next Steps after a Hearing Test</a>');#}
+        {#        }#}
+        {#        if (mySub == 'next') {#}
+        {#            $('.subnav').html('<a onclick="goHTSub(\'what\');">What is a Hearing Test?</a> / <a onclick="goHTSub(\'happens\');">What Happens at a Hearing Test?</a> / <a onclick="goHTSub(\'results\');">Hearing Test Results</a> / Next Steps after a Hearing Test');#}
+        {#        }#}
+        {##}
+        {#    }#}
+        {##}
+        {#</script>#}
+        <div class="divider footerDivider"></div>
+
+
+        <script type="text/javascript" src="./ear/earq.js.download"></script>
+
+
+        <script type="application/ld+json">
+
+{  
+   "@context":"http://schema.org",
+   "@type":"BreadcrumbList",
+   "itemListElement":[  
+      {  
+         "@type":"ListItem",
+         "position":1,
+         "item":{  
+            "@id":"https://www.earq.com",
+            "name":"Home"
+         }
+      },
+      {  
+         "@type":"ListItem",
+         "position":2,
+         "item":{  
+            "@id":"https://www.earq.com/hearing-health",
+            "name":"Hearing Health Education"
+         }
+      }   ]
+}
+
+</script>
+
+
+        <a id="undersplash" onclick="closeSplashScreen();" style="display: none;"></a>
+        <div id="splash" style="display: none;">
+
+            <a class="x" onclick="closeSplashScreen();">x</a>
+
+            <p id="splash_title">We've found your local EarQ provider!</p>
+            <p id="splash_subtitle">The closest EarQ provider to your discovered/searched location is:</p>
+
+            <div id="splash_provider">
+
+                <!--<a href="https://www.earq.com/locations/love-to-hear-again"><img class="splash_logo" src="https://cdn.earq.com/member_logos/Love-to-Hear-Logo.jpg" border="0"/></a>
+
+                <p><a href="https://www.earq.com/locations/love-to-hear-again">Love To Hear Again Audiology<br>1025 S Main St. #301<br>Grapevine, TX 76051</a></p>
+
+                <div class="clear"></div>
+
+                <div id="splash_map"></div>
+
+                <a class="learnMoreButton" href="https://www.earq.com/locations/love-to-hear-again">Schedule Appointment</a>
+
+                <p class="closeThisWindow"><a onclick="javascript:closeSplashScreen();">- Close this Window -</a></p>-->
+
+            </div>
+
+
+        </div>
+
+
+        <div id="ui-datepicker-div"
+             class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"></div>
+    </body>
+
+    <style>
+        @charset "utf-8";
+        /* CSS Document */
+
+        h1.educational, h2.innerH2 {
+
+            display: block;
+            width: 744px;
+            height: 70px;
+            margin: 0 auto;
+            text-align: center;
+            font-size: 3em;
+            font-weight: var(--font-medium);
+            margin-top: 100px;
+            margin-bottom: 100px;
+
+        }
+
+        h2.innerH2.centered {
+            text-align: center;
+        }
+
+        h1.educationalWide {
+            width: 1300px;
+        }
+
+        h1.iconChatBlue {
+
+            background: url("https://cdn.earq.com/platform_images/icon-chat.png") no-repeat left;
+            min-height: 70px;
+
+        }
+
+        h1.iconChatYellow, h2.iconChatYellow {
+
+            background: url("https://cdn.earq.com/platform_images/icon-chat-yellow.png") no-repeat left !important;
+            min-height: 70px;
+
+        }
+
+        h2.iconChatYellow {
+            text-align: center !important;
+            width: 950px !important;
+            min-height: 70px;
+        }
+
+        h1.iconSearchBlue {
+
+            /* background: url("https://cdn.earq.com/platform_images/icon-magnifying-blue2.png") no-repeat left; */
+            background: url("https://cdn.earq.com/platform_images/icon-search2.png") no-repeat left;
+            min-height: 66px;
+
+        }
+
+        h1.iconCrossRed {
+
+            background: url("https://cdn.earq.com/platform_images/icon-cross.png") no-repeat left;
+            min-height: 70px;
+
+        }
+
+        h1.iconEarRed {
+
+            background: url("https://cdn.earq.com/platform_images/icon-ear.png") no-repeat left;
+            width: 600px;
+            min-height: 70px;
+
+        }
+
+        h1.iconHearingAidRed, h2.iconHearingAidRed {
+
+            background: url("https://cdn.earq.com/platform_images/icon-hearing-aid3.png") no-repeat left !important;
+            height: 72px;
+            min-height: 72px;
+
+        }
+
+        h2.iconHearingAidRed {
+            text-align: center !important;
+            width: 500px !important;
+        }
+
+        h1.iconReadingBlue {
+
+            background: url("https://cdn.earq.com/platform_images/icon-reading-blue.png") no-repeat left;
+
+        }
+
+        h2.iconNewsRed {
+
+            background: url("https://cdn.earq.com/platform_images/icon-news.png") no-repeat left !important;
+            width: 400px !important;
+            text-align: center !important;
+            margin-bottom: 20px !important;
+            min-height: 53px;
+
+        }
+
+        h2.iconFileYellow {
+            background: url("https://cdn.earq.com/platform_images/icon-file.png") no-repeat left !important;
+            width: 400px !important;
+            text-align: center !important;
+            margin-bottom: 20px !important;
+            min-height: 65px;
+        }
+
+        h2.innerH2 {
+
+            text-align: left;
+            margin-top: 40px;
+            margin-bottom: 40px;
+            width: 100%;
+            background: transparent;
+
+        }
+
+        /*** FAQ ***/
+
+        .questionHolder {
+
+            display: block;
+            width: 1300px;
+            height: 24px;
+            padding: 16px 0px 24px 0px;
+            margin: 0 auto;
+            margin-bottom: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            border-radius: 16px;
+            background: #fff;
+            transition: background 0.3s ease, border 0.3s ease;
+
+        }
+
+        .questionHolder .questionItself {
+            display: block;
+            float: left;
+            margin-left: 76px;
+            font-size: 1.4em;
+            font-weight: var(--font-medium);
+            color: #111;
+            transition: color 0.3s ease;
+            width: calc(100% - 152px);
+            height: 20px;
+            text-transform: uppercase;
+        }
+
+        .questionBlue {
+            border: 2px solid #009ecc;
+        }
+
+        .questionBlue:hover, .questionBlue.activeQuestion {
+            background: #009ecc;
+            border: 2px solid #006282;
+        }
+
+        .questionHolder:hover .questionItself, .questionHolder.activeQuestion .questionItself {
+            color: #fff;
+        }
+
+        .questionRed {
+            border: 2px solid #ef3c3c;
+        }
+
+        .questionRed:hover, .questionRed.activeQuestion {
+            border: 2px solid #901615;
+            background: #ef3c3c;
+        }
+
+        .questionYellow {
+            border: 2px solid #f9a01b;
+        }
+
+        .questionYellow:hover, .questionYellow.activeQuestion {
+            border: 2px solid #c56118;
+            background: #f9a01b;
+        }
+
+        .answerHolder {
+            display: block;
+            margin: 0 auto;
+            padding: 20px 68px 20px 68px;
+            width: 1164px;
+            height: auto;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .answerHolder.activeAnswer {
+            display: block;
+            opacity: 1;
+            margin-bottom: 20px;
+        }
+
+        .answerHolder ul, .answerHolder ol {
+            margin-left: 40px;
+        }
+
+        .answerHolder p, .answerHolder li {
+            font-size: 1.2em;
+            font-weight: var(--font-book);
+            margin-bottom: 20px;
+        }
+
+        .answerHolder p.noMargin, .answerHolder li.noMargin {
+            margin-bottom: 0px;
+        }
+
+        .answerHolder strong {
+            font-weight: var(--font-medium);
+        }
+
+        .answerHolder h3 {
+            font-size: 1.6em;
+            font-weight: var(--font-medium);
+            margin-bottom: 20px;
+            margin-top: 80px;
+        }
+
+        .answerHolder img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .answerBlue p a, .answerBlue li a {
+            color: #009ecc;
+        }
+
+        .answerBlue p a:hover, .answerBlue li a:hover {
+            color: #006282;
+        }
+
+        .answerYellow p a, .answerYellow li a {
+            color: #f9a01b;
+        }
+
+        .answerYellow p a:hover, .answerYellow li a:hover {
+            color: #c56118;
+        }
+
+        .cont, .contTop {
+
+            display: block;
+            margin: 0 auto;
+            width: 1300px;
+            margin-bottom: 100px;
+
+        }
+
+        .contTop {
+
+            margin-bottom: 40px;
+
+        }
+
+        #cont_chart {
+            width: calc(100% - 160px);
+            margin-left: 80px;
+        }
+
+        .cont .intro, .contTop .intro {
+
+            font-size: 1.4em;
+
+        }
+
+        .cont .intro strong, .cont strong, .contTop .intro strong, .contTop strong {
+            font-weight: var(--font-semibold);
+            font-weight: var(--font-medium);
+        }
+
+        .cont h2 {
+
+            /*text-transform: uppercase;*/
+            font-size: 2.4em;
+            font-weight: var(--font-medium);
+            margin-bottom: 20px;
+            opacity: 1;
+
+        }
+
+        .cont .yellowH2 { /*color: #f9a01b;*/
+        }
+
+        .cont .blueH2 { /*color: #009ecc;*/
+        }
+
+        .cont .redH2 { /*color: #ef3c3c;*/
+        }
+
+        .contactBlockHalf {
+            display: block;
+            float: left;
+            width: 50%;
+            height: 120px;
+        }
+
+        .contactLine {
+
+            display: block;
+            padding-left: 60px;
+            width: calc(100% - 60px);
+            height: auto;
+            min-height: 50px;
+            margin-bottom: 20px;
+
+        }
+
+        .contactLineText {
+
+            font-size: 1.8em;
+            font-weight: var(--font-medium);
+            color: #111;
+            line-height: 110%;
+
+        }
+
+        .contactLinePhone {
+
+            /*background: url('platform_images/icon-circle-phone.png') no-repeat top left;*/
+            background: url('platform_images/contactIcon_phone.png') no-repeat top left;
+
+        }
+
+        .contactLineFax {
+
+            /*background: url('platform_images/icon-circle-fax.png') no-repeat top left;*/
+            background: url('platform_images/contactIcon_fax.png') no-repeat top left;
+
+        }
+
+        .contactLineAddress {
+
+            /*background: url('platform_images/icon-circle-map.png') no-repeat top left;*/
+            background: url('platform_images/contactIcon_address.png') no-repeat top left;
+
+        }
+
+        .contactLineEmail {
+
+            background: url('platform_images/icon-circle-chat.png') no-repeat top left;
+
+        }
+
+        .efhp_participant {
+
+            display: block;
+            float: left;
+            margin-right: 40px;
+            margin-bottom: 20px;
+
+        }
+
+        /*** SPINNY PLUS/MINUS FOR FAQ BAR ***/
+
+        .closed .vertical {
+            transition: all 0.3s ease-in-out;
+            transform: rotate(-90deg);
+        }
+
+        .closed .horizontal {
+            transition: all 0.3s ease-in-out;
+            transform: rotate(-90deg);
+            opacity: 1;
+        }
+
+        .circle-plus.opened .vertical {
+            transition: all 0.3s ease-in-out;
+            transform: rotate(90deg);
+            background-color: white;
+        }
+
+        .opened .horizontal {
+            transition: all 0.3s ease-in-out;
+            transform: rotate(90deg);
+            opacity: 0;
+        }
+
+        .questionHolder:hover .circle-plus .circle .vertical, .questionHolder:hover .circle-plus .circle .horizontal, .activeQuestion .circle-plus .circle .vertical {
+            background-color: white;
+        }
+
+        .circle-plus {
+            display: block;
+            float: left;
+            height: 20px;
+            width: 20px;
+            font-size: 1em;
+            opacity: 1;
+            margin-top: 6px;
+        }
+
+        .circle-plus .circle {
+            position: relative;
+            width: 20px;
+            height: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .circle-plus .circle .horizontal {
+            position: absolute;
+            background-color: black;
+            width: 20px;
+            height: 2px;
+            left: 50%;
+            margin-left: -10px;
+            top: 50%;
+            margin-top: -1px;
+        }
+
+        .circle-plus .circle .vertical {
+            position: absolute;
+            background-color: black;
+            width: 2px;
+            height: 20px;
+            left: 50%;
+            margin-left: -1px;
+            top: 50%;
+            margin-top: -10px;
+        }
+
+        /*** END SPINNY PLUS/MINUS FOR FAQ BAR ***/
+
+        /*** SUB BLOCKS ***/
+
+        .subsHolder {
+
+            display: block;
+            margin: 0 auto;
+            margin-bottom: 100px;
+
+        }
+
+        .subBlocksFour {
+
+            width: 1300px;
+            height: 208px;
+
+        }
+
+        .subBlocksThree {
+
+            width: 960px;
+            height: 208px;
+
+        }
+
+        .subBlock {
+
+            display: block;
+            float: left;
+            width: 262px;
+            height: 204px;
+
+            padding: 28px 20px 20px 20px;
+            width: 222px;
+            height: 156px;
+
+            margin-right: 78px;
+            border-radius: 16px;
+            transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
+            background: #fff;
+            font-size: 2em;
+            font-weight: var(--font-medium);
+            text-align: center;
+
+            cursor: pointer;
+
+        }
+
+        .subBlockShort {
+
+            font-size: 1.4em;
+            padding: 8px 20px 10px 20px;
+            font-weight: var(--font-semibold);
+            height: 80px;
+            margin-bottom: 10px;
+
+        }
+
+        .subBlock .single {
+            display: block;
+            padding: 22px 0px 22px 0px;
+        }
+
+        .subBlockYellow {
+
+            border: 2px solid #f9a01b;
+
+        }
+
+        .subBlockYellow:hover, .subBlockYellow.activeSubBlock {
+            border: 2px solid #c56118;
+            background: #f9a01b;
+            color: #fff;
+        }
+
+        .subBlockRed {
+
+            border: 2px solid #ef3c3c;
+
+        }
+
+        .subBlockRed:hover, .subBlockRed.activeSubBlock {
+
+            border: 2px solid #901615;
+            background: #ef3c3c;
+            color: #fff;
+
+        }
+
+        .subBlockBlue {
+
+            border: 2px solid #009ecc;
+
+        }
+
+        .subBlockBlue:hover, .subBlockBlue.activeSubBlock {
+
+            border: 2px solid #006282;
+            background: #009ecc;
+            color: #fff;
+
+        }
+
+        .subBlock .arrows {
+
+            display: block;
+            width: 40px;
+            height: 40px;
+            margin: 0 auto;
+            margin-top: 20px;
+
+        }
+
+        .subBlockShort .arrows {
+            margin-top: 6px;
+        }
+
+        .subBlock .arrows .arrow {
+
+            width: 40px;
+            height: 40px;
+            display: block;
+            float: left;
+            z-index: 1;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+            border-radius: 22px;
+            background: #111 url("https://cdn.earq.com/platform_images/zag-white-down2.png") no-repeat center;
+
+        }
+
+        .subBlockYellow .arrows .arrow {
+
+            background: #f9a01b url("https://cdn.earq.com/platform_images/zag-white-down2.png") no-repeat center;
+            border: 2px solid #c56118;
+
+        }
+
+        .subBlockYellow .arrows .arrow-inverted {
+
+            border: 2px solid #c56118;
+
+        }
+
+        .subBlockRed .arrows .arrow {
+
+            background: #ef3c3c url("https://cdn.earq.com/platform_images/zag-white-down2.png") no-repeat center;
+            border: 2px solid #901615;
+
+        }
+
+        .subBlockRed .arrows .arrow-inverted {
+
+            border: 2px solid #901615;
+
+        }
+
+        .subBlockBlue .arrows .arrow {
+
+            background: #009ecc url("https://cdn.earq.com/platform_images/zag-white-down2.png") no-repeat center;
+            border: 2px solid #006282;
+
+        }
+
+        .subBlockBlue .arrows .arrow-inverted {
+
+            border: 2px solid #006282;
+
+        }
+
+        .subBlock .arrows .arrow-inverted {
+
+            display: block;
+            float: left;
+            width: 40px;
+            height: 40px;
+            margin-top: -44px;
+            border-radius: 22px;
+            opacity: 0;
+            z-index: 2;
+            transition: opacity 0.3s ease;
+            background: #fff url("https://cdn.earq.com/platform_images/zag-black-down2.png") no-repeat center;
+
+        }
+
+        .subBlock.activeSubBlock .arrows .arrow, .subBlock:hover .arrows .arrow {
+
+            opacity: 0;
+
+        }
+
+        .subBlock.activeSubBlock .arrows .arrow-inverted, .subBlock:hover .arrows .arrow-inverted {
+
+            opacity: 1;
+
+        }
+
+        /*** END SUB BLOCKS ***/
+
+        /*** shareable image - adopted from old site ***/
+
+        .shareableIMG {
+            display: block;
+            margin: 0 auto;
+            font-size: 1em;
+            font-weight: var(--font-book);
+            max-width: 360px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.1);
+            padding: 4px;
+            border-radius: 16px;
+        }
+
+        .shareableIMG .shareNote {
+            font-weight: var(--font-semibold);
+            color: #111;
+            float: right;
+            padding-top: 10px;
+            margin-right: 4px;
+            text-transform: uppercase;
+            opacity: .3;
+        }
+
+        .shareableIMG .siTop {
+            width: 360px;
+            height: auto;
+            margin-bottom: 8px;
+            display: block;
+            border-radius: 16px;
+        }
+
+        .shareableIMG .shareIcon {
+            float: right !important;
+            margin-left: 6px !important;
+            margin-right: 0px !important;
+            opacity: .3;
+            transition: opacity 0.3s ease;
+            margin-bottom: 6px;
+        }
+
+        .shareableIMG .shareIcon:hover {
+            opacity: 1;
+        }
+
+        .shareableIMG .siPinterest {
+            margin-right: 60px !important;
+        }
+
+        .cont .caption {
+
+            text-align: center;
+            font-size: 1em;
+            color: #111;
+            opacity: .5;
+
+        }
+
+        .cont .caption a {
+
+            color: #111;
+
+        }
+
+        /*** end shareable image ***/
+
+        /*** hearing health - new index page ***/
+
+        .threePreviewsHolder {
+
+            display: block;
+            width: 1270px;
+            margin: 0 auto;
+
+        }
+
+        .threePreviewsHolder .third {
+
+            display: block;
+            float: left;
+            width: 360px;
+            height: 360px;
+            margin-right: 90px;
+
+        }
+
+        .threePreviewsHolder .third.shortThird {
+            height: 180px;
+        }
+
+        .threePreviewsHolder .third .crossIcon {
+
+            display: block;
+            width: 46px;
+            height: 46px;
+            background: url("https://cdn.earq.com/platform_images/icon-cross-46-blue.png") no-repeat center;
+            margin-bottom: 20px;
+
+        }
+
+        .threePreviewsHolder .third .crossIconRed {
+            background: url("https://cdn.earq.com/platform_images/icon-cross-46-red.png") no-repeat center;
+        }
+
+        .threePreviewsHolder .third .crossIconYellow {
+            background: url("https://cdn.earq.com/platform_images/icon-cross-46-yellow.png") no-repeat center;
+        }
+
+        .threePreviewsHolder .third .accent {
+            display: block;
+            width: 100%;
+            height: 75px;
+            margin-bottom: 8px;
+        }
+
+        .threePreviewsHolder .third .accent48 {
+            background: url("https://cdn.earq.com/platform_images/accent-america.png") no-repeat center;
+        }
+
+        .threePreviewsHolder .third .accent1in5 {
+            background: url("https://cdn.earq.com/platform_images/accent-1-in-5.png") no-repeat center;
+        }
+
+        .threePreviewsHolder .third .accentFlag {
+            background: url("https://cdn.earq.com/platform_images/accent-flag.png") no-repeat center;
+        }
+
+        .threePreviewsHolder .third h3 {
+
+            font-size: 1.8em;
+            font-weight: var(--font-medium);
+            color: #111;
+            margin-bottom: 20px;
+
+        }
+
+        .threePreviewsHolder .third h3 a {
+            text-decoration: none;
+            color: #111;
+            transition: color 0.3s ease;
+        }
+
+        .threePreviewsHolder .third h3 a:hover {
+            text-decoration: underline;
+            color: var(--earq-red-hex);
+        }
+
+        .threePreviewsHolder .third p {
+
+            font-size: 1.2em;
+            font-weight: var(--font-light);
+            display: block;
+            height: 120px;
+
+        }
+
+        .threePreviewsHolder .third p.largeP {
+            font-size: 1.4em;
+            text-align: center;
+        }
+
+        .threePreviewsHolder .third p.largeP strong {
+            font-weight: var(--font-semibold);
+            font-weight: var(--font-medium);
+        }
+
+        .nextArrow, .nextArrowBlue, .nextArrowRed, .nextArrowYellow {
+
+            display: block;
+            width: 28px;
+            height: 28px;
+            border: 2px solid #056484;
+
+            background: url("https://cdn.earq.com/platform_images/zag_right_20_black3.png") no-repeat center;
+            border-radius: 16px;
+
+        }
+
+        .nextArrowRed {
+            border: 2px solid #921b1a;
+            border-radius: 16px;
+        }
+
+        .nextArrowYellow {
+            border: 2px solid #c7651e;
+            border-radius: 16px;
+        }
+
+        .nextArrowBlue .innerArrow, .nextArrowRed .innerArrow, .nextArrowYellow .innerArrow {
+
+            display: block;
+            width: 28px;
+            height: 28px;
+            border-radius: 16px;
+            opacity: 0;
+            background: url("https://cdn.earq.com/platform_images/zag_right_20_white3.png") no-repeat center;
+            transition: opacity 0.3s ease;
+
+        }
+
+        .nextArrowBlue:hover .innerArrow, .nextArrowRed:hover .innerArrow, .nextArrowYellow:hover .innerArrow {
+
+            opacity: 1;
+
+        }
+
+        .nextArrowBlue .innerArrow {
+            /*border: 2px solid #006282;*/
+            background: #009ecc url("https://cdn.earq.com/platform_images/zag_right_20_white3.png") no-repeat center;
+        }
+
+        .nextArrowRed .innerArrow {
+            /*border: 2px solid #901615;*/
+            background: #ef3c3c url("https://cdn.earq.com/platform_images/zag_right_20_white3.png") no-repeat center;
+        }
+
+        .nextArrowYellow .innerArrow {
+            /*border: 2px solid #c56118;*/
+            background: #f9a01b url("https://cdn.earq.com/platform_images/zag_right_20_white3.png") no-repeat center;
+        }
+
+        h2.iconTinnitusYellow {
+
+            background: url("https://cdn.earq.com/platform_images/icon-tinnitus-white2.png") no-repeat left;
+            width: 500px;
+            height: 73px;
+            min-height: 73px;
+            text-align: center;
+
+        }
+
+        .hhPreview {
+            display: block;
+            margin: 0 auto;
+            width: 1000px;
+            font-size: 1.4em;
+            font-weight: var(--font-book);
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .hhPreview strong {
+            font-weight: var(--font-semibold);
+            font-weight: var(--font-medium);
+        }
+
+        .hhGray {
+            display: block;
+            width: 100%;
+            height: auto;
+            background: #f5f5f5;
+            padding: 96px 0px 96px 0px;
+        }
+
+        .learnMoreCentered {
+            margin: 0 auto;
+            margin-bottom: 40px;
+        }
+
+        .decibelIconHolder {
+            display: block;
+            margin: 0 auto;
+            width: 133px;
+            height: 133px;
+            margin-bottom: 40px;
+        }
+
+        .dbIcon {
+            display: block;
+            float: left;
+            margin: 0 auto;
+            width: 133px;
+            height: 133px;
+            transition: opacity 0.3s ease;
+        }
+
+        .db_normal {
+            z-index: 1;
+            background: url("https://cdn.earq.com/platform_images/icon-normal-conversations.png");
+        }
+
+        .db_dishwasher, .db_lawnmower, .db_orchestra, .db_concert, .db_fireworks {
+            z-index: 2;
+            margin-top: -133px;
+        }
+
+        .db_dishwasher {
+            background: url("https://cdn.earq.com/platform_images/icon-dishwasher.png");
+        }
+
+        .db_lawnmower {
+            background: url("https://cdn.earq.com/platform_images/icon-lawnmower.png");
+        }
+
+        .db_orchestra {
+            background: url("https://cdn.earq.com/platform_images/icon-symphony-orchestra.png");
+        }
+
+        .db_concert {
+            background: url("https://cdn.earq.com/platform_images/icon-rock-concert.png");
+        }
+
+        .db_fireworks {
+            background: url("https://cdn.earq.com/platform_images/icon-fireworks.png");
+        }
+
+        .dbZagsHolder {
+            display: block;
+            margin: 0 auto;
+            width: 604px;
+            height: 39px;
+        }
+
+        .dbZagLeft, .dbZagRight, .dbLabel {
+            display: block;
+            float: left;
+            width: 21px;
+            height: 39px;
+        }
+
+        .dbZagLeft {
+            background: url("https://cdn.earq.com/platform_images/zag-left-red.png");
+            cursor: pointer;
+        }
+
+        .dbZagRight {
+            background: url("https://cdn.earq.com/platform_images/zag-right-red.png");
+            cursor: pointer;
+        }
+
+        .dbLabel {
+            width: calc(100% - 42px);
+            text-align: center;
+            font-size: 2em;
+            font-weight: var(--font-medium);
+        }
+
+        .dbLevel {
+            display: block;
+            width: 100%;
+            text-align: center;
+            font-size: 2.4em;
+            font-weight: var(--font-light);
+            margin-top: 8px;
+            margin-bottom: 80px;
+        }
+
+        .dbDotsHolder {
+            display: block;
+            margin: 0 auto;
+            width: 150px;
+            height: 14px;
+            margin-bottom: 100px;
+        }
+
+        .dbDot {
+            display: block;
+            float: left;
+            cursor: pointer;
+            width: 12px;
+            height: 12px;
+            border: 2px solid #982726;
+            border-radius: 7px;
+            margin-right: 10px;
+            background: rgba(239, 60, 60, 0);
+            transition: background 0.3s ease;
+        }
+
+        .dbDot:hover, .activeDbDot {
+            background: rgba(239, 60, 60, 1);
+        }
+
+        /*** end hearing health index ***/
+
+        /*** careers page ***/
+
+        .hhCenteredUL {
+
+            display: block;
+            margin: 0 auto;
+            width: 600px;
+            height: 140px;
+
+        }
+
+        .hhCenteredUL li {
+
+            display: block;
+            float: left;
+            width: 50%;
+            height: 36px;
+            font-size: 1.4em;
+            font-weight: var(--font-light);
+
+        }
+
+        #wordsToLiveBy {
+
+            display: block;
+            margin: 0 auto;
+            margin-top: 80px;
+            margin-bottom: 120px;
+            padding: 40px;
+            width: 960px;
+            box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.2);
+            background: #fff;
+
+        }
+
+        #wordsToLiveBy p {
+            font-size: 1.4em;
+        }
+
+        #wordsToLiveBy h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        #wordsToLiveBy h4 {
+            font-weight: var(--font-semibold);
+            font-size: 1.4em;
+            margin-bottom: 20px;
+        }
+
+        .careerQuotesHolder {
+
+            display: block;
+            width: 90%;
+            margin: 0 auto;
+            height: auto;
+            min-height: 300px;
+
+        }
+
+        .careerQuoteHolder {
+
+            display: block;
+            float: left;
+            padding: 0px 80px 0px 80px;
+            width: calc(100% - 202px);
+            height: auto;
+            min-height: 200px;
+
+        }
+
+        .careerQuote {
+
+            font-size: 1.8em;
+            font-style: italic;
+            margin-bottom: 20px;
+            font-weight: var(--font-light);
+
+        }
+
+        .careerQuoteAuthor {
+
+            font-size: 1.2em;
+            /*font-style: italic;*/
+            margin-bottom: 0px;
+            font-weight: var(--font-semibold);
+            opacity: .4;
+            /*text-indent: 40px;*/
+            text-align: right;
+
+        }
+
+        .careerQuotesDotsHolder {
+            display: block;
+            margin: 0 auto;
+            width: 130px;
+            height: 14px;
+            margin-bottom: 100px;
+        }
+
+        /*** end careers CSS ***/
+
+        .nflpaSection {
+
+            width: 1350px;
+            display: block;
+            margin: 0 auto;
+
+        }
+
+        .nflpaLeft {
+
+            display: block;
+            float: left;
+            width: 480px;
+            height: 256px;
+            margin-left: 74px;
+
+        }
+
+        .nflpaRight {
+
+            display: block;
+            padding-left: 660px;
+
+        }
+
+        .nflpaRight p {
+
+            font-size: 1.4em;
+
+        }
+
+        .nflpaRight li {
+
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            font-weight: var(--font-light);
+
+        }
+
+        .nflpaRight li strong {
+
+            font-weight: var(--font-semibold);
+            font-weight: var(--font-medium);
+
+        }
+
+        .nflpaRight ul {
+            margin-left: 40px;
+        }
+
+        .newsletterBullets {
+
+            display: block;
+            width: 400px;
+            margin: 0 auto;
+
+        }
+
+        .newsletterBullets li {
+
+            font-size: 1.4em;
+            margin-bottom: 0px;
+
+        }
+
+        #mc-embedded-subscribe-form {
+
+            display: block;
+            width: 500px !important;
+            margin: 0 auto !important;
+
+        }
+
+        #mc-embedded-subscribe-form label, #mc-embedded-subscribe-form input {
+            float: none !important;
+            width: 100% !important;
+            border-radius: 16px;
+        }
+
+        /*** end Mailchimp stuff ***/
+
+        /*** associated conditions ***/
+
+        .acCont {
+            display: block;
+            margin: 0 auto;
+            border: 2px solid #f04d4d;
+            padding: 40px 60px 40px 60px;
+            width: calc(100% - 124px);
+            margin-top: 40px;
+            margin-bottom: 40px;
+
+            max-width: 1140px;
+        }
+
+        .acCont.acContBlue {
+            border: 2px solid #009ecc;
+        }
+
+        .acCont.acContYellow {
+            border: 2px solid #f9a01b;
+        }
+
+        .acContRed p a:link {
+            color: #f04d4d;
+        }
+
+        .acContBlue p a:link {
+            color: #009ecc;
+        }
+
+        .acContYellow p a:link {
+            color: #f9a01b;
+        }
+
+        .acButton {
+            /*padding-top: 30px;
+            height: 204px;*/
+            background: #ffffff !important;
+
+            padding-top: 130px;
+            height: 104px;
+
+            cursor: pointer;
+            transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: var(--font-medium);
+            text-align: center;
+            font-size: 1.5em;
+
+            width: 230px;
+            height: 230px;
+            padding: 100px 20px 0px 20px !important;
+            width: 190px !important;
+            height: 130px !important;
+        }
+
+        .acButtonRed {
+            border: 2px solid #ef3c3c;
+        }
+
+        .acButtonBlue {
+            border: 2px solid #009ecc;
+        }
+
+        .acButtonYellow {
+            border: 2px solid #f9a01b;
+        }
+
+        .acTwoLines {
+            padding: 85px 20px 0px 20px !important;
+            height: 145px !important;
+        }
+
+        .acButtonRed:hover, .acButtonRed.activeAcButton {
+            border: 2px solid #901615;
+            background: #ef3c3c !important;
+            color: #fff;
+        }
+
+        .acButtonBlue:hover, .acButtonBlue.activeAcButton {
+            border: 2px solid #006282;
+            background: #009ecc !important;
+            color: #fff;
+        }
+
+        .acButtonYellow:hover, .acButtonYellow.activeAcButton {
+            border: 2px solid #c56118;
+            background: #f9a01b !important;
+            color: #fff;
+        }
+
+        .acButtonsHolder {
+            height: 250px !important;
+            margin-bottom: 40px !important;
+            margin-top: 40px !important;
+        }
+
+        .acButtonsHolder .stylesHolderInner {
+            height: 250px !important;
+        }
+
+        .acButtonsZag {
+            height: 250px !important;
+        }
+
+        .acDots {
+            width: 226px !important;
+        }
+
+        .acCont h2 {
+            color: #111 !important;
+            text-transform: none !important;
+            font-size: 1.6em !important;
+        }
+
+        .acHolderWide {
+            width: 4700px !important;
+        }
+
+        .acCont .caption a {
+
+            color: #111 !important;
+        }
+
+        .acCont .caption {
+            display: block;
+            margin-top: 40px;
+        }
+
+        .contBullets ul {
+            margin-left: 40px;
+        }
+
+        .contBullets li {
+            font-size: 1.2em;
+        }
+
+        .contBullets li li {
+            font-size: 1em;
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 1499px) {
+
+            #cont_chart {
+                width: calc(100% - 40px);
+                margin: 0 auto;
+                padding: 0px;
+            }
+
+            #cont_chart p.intro {
+                padding: 0px 20px 0px 20px;
+            }
+
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 1459px) {
+
+            .nflpaSection {
+                width: calc(100% - 160px);
+            }
+
+            .nflpaLeft {
+                width: 230px;
+                height: 171px;
+                margin-left: 0px;
+            }
+
+            .nflpaLeft img {
+                width: 230px;
+                height: auto;
+            }
+
+            .nflpaRight {
+                padding-left: 250px;
+            }
+
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 1419px) {
+
+            .threePreviewsHolder {
+                width: 920px;
+            }
+
+            .subBlocksFour {
+                width: 860px;
+                margin-bottom: 50px;
+            }
+
+            .subBlocksThree {
+                width: 644px;
+                margin-bottom: 50px;
+                height: 150px;
+            }
+
+            .threePreviewsHolder .third {
+                width: 280px;
+                margin-right: 40px;
+            }
+
+            .threePreviewsHolder .third h3 {
+                font-size: 1.4em;
+            }
+
+            .threePreviewsHolder .third br {
+                display: none;
+            }
+
+            .subBlock {
+                width: 235px;
+
+                padding: 18px 15px 10px 15px;
+                width: 165px;
+                font-size: 1.4em;
+                margin-right: 20px;
+                height: 130px;
+            }
+
+            .cont, .contTop, .searchResults {
+                padding: 0px 100px 0px 100px;
+                width: calc(100% - 200px);
+            }
+
+            .acCont {
+                padding: 40px;
+                width: calc(100% - 80px);
+            }
+
+            .questionHolder {
+                width: calc(100% - 4px);
+            }
+
+            .answerHolder {
+                width: 100%;
+                padding: 20px 0px 20px 0px;
+            }
+
+            h1.educational {
+                font-size: 2.4em;
+                margin-top: 50px;
+                margin-bottom: 50px;
+                width: 540px;
+            }
+
+            h1.educationalWide.iconCrossRed {
+                text-align: left;
+                padding-left: 90px;
+                width: calc(100% - 290px);
+                /*margin-left: 100px;*/
+                line-height: 125%;
+            }
+
+            .cont .intro, .contTop .intro {
+                font-size: 1.4em;
+                margin-bottom: 20px;
+            }
+
+            .subBlock .single {
+                display: block;
+                padding: 0px;
+            }
+
+            .subBlocksThree .subBlock {
+                height: 106px;
+            }
+
+            .cont h2 {
+                font-size: 2.4em;
+            }
+
+            #sub_diseases {
+                padding: 4px 15px 24px 15px;
+            }
+
+            #sub_diseases .arrows {
+                margin-top: 8px;
+            }
+
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 1309px) {
+            .acCont {
+                padding: 20px !important;
+                width: calc(100% - 80px) !important;
+            }
+
+            .acCont h2 {
+                font-size: 1.4em !important;
+            }
+
+            .acCont p, .acCont p.intro {
+                font-size: 1.2em !important;
+            }
+
+            .acCont img {
+                max-width: 100%;
+                height: auto;
+            }
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 1259px) {
+
+            .careerQuotesHolder {
+
+                width: 100%;
+
+            }
+
+            .careerQuotesHolder .dbZagLeft {
+                margin-left: 20px;
+                margin-top: -60px
+            }
+
+            .careerQuotesHolder .dbZagRight {
+                margin-right: 20px;
+                margin-top: -60px;
+                float: right;
+            }
+
+            .careerQuoteHolder {
+                width: calc(100% - 40px);
+                margin: 0 auto;
+                margin-top: 80px;
+                padding: 0px;
+                height: auto;
+                float: none;
+            }
+
+            .careerQuote {
+                font-size: 1.4em;
+            }
+
+            .careerQuoteAuthor {
+                font-size: 1em;
+            }
+
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 1199px) {
+
+            .hhPreview {
+                width: calc(100% - 80px);
+                font-size: 1.2em !important;
+            }
+
+            .hhPreview strong {
+                font-weight: var(--font-semibold);
+            }
+
+            .hhCenteredUL {
+                width: 300px;
+            }
+
+            .hhCenteredUL li {
+                font-size: 1.2em;
+                margin-bottom: 20px;
+                line-height: 105%;
+            }
+
+            #wordsToLiveBy {
+                width: calc(100% - 80px);
+                padding: 20px;
+            }
+
+            #wordsToLiveBy p, #wordsToLiveBy h4 {
+                font-size: 1.2em;
+            }
+
+            #wordsToLiveBy .divider {
+                margin-bottom: 20px;
+            }
+
+        }
+
+        @media only screen and (min-width: 930px) and (max-width: 1159px) {
+            .cont, .contTop, .searchResults {
+                padding: 0px 50px 0px 50px;
+                width: calc(100% - 100px);
+            }
+
+            .bannerHeaderHolder p {
+                width: calc(100% - 100px);
+                font-size: 1.2em;
+            }
+
+            .bannerHeaderHolder p strong {
+                font-weight: var(--font-semibold);
+            }
+
+            .questionHolder {
+                padding: 14px 0px 16px 0px;
+                height: 24px;
+                margin-bottom: 10px;
+            }
+
+            .questionHolder .questionItself {
+                font-size: 1.2em;
+                margin-left: 24px;
+                width: calc(100% - 72px);
+                font-weight: var(--font-semibold);
+            }
+
+            .circle-plus {
+                margin-top: 3px;
+            }
+
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 1159px) {
+            .hhGray h2, h2.innerH2 {
+                font-size: 1.8em;
+                margin-bottom: 20px;
+                height: auto;
+            }
+
+            .nflpaRight p, .nflpaRight li {
+                font-size: 1.2em;
+            }
+
+            .nflpaRight li strong {
+                font-weight: var(--font-semibold);
+            }
+
+            .nflpaRight ul {
+                margin-left: 40px;
+            }
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 1049px) {
+            /*h2.iconChatYellow {
+                width: 640px !important;
+            }*/
+            h2.iconChatYellow, h2.iconChatBlue, h2.iconTinnitusYellow, h2.iconHearingAidRed, h2.iconFileYellow, h1.iconEarRed, h2.iconCrossRed, h1.iconHearingAidRed, h1.iconCrossRed, h2.iconNewsRed {
+                width: calc(100% - 40px) !important;
+                padding: 80px 20px 0px 20px !important;
+                font-size: 1.8em !important;
+                line-height: 125% !important;
+                background-position: top center !important;
+                height: auto !important;
+                min-height: 24px !important;
+                margin: 0 auto;
+                margin-bottom: 20px;
+            }
+
+            h1.iconCrossRed {
+                text-align: center !important;
+            }
+
+            h1.educationalWide, h1.educational {
+                margin-bottom: 40px;
+            }
+
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 999px) {
+            .threePreviewsHolder .third p.largeP {
+                font-size: 1.2em;
+            }
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 989px) {
+
+            .threePreviewsHolder {
+                width: calc(100% - 30px);
+            }
+
+            .threePreviewsHolder .third {
+                width: calc(33.3% - 30px);
+                margin-right: 30px;
+            }
+
+            .threePreviewsHolder .third h3 {
+                font-size: 1.2em;
+                font-weight: var(--font-semibold);
+            }
+
+            .threePreviewsHolder .third p {
+                font-size: 1em;
+                height: 100px;
+            }
+
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 839px) {
+            .threePreviewsHolder .third h3 {
+                font-size: 1em;
+                margin-bottom: 12px;
+            }
+
+            .threePreviewsHolder .third p {
+                height: 140px;
+            }
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 929px) {
+
+            h1.educational {
+                font-size: 1.8em;
+                width: 420px;
+                line-height: 225%;
+            }
+
+            /*h1.iconHearingAidRed, h2.iconHearingAidRed {
+                width: 460px;
+            }*/
+            .subBlocksFour {
+                width: 420px;
+                height: 370px;
+            }
+
+            .subBlock {
+                margin-bottom: 20px;
+            }
+
+            #sub_conductive, #sub_batteries {
+                margin-right: 0px !important;
+            }
+
+            .cont, .contTop, .searchResults {
+                padding: 0px 20px 0px 20px;
+                width: calc(100% - 40px);
+            }
+
+            .cont .intro, .contTop .intro {
+                font-size: 1.2em;
+                margin-bottom: 16px;
+            }
+
+            .bannerHeaderHolder p {
+                width: calc(100% - 40px);
+                font-size: 1.1em;
+            }
+
+            .bannerHeaderHolder p strong, .cont .intro strong, .cont strong, .contTop .intro strong, .contTop strong {
+                font-weight: var(--font-semibold);
+            }
+
+            .questionHolder {
+                padding: 10px 0px 14px 0px;
+                height: 20px;
+                margin-bottom: 8px;
+            }
+
+            .questionHolder .questionItself {
+                font-size: 1.1em;
+                margin-left: 14px;
+                width: calc(100% - 50px);
+                font-weight: var(--font-semibold);
+            }
+
+            .circle-plus {
+                margin-top: 2px;
+            }
+
+            .answerHolder p, .answerHolder li {
+                font-size: 1.05em;
+            }
+
+            .answerHolder {
+                padding: 10px 0px 10px 0px;
+            }
+
+            .cont h2 {
+                font-size: 1.6em;
+            }
+
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 879px) {
+            .hhGray {
+                padding: 40px 0px 40px 0px;
+            }
+
+            .nflpaSection {
+                width: calc(100% - 80px);
+            }
+
+            .nflpaLeft {
+                float: none;
+                width: 260px;
+                height: auto;
+                margin: 0 auto;
+                margin-bottom: 20px;
+            }
+
+            .nflpaLeft img {
+                width: 100%;
+                height: auto;
+            }
+
+            .nflpaRight {
+                float: none;
+                width: 100%;
+                height: auto;
+                padding: 0px;
+                margin: 0 auto;
+            }
+
+            .faqCont .questionHolder {
+                height: auto;
+            }
+
+            .faqCont .questionHolder .questionItself {
+                width: calc(100% - 70px);
+                margin-right: 20px;
+                height: auto;
+            }
+
+            .contactBlockHalf {
+                float: none;
+                width: 100%;
+                height: auto;
+                margin-bottom: 20px;
+            }
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 749px) {
+            .threePreviewsHolder {
+                height: auto;
+            }
+
+            .threePreviewsHolder .third, .threePreviewsHolder .third.shortThird {
+                float: none;
+                width: 100%;
+                margin: 0 auto;
+                height: auto;
+                margin-bottom: 40px;
+            }
+
+            .threePreviewsHolder .third h3 {
+                font-size: 1.2em;
+                margin-bottom: 8px;
+                text-align: center;
+            }
+
+            .threePreviewsHolder .third p {
+                height: auto;
+                margin-bottom: 8px;
+                font-size: 1.2em;
+                text-align: center;
+            }
+
+            .threePreviewsHolder .third .crossIcon {
+                margin: 0 auto;
+                margin-bottom: 8px;
+            }
+
+            .acButton {
+                width: 150px !important;
+                height: 80px !important;
+            }
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 729px) {
+            .dbDotsHolder {
+                display: none;
+            }
+
+            .dbZagsHolder {
+                width: calc(100% - 40px);
+            }
+
+            .dbLabel {
+                font-size: 1.2em;
+                font-weight: var(--font-semibold);
+                height: 24px;
+            }
+
+            .dbLevel {
+                margin-top: 0px;
+                font-size: 2em;
+            }
+
+            #mc-embedded-subscribe-form {
+                width: calc(100% - 40px) !important;
+            }
+
+            #mc-embedded-subscribe-form label, #mc-embedded-subscribe-form input {
+                width: calc(100% - 20px) !important;
+            }
+
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 709px) {
+            /*h2.iconChatYellow, h2.iconChatBlue {
+                width: calc(100% - 130px) !important;
+                margin-left: 20px !important;
+                padding-left: 90px !important;
+                padding-right: 20px !important;
+            }
+            h2.iconTinnitusYellow {
+                text-align: center;
+                width: 260px !important;
+                margin-left: 20px;
+            }
+            h2.iconHearingAidRed {
+                width: calc(100% - 130px) !important;
+                padding-left: 80px !important;
+                padding-right: 20px !important;
+                margin-left: 20px !important;
+            }*/
+            .careerQuotesDotsHolder {
+                display: none;
+            }
+
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 699px) {
+
+            .subBlocksThree {
+                width: 404px;
+            }
+
+            .subBlocksThree .subBlock {
+                padding: 8px 10px 5px 10px;
+                width: 100px;
+                font-size: 1.2em;
+                margin-right: 10px;
+                font-weight: var(--font-semibold);
+            }
+
+            .subBlocksThree .subBlock .arrows {
+                margin-top: 6px;
+            }
+
+            #sub_tinnitus .arrows {
+                margin-top: 32px;
+            }
+
+            #sub_diseases {
+                height: 96px;
+            }
+
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 659px) {
+
+            .hhPreview {
+                font-size: 1.1em;
+                width: calc(100% - 40px);
+            }
+
+            .threePreviewsHolder .third p, .threePreviewsHolder .third h3 {
+                font-size: 1.1em;
+            }
+
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 599px) {
+            .nflpaRight p, .nflpaRight li {
+                font-size: 1.1em;
+            }
+
+            .newsletterBullets {
+                width: 280px;
+            }
+
+            .newsletterBullets li {
+                font-size: 1.1em;
+            }
+
+            h1.educational, h1.educationalWide {
+                font-size: 1.4em;
+                max-width: calc(100% - 40px);
+                line-height: 125%;
+            }
+
+            /*h2.iconFileYellow {
+                   padding-left: 70px !important;
+               padding-right: 20px !important;
+               margin-left: 20px !important;
+               width: calc(100% - 160px) !important;
+               text-align: center !important;
+            }
+            h1.iconEarRed {
+                   font-size: 1.6em !important;
+               padding-left: 70px !important;
+               width: 200px !important;
+            }*/
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 499px) {
+            .subBlocksFour, .subBlocksThree {
+                width: calc(100% - 40px);
+                height: auto !important;
+            }
+
+            .subBlocksFour .subBlock, .subBlocksThree .subBlock {
+                width: calc(50% - 30px);
+                margin-right: 10px;
+                margin-bottom: 10px;
+                font-size: 1.1em;
+                font-weight: var(--font-semibold);
+                padding: 14px 10px 10px 10px;
+                height: 110px;
+            }
+
+            .acCont p, .acCont p.intro {
+                font-size: 1.1em !important;
+            }
+
+            .subBlocksThree .subBlock {
+                height: 100px;
+            }
+
+            /*h2.iconCrossRed, h1.iconCrossRed, h1.iconHearingAidRed {
+                margin-left: 20px !important;
+                padding-left: 90px !important;
+                padding-right: 20px !important;
+                width: calc(100% - 130px) !important;
+                line-height: 125% !important;
+            }*/
+            .cont .intro, .contTop .intro {
+                font-size: 1.1em;
+            }
+
+            #sub_menieres, #sub_operations, #sub_diseases {
+                clear: both;
+                float: none;
+                margin-left: 25%;
+            }
+
+            #sub_infections, #sub_how, #sub_marketing {
+                margin-right: 0px;
+            }
+
+            #sub_infections .arrows {
+                margin-top: 32px;
+            }
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 459px) {
+
+            .bannerHeaderHolder h1 {
+                font-size: 2em;
+            }
+
+            .hhGray h2, h2.innerH2 {
+                font-size: 1.4em;
+                font-weight: var(--font-semibold);
+                padding: 0px 20px 0px 20px;
+                width: calc(100% - 40px);
+            }
+
+            /*h2.iconNewsRed {
+                font-size: 1.6em;
+                width: 280px !important;
+                line-height: 250%;
+            }*/
+            .cont h2 {
+                font-size: 1.4em;
+            }
+
+            .cont p, .cont li, .contTop p, .contTop li, #anatomyChartRight li {
+                font-size: 1.1em !important;
+            }
+
+            #anatomyChartRight li li {
+                font-size: .9em !important;
+            }
+
+        }
+
+        @media only screen and (min-width: 20px) and (max-width: 399px) {
+            .contactLineText {
+                font-size: 1.4em;
+            }
+
+            .careerQuote {
+                font-size: 1.2em;
+            }
+        }
+
+        @media only screen and (min-width: 380px) and (max-width: 499px) {
+            #sub_mixed .arrows {
+                margin-top: 42px !important;
+            }
+        }
+    </style>
+    </html>
+{% endblock %}
